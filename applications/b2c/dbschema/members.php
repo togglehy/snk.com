@@ -55,7 +55,6 @@ $db['members'] = array(
         ) ,
         'area' => array(
             'label' => ('地区') ,
-
             'type' => 'region',
             'sdfpath' => 'contact/area',
             'filtertype' => 'yes',
@@ -215,7 +214,6 @@ $db['members'] = array(
             'sdfpath' => 'currency',
             'type' => 'varchar(20)',
             'label' => ('货币') ,
-
             'in_list' => true,
             'comment' => ('货币(偏爱货币)') ,
         ) ,

@@ -1,0 +1,14 @@
+<desktop>
+
+    <permissions>
+        <permission id="seller" display='true' workground='seller.wrokground'>商家管理</permission>
+		<permission id="sellercheck" display='true' workground='seller.wrokground'>商家审核</permission>		
+    </permissions>
+    <workground name="商家" icon="icon-docs" id="seller.wrokground" order="60">
+        <menugroup name="商家管理">
+            <menu controller='admin_seller' action='index' permission='cms_content' display='true' order="60">商家管理</menu>
+			<menu controller='admin_seller' action='index' permission='cms_content' display='true' order="60">商家审核</menu>
+        </menugroup>
+    </workground>
+
+</desktop>

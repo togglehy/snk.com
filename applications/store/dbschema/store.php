@@ -60,6 +60,16 @@ $db['store'] = array(
             'in_list' => true,
             'default_in_list' => true,
         ) ,
+
+		'seller_id' => array (
+			'type' => 'number',
+			'label' => ('商家'),
+			'comment' => ('商家'),
+			'default' => 0,
+			'width' => 110,
+			'in_list' => true,
+			'orderby' => true,
+		),
     ) ,
     'index' => array(
         'ind_bn' => array(

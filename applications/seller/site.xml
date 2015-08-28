@@ -1,0 +1,12 @@
+<site>
+	<module controller='site_seller' >
+		<name>s</name>
+		<title>商家中心</title>
+		<disable>false</disable>
+	</module>
+	<module controller='site_order' >
+		<name>o</name>
+		<title>商家订单</title>
+		<disable>false</disable>
+	</module>
+</site> 

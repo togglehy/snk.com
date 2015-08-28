@@ -1,0 +1,12 @@
+<root>
+<!-- 模块：站点管理(site) -->
+    <register module="site" ctl="admin_seller" act="save" param="seller.indexs.title" prk="seller_id">
+        <operate_type>商家</operate_type>
+        <template>商家 %s</template>
+    </register>
+	
+	<register module="site" ctl="admin_seller" act="checkin" param="seller_id">
+        <operate_type>商家审核</operate_type>
+        <template>>商家审核 %s</template>
+    </register>    
+</root>

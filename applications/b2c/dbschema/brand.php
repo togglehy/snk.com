@@ -22,7 +22,7 @@ $db['brand']=array (
       'extra' => 'auto_increment',
       'label' => ('品牌id'),
       'comment' => ('品牌id'),
-      
+
       'in_list' => false,
       'default_in_list' => false,
     ),
@@ -92,7 +92,15 @@ $db['brand']=array (
       'type' => 'last_modify',
       'label' => ('更新时间'),
       'width' => 110,
-      
+      'in_list' => true,
+      'orderby' => true,
+    ),
+	'seller_id' => array (
+      'type' => 'number',
+      'label' => ('商家'),
+	  'comment' => ('商家'),
+	  'default' => 0,
+      'width' => 110,
       'in_list' => true,
       'orderby' => true,
     ),

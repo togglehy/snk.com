@@ -336,6 +336,14 @@ $db['orders'] = array(
             'type' => 'bool',
             'default' => 'false',
         ) ,
+		'seller' => array (
+			'type' => 'serialize',
+			'label' => ('商家'),
+			'comment' => ('商家'),
+			'default' => 0,
+			'in_list' => true,
+			'orderby' => true,
+		),
     ) ,
     'index' => array(
         'ind_ship_status' => array(

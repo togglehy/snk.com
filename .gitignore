@@ -1,0 +1,13 @@
+\#*
+.*
+!.gitignore
+*.swp
+*~
+*.swo
+$.swn
+config/certi.php
+config/config.php
+config/install.lock.php
+tmp/
+logs/
+mobile_test_case

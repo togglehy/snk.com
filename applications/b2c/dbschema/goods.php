@@ -199,6 +199,17 @@ $db['goods'] = array(
             'filtertype' => 'normal',
             'label' => ('周购买次数') ,
         ) ,
+		// 商家
+		'seller_id' => array (
+		  'type' => 'number',
+		  'label' => ('商家'),
+		  'comment' => ('商家'),
+		  'default' => 0,
+		  'width' => 110,
+		  'in_list' => true,
+		  'orderby' => true,
+		),
+
         'params' =>
             array (
               'type' => 'serialize',
