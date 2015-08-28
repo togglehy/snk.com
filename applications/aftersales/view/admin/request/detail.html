@@ -1,0 +1,277 @@
+<div class="table-scrollable">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                SKU货号
+            </th>
+            <th>
+                商品名称
+            </th>
+            <th>
+                商品成交价
+            </th>
+            <th>
+                申请售后服务
+            </th>
+            <th>
+                订单
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <{$product.bn}>
+            </td>
+            <td>
+                <img src="<{$product.image_id|storager:'xs'}>" class="img-thumbnail" width=40 />
+                <{$product.name}><small><{$product.spec_info}></small>
+            </td>
+            <td>
+                <small>￥</small><{$product.buy_price|cur}>
+            </td>
+            <td>
+                <{switch from=$request_detail.req_type}>
+                    <{case value='1'}>
+                    退货
+                    <{case value='2'}>
+                    换货
+                    <{case value='3'}>
+                    维修
+                    <{case value='4'}>
+                    投诉\建议
+                <{/switch}>
+                <{if $request_detail.product.quantity}>
+                x <{$request_detail.product.quantity}>
+                <{/if}>
+            </td>
+            <td>
+                <a target="_blank" href="index.php?app=b2c&ctl=admin_order&act=detail&p[0]=<{$request_detail.order_id}>"><{$request_detail.order_id}></a>
+                <{if $request_detail.order.pmt_goods || $request_detail.order.pmt_goods}>
+                <br>
+                    <i class="fa fa-warning"></i>该订单存在促销优惠
+                <{/if}>
+            </td>
+        </tr>
+        <tr>
+            <td class="font-red-pink">
+                <i class="fa fa-meh-o"></i> 问题描述：
+            </td>
+            <td colspan=4>
+                <{$request_detail.description}>
+                <{if count($request_detail.images)<1}>
+                    <{else}>
+                    <br>
+                    <{foreach from=$request_detail.images item=item}>
+                    <a target="_blank" href="<{$item.image_id|storager}>">
+                        <img class="img-thumbnail" src="<{$item.image_id|storager:'xs'}>" width="40" />
+                    </a>
+                    <{/foreach}>
+                    <{/if}>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<{if $request_detail.reship}>
+<div class="table-scrollable">
+<table class="table">
+    <thead>
+        <th>
+            退货单号
+        </th>
+        <th>
+            物流单号
+        </th>
+        <th>
+            始发地址
+        </th>
+        <th>
+            收货地址
+        </th>
+        <th>
+            物流费用
+        </th>
+        <th>
+            最后更新时间
+        </th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <{$request_detail.reship.delivery_id}>
+            </td>
+            <td>
+                <{$request_detail.reship.logistics_no}>
+            </td>
+            <td>
+                <{$request_detail.reship.consignor.addr}>
+            </td>
+            <td>
+                <{$request_detail.reship.consignee.addr}>
+            </td>
+            <td>
+                <{$request_detail.reship.cost_freight+$reship.cost_protect|cur}>
+            </td>
+            <td>
+                <{$request_detail.reship.last_modify|cdate}>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<{/if}>
+<{if $request_detail.refund}>
+<div class="table-scrollable">
+<table class="table">
+    <thead>
+        <th>
+            退款单号
+        </th>
+        <th>
+            退款金额
+        </th>
+        <th>
+            收款者银行
+        </th>
+        <th>
+            收款者账户
+        </th>
+        <th>
+            当前状态
+        </th>
+        <th>
+            最后更新时间
+        </th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <{$request_detail.refund.bill_id}>
+            </td>
+            <td>
+                <{$request_detail.refund.money|cur}>
+            </td>
+            <td>
+                <{$request_detail.refund.payee_bank}>
+            </td>
+            <td>
+                <{$request_detail.refund.payee_account}>
+            </td>
+            <td>
+                <{$request_detail.refund.status}>
+            </td>
+            <td>
+                <{$request_detail.refund.last_modify|cdate}>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<{/if}>
+
+<form action="index.php?app=aftersales&ctl=admin_request&act=save&p[0]=<{$request_detail.request_id}>&finder_page=<{$env.get.page}>" method="post" class="form">
+    <input type="hidden" name="request_id" value="<{$request_detail.request_id}>">
+    <div class="form-horizontal">
+        <div class="form-body">
+            <div class="form-group">
+                <label class="col-md-2 control-label">售后服务类型</label>
+                <div class="col-md-4">
+                    <{input name="req_type" type=select options=$rq_schema.columns.req_type.type value=$request_detail.req_type}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">商品返回方式</label>
+                <div class="col-md-4">
+                    <{input name="delivery_type" type=select options=$rq_schema.columns.delivery_type.type value=$request_detail.delivery_type}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">状态</label>
+                <div class="col-md-4">
+                    <{input name="status" type=select options=$rq_schema.columns.status.type value=$request_detail.status}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">备注</label>
+                <div class="col-md-9">
+                    <{input name="remarks" required="true" type=textarea value=$request_detail.remarks}>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-9">
+                        <button type="submit" class="btn green">更新</button>
+                        <{if $request_detail.req_type!='4'}>
+                        <{if !$request_detail.reship}>
+                        <a href="index.php?app=b2c&ctl=admin_order&act=goreship&p[0]=<{$request_detail.order_id}>&p[1]=<{$request_detail.memember_addr_id}>&product[product_id]=<{$product.product_id}>&product[quantity]=<{$request_detail.product.quantity}>" data-toggle="modal" data-target="#order_edit_modal_<{$env.get.id}>" class="btn btn-default">新建退货单</a>
+                        <{/if}>
+                        <{if !$request_detail.refund}>
+                        <a href="index.php?app=b2c&ctl=admin_order&act=gorefund&p[0]=<{$request_detail.order_id}>&refund_amount=<{$product.buy_price*$request_detail.product.quantity}>" class="btn btn-default" data-target="#order_edit_modal_<{$env.get.id}>" data-toggle="modal">新建退款单</a>
+                        <{/if}>
+                        <{/if}>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="modal fade bs-modal-lg " id="order_edit_modal_<{$env.get.id}>" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+    $('#order_edit_modal_<{$env.get.id}>').on('shown.bs.modal',function(){
+        var form = $(this).find('form'),detail_row = form.closest('.detail-row'),detail_url = detail_row.prev().find('[data-detail]').attr('data-detail'),sub_btn = $(form.find('[type="submit"]'));
+        sub_btn.on('click',function(e){
+            e.stopPropagation();
+            sub_btn.attr('data-loading-text','正在提交...').button('loading');
+            $.post(form.prop('action'),form.serialize(),function(re){
+
+                if('success' in re){
+                    var save_data = {
+                        request_id:"<{$request_detail.request_id}>"
+                    };
+                    if('delivery_id' in re){
+                        save_data['delivery_id'] = re.delivery_id;
+                    }
+                    if('bill_id' in re){
+                        save_data['bill_id'] = re.bill_id;
+                    }
+                    $.post('index.php?app=aftersales&ctl=admin_request&act=save',save_data,function(re){
+                        sub_btn.button('reset');
+                        if('success' in re){
+                            $('#order_edit').modal('hide'); //关窗
+                            Messagebox.success(re.success);//提示
+                            detail_row.find('td').load(detail_url);//刷新
+                        }else if('error' in re){
+                            Messagebox.error(re.error||'异常');
+                        }else{
+                            Messagebox.error('发生异常');
+                        }
+
+                    },'json');
+
+                    return;
+                }
+
+                if('error' in re){
+                    Messagebox.error(re.error);
+                }else{
+                    Messagebox.error('发生异常');
+                }
+                sub_btn.button('reset');
+            },'json');
+            return false;
+        });
+    });
+</script>

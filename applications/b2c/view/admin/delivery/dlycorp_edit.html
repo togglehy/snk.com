@@ -1,0 +1,61 @@
+<h3 class="page-title"><{if $dlycorp.corp_id }>编辑物流公司<{else}>添加物流公司<{/if}></h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?app=b2c&ctl=admin_dlycorp&act=index">物流公司列表</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;"><{if $dlycorp.corp_id }>编辑物流公司<{else}>添加物流公司<{/if}></a>
+        </li>
+    </ul>
+</div>
+<form action="index.php?app=b2c&ctl=admin_dlycorp&act=save" method="post" id='dlycorp_form' class="form" >
+
+    <{if $dlycorp.corp_id }><input type="hidden" name="corp_id" value="<{$dlycorp.corp_id}>"><{/if}>
+    <div class="form form-horizontal">
+        <div class="form-body">
+             <div class="form-group">
+                 <label class="col-md-2 control-label">物流公司名称<span class="required" aria-required="true">*</span></label>
+                 <div class="col-md-5">
+                     <input type="text"  name="name"  required="true" value="<{$dlycorp.name}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+
+             <div class="form-group">
+                 <label class="col-md-2 control-label">物流公司代码<span class="required" aria-required="true">*</span></label>
+                 <div class="col-md-5">
+                     <input type="text" onkeyup="$(this).val($(this).val().toUpperCase());"  name="corp_code"  required="true" value="<{$dlycorp.corp_code}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+
+             <div class="form-group">
+                 <label class="col-md-2 control-label">公司官网</label>
+                 <div class="col-md-5">
+                     <input type="url"  name="website"   value="<{$dlycorp.website}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">包裹查询网址</label>
+                 <div class="col-md-5">
+                     <input type="url"  name="request_url" value="<{$dlycorp.request_url}>" class="form-control" >
+                 </div>
+             </div>
+             <!-- <div class="form-group">
+                 <label class="col-md-2 control-label">排序</label>
+                 <div class="col-md-2">
+                     <input type="number"  name="ordernum" value="<{$dlycorp.ordernum}>" class="form-control" >
+                 </div>
+             </div> -->
+
+    </div>
+        <div class="form-actions">
+            <div class="row">
+                    <div class="col-md-offset-2 col-md-9">
+                        <button type="submit" class="btn blue">保存</button>
+                    </div>
+            </div>
+        </div>
+
+    <div>
+</form>

@@ -1,0 +1,78 @@
+<h3 class="page-title">
+			商品分类管理 <small>商品分类主要作用是用于导航</small>
+</h3>
+
+<div class="table-toolbar">
+    <div class="btn-group">
+        <a class="btn green" data-target="#cat_edit" data-toggle="modal" label="添加新分类" icon="fa-plus" href="index.php?app=b2c&ctl=admin_goods_cat&act=addnew">
+                添加新分类&nbsp;<i class="fa fa-plus"></i>
+        </a>
+    </div>
+</div>
+<form  action="index.php?app=b2c&ctl=admin_goods_cat&act=update" method="post">
+
+
+<div class="table-scrollable">
+    <table class="table  table-striped table-hover">
+        <thead>
+            <tr>
+                <th>分类</th>
+                <th class="hide">关联类型</th>
+                <th width="5%">同级排名<button class="btn btn-xs default" type="submit"><i class="fa fa-refresh"></i> 更新排名</button></th>
+                <th>操作</th>
+            </tr>
+        </thead>
+    <tbody id="cat_list">
+        <{foreach from=$tree item=item name="item"}>
+            <tr data-catid="<{$item.cat_id}>" data-catpid="<{$item.pid}>" data-step="<{$item.step}>">
+                <td><{$item.cat_name}></td>
+                <td class="hide"><{if $item.type_name}><span class="badge badge-default"><{$item.type_name}></span><{/if}></td>
+                <td><input class="form-control input-sm" type="number" size="5"  name="p_order[<{$item.cat_id}>]" value="<{$item.p_order|default:0}>"  ></td>
+                <td>
+					<a class="btn btn-xs btn-default" href="<{link router='site' app=b2c ctl=site_list}>?cat_id=<{$item.cat_id}>" target="_blank"><i class="fa fa-eye"></i>预览</a>
+                    <a data-target="#cat_edit" data-toggle="modal" href="index.php?app=b2c&ctl=admin_goods_cat&act=edit&p[0]=<{$item.cat_id}>" class="btn btn-xs btn-default"><i class="fa fa-edit"></i> 编辑</a>
+                    <button type="button" data-catname="<{$item.cat_name}>"  data-action="index.php?app=b2c&ctl=admin_goods_cat&act=toRemove&p[0]=<{$item.cat_id}>" class="btn btn-xs btn-default cat-del"><i class="fa fa-trash-o"></i> 删除</button>
+                    <a data-target="#cat_edit" data-toggle="modal" href="index.php?app=b2c&ctl=admin_goods_cat&act=addnew&p[0]=<{$item.cat_id}>" class="btn btn-xs btn-default"><i class="fa fa-plus"></i> 添加子类</a>
+                </td>
+            </tr>
+        <{/foreach}>
+    </tbody>
+    </table>
+</div>
+</form>
+<script charset="utf-8">
+    $.each($('#cat_list tr'),function(index,item){
+            item = $(item);
+            if(item.attr('data-catpid')!='0'){
+                var cat_name_col = item.find('td:first');
+                var cat_parent_col = $('#cat_list tr[data-catid="'+item.attr('data-catpid')+'"] td:first');
+                cat_name_col.html('<span style="color:#cecece;">'+cat_parent_col.text()+"&nbsp;&raquo;&nbsp;</span>"+cat_name_col.text());
+            }
+    });
+	$('#cat_list button.cat-del').on('click',function(e){
+		e.stopPropagation();
+		var btn = $(this);
+		bootbox.confirm('确定删除分类<span class="badge">'+btn.attr('data-catname')+"</span>?",function(flag){
+				if(flag){
+					$.getJSON(btn.attr('data-action'),function(re){
+						if(re && re.success){
+							btn.closest('tr').remove();
+							toastr['success'](re.success,'成功');
+						}else if(re.error){
+							toastr['error'](re.error,'错误');
+						}else{
+							toastr['error']('删除失败','错误');
+						}
+					});
+				}
+		});
+	});
+</script>
+
+<div class="modal fade" id="cat_edit" role="basic" aria-hidden="true">
+              <div class="modal-dialog">
+                      <div class="modal-content">
+
+                      </div>
+              </div>
+</div>

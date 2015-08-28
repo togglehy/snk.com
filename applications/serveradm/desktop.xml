@@ -1,0 +1,7 @@
+<desktop>
+    <permissions>
+        <permission id="serveradm" display='true'>服务器信息</permission>
+    </permissions>
+    <adminpanel group="desktop_system" permission="serveradm" controller="admin_xhprof" action="index" display='false'>xhprof性能探针</adminpanel>
+    <adminpanel group="desktop_system" permission="serveradm" controller="admin_serveradm" action="index" display='true'>服务器信息</adminpanel>
+</desktop>

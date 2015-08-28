@@ -1,0 +1,89 @@
+{
+	"data":
+	[
+		{
+			"brand_id": 1,
+			"brand_name": "Apple",
+			"brand_initial": "A",
+			"brand_url": null,
+			"brand_desc": "<p>Apple 设计并打造了 iPod 和 iTunes、Mac 笔记本电脑和台式电脑、OS X 操作系统，以及革命性的 iPhone 和 iPad。</p>",
+			"brand_logo": "f0af2e6bbdfaad22bd5b2308203a0270",
+			"brand_setting": "a:1:{s:14:\"brand_template\";s:12:\"default.html\";}",
+			"disabled": "false",
+			"ordernum": 30,
+			"last_modify": 1433233491
+		},
+		{
+			"brand_id": 2,
+			"brand_name": "MIUI/小米",
+			"brand_initial": "M",
+			"brand_url": null,
+			"brand_desc": "<p>小米公司正式成立于2010年4月，是一家专注于高端智能手机、互联网电视自主研发的创新型科技企业。主要由前谷歌、微软、摩托、金山等知名公司的顶尖人才组建。 小米手机、MIUI、米聊、小米网、小米盒子、小米电视和小米路由器是小米公司旗下七大核心业务。“为发烧而生”是小米的产品理念。小米公司首创了用互联网模式开发手机操作系统的模式，将小米手机打造成全球首个互联网手机品牌。并通过互联网开发、营销和销售小米的产品。 小米公司在机顶盒、互联网电视和路由器等领域也颠覆了传统市场。同时，小米公司也在积极打造小米生态链体系，力争全行业、全产业链都能达到共赢。<br></p>",
+			"brand_logo": "3942f9bbd284e2682a96b960f3d06140",
+			"brand_setting": "a:1:{s:14:\"brand_template\";s:12:\"default.html\";}",
+			"disabled": "false",
+			"ordernum": 30,
+			"last_modify": 1433224148
+		},
+		{
+			"brand_id": 3,
+			"brand_name": "保宁",
+			"brand_initial": "B",
+			"brand_url": null,
+			"brand_desc": "<p>保宁米迪恩成立于1979年，以临床医学为基础研制开发，致力于提高宝宝以及妈妈的健康和生活质量，现已成为多年韩国婴童NO.1品牌。<br></p>",
+			"brand_logo": "8ab0dacccb6251497cff252855781aed",
+			"brand_setting": "a:1:{s:14:\"brand_template\";s:12:\"default.html\";}",
+			"disabled": "false",
+			"ordernum": 30,
+			"last_modify": 1433224206
+		},
+		{
+			"brand_id": 4,
+			"brand_name": "FISHER-PRICE/费雪",
+			"brand_initial": "F",
+			"brand_url": null,
+			"brand_desc": "<p>费雪牌是全球领先的婴幼儿品牌，在过去的80年历史中，费雪已经为从出生到5岁的宝宝制作了成千上万款玩具，为他们提供合适年龄、有趣好玩、帮助成长、高品质及绝对安全的玩具和婴幼儿用品！<br></p>",
+			"brand_logo": "48587059f56eafdbd6e14163d66f37b4",
+			"brand_setting": "a:1:{s:14:\"brand_template\";s:12:\"default.html\";}",
+			"disabled": "false",
+			"ordernum": 30,
+			"last_modify": 1433224250
+		},
+		{
+			"brand_id": 5,
+			"brand_name": "Fila/斐乐",
+			"brand_initial": "F",
+			"brand_url": null,
+			"brand_desc": "<p>FILA是著名的意大利百年生活时尚品牌，始创于1911年意大利Biella小镇。今日的FILA以积极向上、不断拼搏和永不放弃的探索精神为品牌理念，以优雅活力的设计、高品质的物料以及一流的剪裁誉满全球。FILA现行销于意大利、英国、德国、法国、美国、日本、韩国、巴西、俄罗斯等三十多个国家。<br></p>",
+			"brand_logo": "17a58a1ffd272157277ff7063726d1d4",
+			"brand_setting": "a:1:{s:14:\"brand_template\";s:12:\"default.html\";}",
+			"disabled": "false",
+			"ordernum": 30,
+			"last_modify": 1433224405
+		},
+		{
+			"brand_id": 6,
+			"brand_name": "NEW BALANCE",
+			"brand_initial": "N",
+			"brand_url": null,
+			"brand_desc": "<p>NB诞生于1906年美国波士顿。100多年来，不断以新兴科技，孜孜不倦地开发符合人体工程学的鞋款。以追求极度舒适穿着感受为目标。NB童鞋专注1-14岁儿童足部健康，注重辅助发育、舒适稳定、保护矫正。<br></p>",
+			"brand_logo": "e0abb117a7090bfb5d647c04b8651bea",
+			"brand_setting": "a:1:{s:14:\"brand_template\";s:12:\"default.html\";}",
+			"disabled": "false",
+			"ordernum": 30,
+			"last_modify": 1433225605
+		},
+		{
+			"brand_id": 7,
+			"brand_name": "GAP",
+			"brand_initial": "G",
+			"brand_url": null,
+			"brand_desc": "<p>源自1969，45年以来Gap已成为风靡全美的最大服饰零售商之一。Gap坚持秉承重塑经典、引领潮流的精神，演绎“大胆、简易、真实”的美式休闲时装文化。<br></p>",
+			"brand_logo": "afd7efd818a7da81721578c5ee886bc1",
+			"brand_setting": "a:1:{s:14:\"brand_template\";s:12:\"default.html\";}",
+			"disabled": "false",
+			"ordernum": 30,
+			"last_modify": 1433233198
+		}
+	]
+}

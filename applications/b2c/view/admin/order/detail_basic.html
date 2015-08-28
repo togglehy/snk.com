@@ -1,0 +1,491 @@
+<div class="row">
+	<div class="col-md-4 col-sm-12">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					会员信息
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="row static-info">
+					<div class="col-md-3">
+						账号:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.login_account}>
+					</div>
+				</div>
+				<{if $member_info.name}>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						姓名:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.name}>
+					</div>
+				</div>
+				<{/if}>
+				<{if $member_info.sex}>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						性别:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.sex}>
+					</div>
+				</div>
+				<{/if}>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						等级:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.levelname}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						折扣:
+					</div>
+					<div class="col-md-9 value">
+						<{if $member_info.lv_discount<1}>
+						<{$member_info.lv_discount*10}>折
+						<{else}>
+						无
+						<{/if}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						经验:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.experience}><small class="text-muted">&nbsp;此单可得:<{$order.order_total|number_format:'0':'':''}></small>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						积分:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.integral}>
+						<small class="text-muted">&nbsp;此单可得:<{$order.score_g+0}></small>
+					</div>
+				</div>
+
+				<{if $member_info.email}>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						邮箱:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.email}>
+					</div>
+				</div>
+				<{/if}>
+				<{if $member_info.mobile}>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						手机:
+					</div>
+					<div class="col-md-9 value">
+						<{$member_info.mobile}>
+					</div>
+				</div>
+				<{/if}>
+			</div>
+		</div>
+	</div> <!-- end col -->
+
+	<div class="col-md-4 col-sm-12">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					收货人信息
+				</div>
+				<{if $order.status == 'active' && $order.ship_status == '0'}>
+				<div class="actions">
+					<a href="index.php?app=b2c&ctl=admin_order&act=edit&p[0]=<{$order.order_id}>" data-toggle="modal" data-target="#order_edit" class="btn btn-default btn-sm">
+					<i class="fa fa-pencil"></i> 编辑 </a>
+				</div>
+				<{/if}>
+			</div>
+			<div class="portlet-body">
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						姓名:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.consignee.name|escape:'html'}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						地区:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.consignee.area|region}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						地址:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.consignee.addr|escape:'html'}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						邮编:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.consignee.zip|escape:'html'}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						电话:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.consignee.mobile}>
+						<{if $order.consignee.telephone}>
+						&nbsp;/&nbsp;<{$order.consignee.telephone}>
+						<{/if}>
+					</div>
+				</div>
+				<!-- <div class="row static-info">
+					<div class="col-md-3 name">
+						期望收货时间:
+					</div>
+					<div class="col-md-9 value">
+
+					</div>
+				</div> -->
+			</div>
+		</div>
+	</div> <!-- end col -->
+
+	<div class="col-md-4 col-sm-12">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					支付方式
+				</div>
+				<{if $order.status == 'active' && $order.pay_status == '0'}>
+				<!-- <div class="actions">
+					<a href="index.php?app=b2c&ctl=admin_order&act=edit&p[0]=<{$order.order_id}>" data-toggle="modal" data-target="#order_edit" class="btn btn-default btn-sm">
+					<i class="fa fa-pencil"></i> 编辑 </a>
+				</div> -->
+				<{/if}>
+			</div>
+			<div class="portlet-body">
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						名称:
+					</div>
+					<div class="col-md-9 value">
+						<{$payapp.display_name}>
+						<br><small><{$payapp.name}><{$payapp.version}></small>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						状态:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.pay_status|order_pay_status}>
+					</div>
+				</div>
+				<{if $order.order_total-$order.payed>0}>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						应付:
+					</div>
+					<div class="col-md-9 value">
+						<small>￥</small><{$order.order_total-$order.payed|cur}>
+					</div>
+				</div>
+				<{/if}>
+				<!-- <div class="row static-info">
+					<div class="col-md-3 name">
+						未付金额:
+					</div>
+					<div class="col-md-9 value">
+
+					</div>
+				</div> -->
+			</div>
+		</div>
+
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					物流方式
+				</div>
+				<{if $order.status == 'active' && $order.ship_status == '0'}>
+				<!-- <div class="actions">
+					<a href="index.php?app=b2c&ctl=admin_order&act=edit&p[0]=<{$order.order_id}>" data-toggle="modal" data-target="#order_edit" class="btn btn-default btn-sm">
+					<i class="fa fa-pencil"></i> 编辑 </a>
+				</div> -->
+				<{/if}>
+			</div>
+			<div class="portlet-body">
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						名称:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.dlytype.dt_name}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						运费:
+					</div>
+					<div class="col-md-9 value">
+						<small>￥</small><{$order.cost_freight|cur}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						状态:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.ship_status|order_ship_status}>
+					</div>
+				</div>
+<!--
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						追踪:
+					</div>
+					<div class="col-md-9 value">
+
+					</div>
+				</div> -->
+			</div>
+		</div>
+	</div> <!-- end col -->
+
+	<div class="col-md-12 col-sm-12">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					购物清单
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>货号</th>
+								<th>名称</th>
+								<th>销售价</th>
+								<th>会员价</th>
+								<th>成交价</th>
+								<th>数量</th>
+								<th>小计</th>
+								<th>已发货数量</th>
+							</tr>
+						</thead>
+						<tbody>
+							<{foreach from=$order.items item=item name="item"}>
+								<tr>
+									<td><{$item.bn}></td>
+									<td>
+										<img class='img-thumbnail' src="<{$item.image_id|storager:'xs'}>" width=40 />
+										<{$item.name}>&nbsp;
+										<small><{$item.spec_info}></small>
+									</td>
+									<td><{$item.price|cur}></td>
+									<td><{$item.member_lv_price|cur}></td>
+									<td><{$item.buy_price|cur}></td>
+									<td><{$item.nums}></td>
+									<td><{$item.amount|cur}></td>
+									<td><{$item.sendnum}></td>
+								</tr>
+							<{/foreach}>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+		</div>
+	</div> <!-- end col -->
+</div>
+<div class="row">
+	<{assign var=has_pmt value=count($order.promotions)}>
+	<{if $has_pmt}>
+		<div class="col-md-6">
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th width="20%">
+									促销作用于
+								</th>
+								<th width="20%">
+									促销分类
+								</th>
+								<th>
+									促销说明
+								</th>
+								<th width="20%">
+									促销优惠金额
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<{foreach from=$order.promotions item=pmt}>
+							<tr>
+								<td>
+									<{if $pmt.pmt_type == 'order'}>
+									订单
+									<{else}>
+									商品
+									<{/if}>
+								</td>
+								<td>
+									<{$pmt.pmt_tag}>
+								</td>
+								<td>
+									<strong><{$pmt.pmt_description}></strong>
+									<p>
+										<{$pmt.pmt_solution}>
+									</p>
+								</td>
+								<td>
+									<{if $pmt.pmt_save>0}>
+									<span class="text-danger">
+										<small>￥</small><{$pmt.pmt_save|cur}>
+									</span>
+									<{/if}>
+								</td>
+
+							</tr>
+							<{/foreach}>
+						</tbody>
+					</table>
+
+				</div>
+
+		</div>
+	<{/if}>
+	<div class="<{if !$has_pmt}>col-md-offset-6<{/if}> col-md-6">
+		<div class="well">
+				<div class="row static-info align-reverse">
+					<div class="col-md-9 name">
+						商品总金额:
+					</div>
+					<div class="col-md-3 value">
+								<small>￥</small><{$order.finally_cart_amount+$order.memberlv_discount+$order.pmt_goods+$order.pmt_order|cur}>
+					</div>
+				</div>
+				<div class="row static-info align-reverse">
+					<div class="col-md-9 name">
+						<{if $order.status == 'active' && $order.pay_status=='0'}>
+						<a href="index.php?app=b2c&ctl=admin_order&act=discount&p[0]=<{$order.order_id}>" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#order_edit">
+							<i class="fa fa-pencil"></i> 新增减价优惠
+						</a>
+						<{/if}>
+						 订单促销优惠:
+					</div>
+					<div class="col-md-3 value">
+						-<small>￥</small><{$order.pmt_order|cur}>
+					</div>
+				</div>
+				<{if $order.pmt_goods > 0}>
+				<div class="row static-info align-reverse">
+					<div class="col-md-9 name">
+						商品促销优惠:
+					</div>
+					<div class="col-md-3 value">
+						-<small>￥</small><{$order.pmt_goods|cur}>
+					</div>
+				</div>
+				<{/if}>
+				<{if $order.cost_tax>0}>
+				<div class="row static-info align-reverse">
+					<div class="col-md-9 name">
+						税金:
+					</div>
+					<div class="col-md-3 value">
+						<small>￥</small><{$order.cost_tax|cur}>
+					</div>
+				</div>
+				<{/if}>
+				<div class="row static-info align-reverse">
+					<div class="col-md-9 name">
+						运费:
+					</div>
+					<div class="col-md-3 value">
+						<small>￥</small><{$order.cost_freight|cur}>
+					</div>
+				</div>
+				<div class="row static-info align-reverse">
+					<div class="col-md-9 name">
+						订单应付金额:
+					</div>
+					<div class="col-md-3 value">
+						<small>￥</small><big><{$order.order_total|cur}></big>
+					</div>
+				</div>
+				<{if $order.need_invoice == 'true'}>
+				<div class="alert alert-info">
+					<h5><i class="fa fa-ticket"></i> 该订单客户要求开具发票</h5>
+					<ul class="list-unstyled">
+						<li><strong>发票抬头:</strong><{$order.invoice_title}></li>
+					</ul>
+				</div>
+				<{/if}>
+			</div>
+
+	</div>
+
+</div> <!-- detail-b -->
+<{if $order.memo}>
+<div class="note">
+	<h4 class="block">顾客备注</h4>
+	<p>
+		<{$order.memo}>
+	</p>
+</div>
+<{/if}>
+
+<div class="note">
+	<h4 class="block">订单处理人员备注&nbsp;&nbsp;<small class="text-muted">Remarks</small></h4>
+	<form  action="index.php?app=b2c&ctl=admin_order&act=remarks&p[0]=<{$order.order_id}>" method="post">
+		<textarea class="form-control" name="remarks" rows="2"><{$order.remarks}></textarea>
+		<button type="submit" class="btn default">保存备注</button>
+	</form>
+</div>
+
+<div class="note">
+	<h4 class="block">订单操作日志</h4>
+	<div class="table-responsive">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>时间</th>
+          <th>操作人</th>
+          <th>行为</th>
+		  <th>操作结果</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <{foreach from=$order_logs item=log}>
+        <tr>
+          <td ><{$log.log_time|cdate}></td>
+          <td><{if $log.op_name}><{$log.op_name}><{else}>顾客<{/if}></td>
+          <td ><{$log.behavior}></td>
+		  <td ><{$log.result}></td>
+          <td ><{$log.log}></td>
+        </tr>
+        <{/foreach}>
+      </tbody>
+      </table>
+    </div>
+</div>

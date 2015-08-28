@@ -1,0 +1,135 @@
+<div class="page-header">
+  <h1>我的订单 <small>My Orders</small></h1>
+</div>
+<ul class="nav nav-tabs my-orders-nav">
+    <li <{if !$current_status||$current_status =='all'}>class="active"<{/if}>><a href="<{link app=b2c ctl=site_member act=orders}>" >全部订单</a></li>
+    <li <{if $current_status =='s1'}>class="active"<{/if}>><a href="<{link app=b2c ctl=site_member act=orders args0=s1}>">待付款</a></li>
+    <li <{if $current_status =='s2'}>class="active"<{/if}>><a href="<{link app=b2c ctl=site_member act=orders args0=s2}>">待发货</a></li>
+    <li <{if $current_status =='s3'}>class="active"<{/if}>><a href="<{link app=b2c ctl=site_member act=orders args0=s3}>">待收货</a></li>
+    <li <{if $current_status =='s4'}>class="active"<{/if}>><a href="<{link app=b2c ctl=site_member act=orders args0=s4}>">待评价</a></li>
+</ul>
+<{if $order_list}>
+<div class="my-orders-list">
+    <table class="table mo-list-head table-bordered">
+        <thead>
+            <tr class="text-nowrap">
+                <th width="70%">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            商品图片
+                        </div>
+                        <div class="col-xs-4 text-left">
+                            商品名称/规格
+                        </div>
+                        <div class="col-xs-2">
+                            数量
+                        </div>
+                        <div class="col-xs-2">
+                            商品价格
+                        </div>
+                        <div class="col-xs-2">
+                            商品操作
+                        </div>
+                    </div>
+                </th>
+                <th width="15%">
+                    订单金额
+                </th>
+                <th width="15%">
+                    订单操作
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <div class="row mo-handle">
+        <div class="col-xs-6">
+            <em><{$order_count}></em>张订单
+        </div>
+        <div class="col-xs-6 text-right">
+            <{minipagers data=$pager}>
+        </div>
+    </div>
+    <{foreach from=$order_list item=order}>
+        <table class="table mo-list-items table-bordered status-<{$order.status}>">
+            <thead>
+                <tr class="text-nowrap">
+                    <th width="70%">
+                        <ul class="list-inline">
+                            <li><{$order.createtime|cdate}></li>
+                            <li>#<a class="text-muted" href="<{link app=b2c ctl=site_order act=detail args0=$order.order_id}>"><strong><{$order.order_id}></strong></a></li>
+                            <li><{$order.pay_status|order_pay_status}></li>
+                            <li><{$order.ship_status|order_ship_status}></li>
+                        </ul>
+                    </th>
+                    <th width="15%"></th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <{foreach from=$order_items_group[$order.order_id] item=item name=oig}>
+                            <div class="row mo-item <{if $env.foreach.oig.last}>last<{/if}>">
+                                <div class="col-xs-2">
+                                    <a href="<{link app=b2c ctl=site_product act=index args0=$item.product_id}>">
+                                    <img class="img-thumbnail" src="<{$item.image_id|storager:'xs'}>" alt="<{$item.name}>" /></a>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a class="text-muted" href="<{link app=b2c ctl=site_product act=index args0=$item.product_id}>"><{$item.name}><{if $item.spec_info}><br><small><{$item.spec_info}></small><{/if}></a>
+                                </div>
+                                <div class="col-xs-2 text-center">
+                                    <{$item.nums}>
+                                </div>
+                                <div class="col-xs-2 text-center">
+                                    <ul class="list-unstyled">
+                                        <li><del><{$item.price|cur}></del></li>
+                                        <li><{$item.buy_price|cur}></li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-2 text-center">
+                                    <{if $order.status!='cancel' && $order.ship_status!='0' && $order.ship_status!='4'}>
+                                    <a class="btn btn-xs btn-block btn-default" href="<{link app=aftersales ctl=site_member act=newrequest args0=$order.order_id args1=$item.product_id}>">退货\退款</a>
+                                    <{/if}>
+                                    <{if $order.status!='dead' && $order.ship_status!='0'}>
+                                    <a class="btn btn-xs btn-block btn-default" href="<{link app=b2c ctl=site_comment act=form args0=$order.order_id args1=$item.product_id}>">评价商品</a>
+                                    <{/if}>
+                                </div>
+                            </div>
+                        <{/foreach}>
+                    </td>
+                    <td class="text-center">
+                        <small>￥</small><{$order.order_total|cur}>
+                        <br>
+                        <{if $order.is_cod=='Y'}>
+                        <span class="label label-default">货到付款</span>
+                        <br>
+                        <{/if}>
+                    </td>
+                    <td>
+                        <{if $order.status=='active' && $order.is_cod!='Y' && $order.pay_status|in_array:$status_map.s1.pay_status}>
+                        <a href="<{link app=b2c ctl=site_checkout act=payment args0=$order.order_id}>" class="btn btn-xs btn-block btn-danger">订单付款</a>
+                        <{/if}>
+                        <a href="<{link app=b2c ctl=site_order act=detail args0=$order.order_id}>" class="btn btn-xs btn-block btn-default">订单详情</a>
+                        <{if $order.ship_status|in_array:$status_map.s3.ship_status}>
+                        <a href="<{link app=b2c ctl=site_order act=detail args0=$order.order_id args1=logistics_tracker}>" class="btn btn-xs btn-block btn-default">追踪物流</a>
+                        <{/if}>
+                        <{if $order.status == 'dead'}>
+                            <span class="btn btn-xs btn-block btn-warning disabled">订单已作废
+                                <br>
+                                <small><{$order.last_modify|cdate}></small>
+                            </span>
+                        <{/if}>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    <{/foreach}>
+</div>
+<{pagers data=$pager}>
+<{else}>
+<br>
+<div class="alert alert-info">
+    <h2>暂无</h2>
+</div>
+<{/if}>

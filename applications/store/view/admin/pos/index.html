@@ -1,0 +1,390 @@
+<div class="row pos-pane">
+    <div class="col-md-6">
+        <div class="panel object-filter" id="product_filter">
+            <div class="panel-heading">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-lg default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span>条码</span>
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-name="filter[barcode|head]" data-placeholder="请输入条码定位货品" class="active">
+                                <a href="javascript:;">条码</a>
+                            </li>
+                            <li data-name="filter[bn|head]" data-placeholder="请输入货号定位货品">
+                                <a href="javascript:;">货号</a>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li data-name="filter[name|has]" data-placeholder="请输入商品名称搜索">
+                                <a href="javascript:;">商品名称</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="text" data-action="<{link app=store ctl=admin_pos act=product_filter}>" style="font-size:18px;height:43px;" name="filter[barcode]" class="form-control input-lg" placeholder="请输入条码定位货品">
+                </div>
+            </div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <div class="well">
+            <a class="icon-btn font-red load-old-member" href="javascript:;" data-action="index.php?app=desktop&ctl=finder&act=object_select&finder_mdl=b2c_mdl_members&multiple=false" class="icon-btn font-red">
+                <i class="icon-user-following"></i>
+                <div>
+                    老会员
+                </div>
+            </a>
+            <a href="index.php?app=b2c&ctl=admin_member&act=add_page&mini=true&callback_func=new_member_callback_func" data-toggle="modal" data-target="#new_member_modal" class="icon-btn font-red">
+                <i class="icon-user-follow"></i>
+                <div>
+                    新会员
+                </div>
+            </a>
+            <a href="index.php?app=store&ctl=admin_pos&act=sel_coupon" data-mustmember=true data-toggle="modal" data-target="#coupon_modal" class="icon-btn">
+                <i class="icon-tag"></i>
+                <div>
+                    使用优惠券
+                </div>
+            </a>
+            <a href="index.php?app=store&ctl=admin_pos&act=sel_delivery" data-mustmember=true data-toggle="modal" data-target="#delivery_modal" class="icon-btn">
+                <i class="icon-plane"></i>
+                <div>
+                    需配送
+                </div>
+            </a>
+            <!-- <a href="javascript:;" id="print_test" class="icon-btn">
+                <i class="fa fa-print"></i>
+                <div>
+                    打印测试
+                </div>
+            </a> -->
+            <div id="cart_body" class="margin-top-10">
+                <div class="alert alert-info">
+                    等待加入货品
+                </div>
+            </div>
+            <button id="ready_submit" type="button" class="btn btn-lg btn-primary btn-block" >结账 <span id="cart_total"></span></button>
+        </div>
+
+    </div>
+</div>
+<form id="cart_form">
+    <!-- 默认无需配送，当面订单 -->
+    <input type="hidden" name="is_delivery" value="N">
+    <input type="hidden" name="payment[pay_app_id]" value="cash">
+</form>
+
+
+
+
+<div class="modal pos-modal fade" id="old_member_modal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      </div>
+  </div>
+</div>
+
+<div class="modal pos-modal fade" id="new_member_modal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+  </div>
+</div>
+
+<div class="modal pos-modal fade" id="coupon_modal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+  </div>
+</div>
+
+<div class="modal pos-modal fade" id="delivery_modal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="payment_modal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h3 class="modal-title">结账</h3>
+          </div>
+          <div class="modal-body">
+              <button type="button" data-payappid="cash" class="icon-btn text-danger">
+                  <i class="fa fa-money"></i>
+                  <div>现金</div>
+                  <i class="fa fa-check-circle-o" style="position:absolute;top:-5px;right:-5px;"></i>
+              </button>
+              <button type="button" data-payappid="paybycard" class="icon-btn">
+                  <i class="fa fa-credit-card"></i>
+                  <div>刷卡</div>
+              </button>
+              <button type="button" data-payappid="alipay_qrcode" class="icon-btn">
+                  <i class="fa fa-qrcode"></i>
+                  <div>支付宝扫码付</div>
+              </button>
+              <button type="button" data-payappid="alipay_qrcode" class="icon-btn">
+                  <i class="fa fa-qrcode"></i>
+                  <div>微信扫码付</div>
+              </button>
+              <table class="table table-borderd margin-top-10">
+                  <tr>
+                      <td class="bg-grey-steel">
+                          应结账金额：
+                          <h1 class="text-danger finaly-total" ></h1>
+                      </td>
+                  </tr>
+              </table>
+          </div>
+          <div class="modal-footer">
+              <button type="button" id="order_create" class="btn btn-lg btn-block green" data-defaulttext="结账,打印小票">结账,打印小票</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+
+<script charset="utf-8">
+    ! function() {
+        //筛选切换操作
+        $('.object-filter .dropdown-menu').on('click', 'li:not(li.divider)', function(e) {
+            //e.stopPropagation();
+            var f = $(this).closest('.object-filter');
+            f.find('.dropdown-menu li').removeClass('active');
+            $(this).addClass('active');
+            f.find('.dropdown-toggle span').text($(this).find('a').text());
+            f.find('input').prop('name', $(this).attr('data-name')).prop('placeholder', $(this).attr('data-placeholder')).val('');
+        });
+
+        //筛选回车操作
+        $('#product_filter input').on('keydown', function(e) {
+            switch (e.keyCode) {
+                case 13://回车
+                    var _input = $(this);
+                    var f = $(this).closest('.object-filter');
+                    f.find('.panel-body').load($(this).attr('data-action'), _input.serializeArray(), function() {
+                        _input.prop('placeholder', '');
+                    });
+                    _input.val('');
+                    _input.prop('placeholder', '正在查找...');
+                    break;
+                case 38:
+                case 40://上下
+                //TODO
+                    break;
+                default:
+                    break;
+
+            }
+        });
+
+
+
+        //焦点筛选输入框
+        // var focus_product_filter = setInterval(function(){
+        //     if($('.pos-modal.in').length)return;
+        //     if($('#product_filter input').length){
+        //         this.focus();
+        //         $('#product_filter input').focus();
+        //     }else{
+        //         clearInterval(focus_product_filter);
+        //     }
+        //
+        // },3000);
+
+
+        //刷新购物车状态
+        var cart_refresh = function(callback_fn){
+
+            $('#cart_body').load('<{link app=store ctl=admin_pos act=store_cart}>',$('#cart_form').find('input').serializeArray(),callback_fn);
+
+        };
+        //会员购买
+        var cart_member = function(member_id,remove){
+            if(!member_id)return;
+            if($('#cart_form input[name="member_id"]').length){
+                if(remove){
+                    $('#cart_form input[name="member_id"]').remove();
+                    $('a[data-mustmember]').removeClass('font-red');
+                }else{
+                    $('#cart_form input[name="member_id"]').val(member_id);
+                }
+            }else{
+                $('a[data-mustmember]').addClass('font-red');
+                $('<input type="hidden" name="member_id" value="'+member_id+'">')
+                .appendTo($('#cart_form'));
+            }
+            cart_refresh();
+        }
+        //在新建会员后回调
+        new_member_callback_func = function(member_id){
+
+            cart_member(member_id);
+
+        }
+
+        //加入货品
+        $('#product_filter').on('click','tr[data-productid]',function(e){
+            if(e)e.stopPropagation();
+            var p_k = $(this).attr('data-productid');
+            var i_p = $('#cart_form input[name="products['+p_k+']"]');
+            var num = parseInt(i_p.val());
+            if(i_p.length){
+                i_p.val(num+1);
+            }else{
+                i_p = $('<input type="hidden" name="products['+p_k+']" value=1>').appendTo($('#cart_form'));
+            }
+            cart_refresh(function(re){
+                var warning = $('#cart_body .alert-warning li[data-object]');
+                if(warning.length){
+                    Messagebox.error(warning.text(),'加入失败');
+                    if(i_p.length && num>1){
+                        i_p.val(num);
+                    }else{
+                        i_p.remove();
+                    }
+                }
+            });
+        });
+
+        //移除货品
+        $('#cart_body').on('click','.list-group-item[data-productid]',function(e){
+            if(e)e.stopPropagation();
+            var p_k = $(this).attr('data-productid');
+            var i_p = $('#cart_form input[name="products['+p_k+']"]');
+            var num = parseInt(i_p.val());
+            if(i_p.length){
+                if(num>1)
+                i_p.val(num-1);
+                else
+                i_p.remove();
+            }
+            cart_refresh();
+        });
+
+        //取消会员购买
+        $('#cart_body').on('click','.list-group-item[data-memberid]',function(e){
+            if(e)e.stopPropagation();
+            var member_id = $(this).attr('data-memberid');
+
+            bootbox.confirm('<h4>将取消会员购买，变为普通顾客购买。确定吗？</h4>',function(flag){
+                if(flag){
+                    cart_member(member_id,'remove');
+                }
+            });
+        });
+
+        //准备结账
+        $('#ready_submit').on('click',function(e){
+            if(e)e.stopPropagation();
+            if(  !$('#cart_form').find('input[name^="product"]').length){
+                return Messagebox.warning('还未加入货品！','提示');
+            }
+            $('#payment_modal').modal('show');
+        });
+        //选择付款方式
+        $('#payment_modal button[data-payappid]').on('click',function(e){
+            $('#payment_modal button[data-payappid]').removeClass('text-danger');
+            $(this).addClass('text-danger');
+            $('#cart_form input[name="payment[pay_app_id]"]').val($(this).attr('data-payappid'));
+            $('#payment_modal button .fa-check-circle-o').appendTo($(this));
+            this.blur();
+        });
+
+        //老会员弹出
+        $('.load-old-member').on('click',function(e){
+            if($('#old_member_modal .modal-body').length){
+                return $('#old_member_modal').modal('show');
+            }
+                $('#old_member_modal .modal-content').empty();
+                $('<div class="modal-body"></div>').appendTo($('#old_member_modal .modal-content'));
+                var _div = $(this).find('div').text('加载中...');
+                $('#old_member_modal .modal-body').load($(this).attr('data-action'),function(e){
+                    _div.text('老会员');
+                    $('#old_member_modal').modal('show');
+
+
+                    $('#old_member_modal').on('click','tbody tr',function(e){
+                        var radio =$(this).find(':radio');
+                        radio.prop('checked','checked').trigger('change');
+                        cart_member(radio.val());
+                        $('#old_member_modal').modal('hide');
+                    });
+                    $('#old_member_modal').on('click','tbody tr :radio',function(e){
+            			if(e)e.stopPropagation();
+                        cart_member($(this).val());
+                        $('#old_member_modal').modal('hide');
+            		});
+
+
+                });
+
+        });
+
+        //结账
+        $('#order_create').on('click',function(e){
+            var _this = this;
+            if($(_this).hasClass('disabled'))return;
+            $(_this).addClass('disabled').text('正在提交...');
+            $.post("<{link app=store ctl=admin_pos act=neworder}>",$('#cart_form').serializeArray(),function(re){
+                re = jsonDecode(re);
+                if(re && re.success){
+                    Messagebox.success(re.success);
+                    order_create_success(re.order_data);
+                }else{
+                    Messagebox.error(re.error||'提交失败');
+                }
+                $(_this).removeClass('disabled').text($(_this).attr('data-defaulttext'));
+            });
+
+        });
+
+
+
+        //结账成功时
+        var order_create_success  = function(order_data){
+            //关闭结账窗
+            //$('#payment_modal').modal('hide');
+
+            //弹出打印
+            $('<iframe src="<{link app=b2c ctl=admin_order act=printing}>&p[0]=1&p[1]=141224104398892&direct_printing=1" class="hide"></iframe>').insertAfter($('#cart_form')).on('load',function(e){
+                //下一笔交易
+                load_page("<{link app=store ctl=admin_pos act=index}>");
+            });
+
+            //TODO
+        };
+
+
+        $('#print_test').on('click',function(){
+            $('<iframe src="<{link app=b2c ctl=admin_order act=printing}>&p[0]=1&p[1]=141224104398892&direct_printing=1&t='+(new Date().getTime())+'" class="hide"></iframe>').insertAfter($('#cart_form'));
+        });
+
+
+
+        //需会员后操作拦截
+        $('a[data-mustmember]').on('click',function(e){
+            if(!$('#cart_form input[name="member_id"]').length){
+                Messagebox.warning('会员才能使用此服务','提示');
+                e.stopPropagation();
+                return false;
+            }
+        });
+
+
+
+    }();
+
+</script>

@@ -1,0 +1,103 @@
+<h3 class="page-title">
+			栏目管理
+</h3>
+
+<div class="table-toolbar">
+    <div class="btn-group">
+        <a class="btn green" data-target="#node_edit" data-toggle="modal" label="添加栏目" icon="fa-plus" href="index.php?app=content&ctl=admin_node&act=add">
+            添加栏目&nbsp;<i class="fa fa-plus"></i>
+        </a>
+    </div>
+</div>
+<form  action="index.php?app=content&ctl=admin_node&act=update" method="post">
+<div class="table-scrollable">
+    <table class="table  table-striped table-hover">
+        <thead>
+            <tr>
+                <th>栏目名称</th>
+                <th width="5%">同级排名<button class="btn btn-xs default" type="submit"><i class="fa fa-refresh"></i> 更新排名</button></th>
+                <th>操作</th>
+            </tr>
+        </thead>
+    <tbody id="node_list">
+        <{foreach from=$list item=item name="item"}>
+        <{assign var="node_id" value=$item.node_id}>
+        <tr data-nodeid="<{$item.node_id}>" data-dpath="<{$item.node_depth}>" data-pid="<{$item.parent_id}>">
+            <td>
+                <{$item.node_name|t:'content'}>
+            </td>
+            <td>
+                <input class="form-control input-xsmall input-sm" type="number"  name="ordernum[<{$item.node_id}>]" value="<{$item.ordernum|default:0}>" />
+            </td>
+            <td>
+
+            <a data-target="#node_edit" data-toggle="modal" class="btn btn-xs btn-default" href="index.php?app=content&ctl=admin_node&act=add&parent_id=<{$item.node_id}>">
+            <i class="fa fa-sitemap"></i> 添加子栏目</a>
+
+
+            <!-- <a data-target="#node_edit" data-toggle="modal" class="btn btn-xs btn-default" href="index.php?app=content&ctl=admin_article_detail&act=add&node_id=<{$item.node_id}>&type=1">
+            <i class="fa fa-pencil"></i> 添加文章</a>
+
+            <a  class="btn btn-xs btn-default" href="index.php?app=content&ctl=admin_article&act=index&filter[node_id]=<{$item.node_id}>&action=view&page=1">
+            <i class="fa fa-list"></i> 查看栏目下文章</a> -->
+
+            <a data-target="#node_edit" data-toggle="modal" class="btn btn-xs btn-default" href="index.php?app=content&ctl=admin_node&act=edit&node_id=<{$item.node_id}>">
+                <i class="fa fa-edit"></i> 编辑栏目</a>
+
+            <a target="_command" data-confirm="确定删除 <{$item.node_name|t:'content'}>？" class="btn btn-xs btn-default" href="index.php?app=content&ctl=admin_node&act=remove&node_id=<{$item.node_id}>">
+                <i class="fa fa-trash"></i> 删除</a>
+
+            <a target="_blank" class="btn btn-xs btn-default" href="<{$item.url}>">
+                <i class="fa fa-eye"></i> 预览</a>
+
+
+            <label><input <{if $item.ifpub eq 'true'}>checked<{/if}> type="checkbox" data-pub-action="index.php?app=content&ctl=admin_node&act=publish&node_id=<{$item.node_id}>&pub=true" data-unpub-action="index.php?app=content&ctl=admin_node&act=publish&node_id=<{$item.node_id}>&pub=false"> 发布</label>
+
+            </td>
+        </tr>
+        <{/foreach}>
+    </tbody>
+    </table>
+</div>
+</form>
+
+
+<div class="modal fade" id="node_edit" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-full">
+                      <div class="modal-content">
+                      </div>
+              </div>
+</div>
+
+
+<script charset="utf-8">
+$('#node_edit').on('hidden.bs.modal',function(){
+	$('#node_edit .modal-content').empty();
+})
+$.each($('#node_list tr'),function(index,item){
+        item = $(item);
+        if(item.attr('data-pid')!='0'){
+            var node_name_col = item.find('td:first');
+            var node_parent_col = $('#node_list tr[data-nodeid="'+item.attr('data-pid')+'"] td:first');
+            node_name_col.html('<span style="color:#cecece;">'+node_parent_col.text()+"&nbsp;&raquo;&nbsp;</span>"+node_name_col.text());
+        }
+});
+
+$('#node_list tr input[type=checkbox]').on('change',function(){
+    var _this = $(this);
+    var current_checked = $(this).is(':checked');
+    var action_url = current_checked?$(this).attr('data-pub-action'):$(this).attr('data-unpub-action');
+
+    $.getJSON(action_url,function(re){
+        if(re.success){
+            Messagebox.success(re.success,'成功');
+			if(!current_checked){
+				$('#node_list tr[data-pid="'+_this.closest('tr').attr('data-nodeid')+'"] input[type=checkbox]').attr('checked',false);
+			}
+        }else{
+            Messagebox.error(re.error||'操作失败','失败');
+            _this.attr('checked',!current_checked);
+        }
+    });
+});
+</script>

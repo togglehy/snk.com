@@ -1,0 +1,10 @@
+<site>
+    <module controller='index'>
+        <name>index</name>
+        <title>首页</title>
+    </module>
+    <module controller='vcode'>
+        <name>vcode</name>
+        <title>验证码</title>
+    </module>
+</site>

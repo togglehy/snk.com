@@ -1,0 +1,31 @@
+{
+	"data":
+	[
+		{
+			"ref_id": 8,
+			"goods_id": 7,
+			"rule_id": 7,
+			"description": "数码智能类目产品95折,苹果产品除外",
+			"member_lv_ids": "1,2,3,4,5",
+			"from_time": 1433193900,
+			"to_time": 1562812200,
+			"status": "true",
+			"stop_rules_processing": "false",
+			"sort_order": 50,
+			"action_solution": "a:1:{s:33:\"b2c_promotion_solutions_topercent\";a:2:{s:8:\"quantity\";s:1:\"2\";s:7:\"percent\";s:2:\"95\";}}"
+		},
+		{
+			"ref_id": 9,
+			"goods_id": 5,
+			"rule_id": 16,
+			"description": "6.1至7.1日，因幼儿玩具6.1折",
+			"member_lv_ids": "1,2,3,4,5",
+			"from_time": 1433103600,
+			"to_time": 1435748100,
+			"status": "true",
+			"stop_rules_processing": "false",
+			"sort_order": 49,
+			"action_solution": "a:1:{s:33:\"b2c_promotion_solutions_topercent\";a:2:{s:8:\"quantity\";s:1:\"1\";s:7:\"percent\";s:2:\"61\";}}"
+		}
+	]
+}

@@ -1,0 +1,21 @@
+<div class="form-body">
+<{assign var=seo_info value=$goods.seo_info}>
+		<div class="form-group">
+			<label class="col-md-2 control-label">标题 <span class="badge badge-default">Title</span> </label>
+			<div class="col-md-3">
+				<input type='text' class="form-control" name='goods[seo_info][seo_title]' value='<{$seo_info.seo_title}>'/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">关键词 <span class="badge badge-default">Keyword</span> </label>
+			<div class="col-md-3">
+				<input type='text' class="form-control" name='goods[seo_info][seo_keywords]' value='<{$seo_info.seo_keywords}>'/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">简介 <span class="badge badge-default">Description</span> </label>
+			<div class="col-md-3">
+				<input type='text' class="form-control" name='goods[seo_info][seo_description]' value='<{$seo_info.seo_description}>'/>
+			</div>
+		</div>
+</div>

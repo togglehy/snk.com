@@ -1,0 +1,56 @@
+{
+	"data":
+	[
+		{
+			"rule_id": 2,
+			"name": "满499就包邮!",
+			"description": "全场类目满499元,即享包邮",
+			"from_time": 1433174400,
+			"to_time": 1563431400,
+			"member_lv_ids": "1",
+			"status": "true",
+			"conditions": "a:4:{s:4:\"type\";s:34:\"b2c_sales_order_aggregator_combine\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";s:1:\"1\";s:10:\"conditions\";a:1:{i:0;a:4:{s:4:\"type\";s:26:\"b2c_sales_order_item_order\";s:9:\"attribute\";s:17:\"order_cart_amount\";s:8:\"operator\";s:2:\">=\";s:5:\"value\";s:3:\"499\";}}}",
+			"action_conditions": "a:2:{s:4:\"type\";s:15:\"product_combine\";s:10:\"conditions\";a:0:{}}",
+			"stop_rules_processing": "false",
+			"sort_order": 50,
+			"action_solution": "a:1:{s:36:\"b2c_promotion_solutions_freeshipping\";a:1:{s:8:\"solution\";s:4:\"true\";}}",
+			"rule_type": "N",
+			"c_template": "ruleplus_promotion_conditions_order_userdefined",
+			"s_template": "b2c_promotion_solutions_freeshipping"
+		},
+		{
+			"rule_id": 3,
+			"name": "优惠劵规则-98折优惠暗号",
+			"description": "当订单最终应付金额满500，使用此优惠暗号可以直接减2%支付",
+			"from_time": 1433088000,
+			"to_time": 1435679700,
+			"member_lv_ids": "1,2,3,4,5",
+			"status": "true",
+			"conditions": "a:4:{s:4:\"type\";s:34:\"b2c_sales_order_aggregator_combine\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";i:1;s:10:\"conditions\";a:2:{i:0;a:4:{s:4:\"type\";s:27:\"b2c_sales_order_item_coupon\";s:9:\"attribute\";s:6:\"coupon\";s:8:\"operator\";s:1:\"=\";s:5:\"value\";s:17:\"AHELLOVMCSHOP2015\";}i:1;a:4:{s:4:\"type\";s:34:\"b2c_sales_order_aggregator_combine\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";s:1:\"1\";s:10:\"conditions\";a:1:{i:0;a:4:{s:4:\"type\";s:26:\"b2c_sales_order_item_order\";s:9:\"attribute\";s:11:\"order_total\";s:8:\"operator\";s:2:\">=\";s:5:\"value\";s:3:\"500\";}}}}}",
+			"action_conditions": "a:2:{s:4:\"type\";s:31:\"b2c_sales_order_aggregator_item\";s:10:\"conditions\";a:0:{}}",
+			"stop_rules_processing": "false",
+			"sort_order": 50,
+			"action_solution": "a:1:{s:33:\"b2c_promotion_solutions_topercent\";a:1:{s:7:\"percent\";s:2:\"98\";}}",
+			"rule_type": "C",
+			"c_template": "ruleplus_promotion_conditions_order_userdefined",
+			"s_template": "b2c_promotion_solutions_topercent"
+		},
+		{
+			"rule_id": 4,
+			"name": "优惠劵规则-10元红包",
+			"description": "使用直接抵10元,不可叠加使用",
+			"from_time": 1433240100,
+			"to_time": 1559683500,
+			"member_lv_ids": "1,2,3,4,5",
+			"status": "true",
+			"conditions": "a:4:{s:4:\"type\";s:34:\"b2c_sales_order_aggregator_combine\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";i:1;s:10:\"conditions\";a:2:{i:0;a:4:{s:4:\"type\";s:27:\"b2c_sales_order_item_coupon\";s:9:\"attribute\";s:6:\"coupon\";s:8:\"operator\";s:1:\"=\";s:5:\"value\";s:4:\"BTEN\";}i:1;a:4:{s:4:\"type\";s:34:\"b2c_sales_order_aggregator_combine\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";s:1:\"1\";s:10:\"conditions\";a:1:{i:0;a:4:{s:4:\"type\";s:26:\"b2c_sales_order_item_order\";s:9:\"attribute\";s:11:\"order_total\";s:8:\"operator\";s:2:\">=\";s:5:\"value\";s:1:\"0\";}}}}}",
+			"action_conditions": "a:4:{s:4:\"type\";s:31:\"b2c_sales_order_aggregator_item\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";s:1:\"1\";s:10:\"conditions\";a:1:{i:0;a:4:{s:4:\"type\";s:26:\"b2c_sales_order_item_goods\";s:9:\"attribute\";s:15:\"goods_buy_price\";s:8:\"operator\";s:2:\">=\";s:5:\"value\";s:1:\"0\";}}}",
+			"stop_rules_processing": "false",
+			"sort_order": 50,
+			"action_solution": "a:1:{s:31:\"b2c_promotion_solutions_byfixed\";a:1:{s:12:\"total_amount\";s:2:\"10\";}}",
+			"rule_type": "C",
+			"c_template": "b2c_promotion_conditions_order_allorderallgoods",
+			"s_template": "b2c_promotion_solutions_byfixed"
+		}
+	]
+}

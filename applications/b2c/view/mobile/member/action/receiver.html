@@ -1,0 +1,113 @@
+<div class="page-header clearfix">
+  <h1 class="pull-left">我的收货地址 <small>My Address</small></h1>
+  <{if $action!='edit'}>
+  <a class="btn btn-success pull-right" href="<{link app=b2c ctl=mobile_member act=receiver args0=edit}>">
+      <i class="glyphicon glyphicon-plus-sign"></i>
+      新增收货地址
+  </a>
+  <{else}>
+  <a class="btn btn-default pull-right" href="<{link app=b2c ctl=mobile_member act=receiver}>">
+      <i class="glyphicon glyphicon-th-list"></i>
+      返回地址列表
+  </a>
+  <{/if}>
+
+</div>
+<{switch from=$action}>
+<{case value='edit'}>
+<form class="form-horizontal" action="<{link app=b2c ctl=mobile_member act=receiver args0=save}>" method="post" id="receiver_form">
+    <{if $maddr.addr_id}>
+    <input type="hidden" name="maddr[addr_id]" value="<{$maddr.addr_id}>">
+    <{/if}>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">收货人姓名<span class="text-danger">*</span></label>
+        <div class="col-md-7">
+          <input name="maddr[name]" style="display:none" disabled="disabled">
+          <input type="text" required="true" autocomplete='off' name="maddr[name]" class="form-control"  value="<{$maddr.name}>" placeholder="收货人姓名">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">收货地区<span class="text-danger">*</span></label>
+        <div class="col-md-7">
+            <{input type=region app=ectools name="maddr[area]" value=$maddr.area}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">详细地址<span class="text-danger">*</span></label>
+        <div class="col-md-7">
+          <input type="text" required="true" autocomplete='off' name="maddr[addr]" class="form-control"  value="<{$maddr.addr}>" placeholder="请填写详细的地址门牌号码,无需重复填写地区">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">邮编</label>
+        <div class="col-md-7">
+          <input type="text"  autocomplete='off' name="maddr[zip]" class="form-control"  value="<{$maddr.zip}>" placeholder="请填写收货地邮政编码">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">手机<span class="text-danger">*</span></label>
+        <div class="col-md-7">
+          <input type="text" required="true" autocomplete='off' name="maddr[mobile]" class="form-control"  value="<{$maddr.mobile}>" placeholder="收货人手机号码">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">固话</label>
+        <div class="col-md-7">
+          <input type="text" autocomplete='off' name="maddr[tel]" class="form-control"  value="<{$maddr.tel}>" placeholder="固定电话">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">Email</label>
+        <div class="col-md-7">
+          <input type="text" autocomplete='off' name="maddr[email]" class="form-control"  value="<{$maddr.email}>" placeholder="电子邮箱">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-5">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" <{if $maddr.is_default=='true'}>checked<{/if}> name="maddr[is_default]" value="true" class="autologin-checkbox">设置为默认收货地址
+            </label>
+          </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-7 col-md-offset-2">
+          <button type="submit" class="btn btn-lg btn-primary">保存<{if $maddr.addr_id}>修改<{/if}>
+          </button>
+          <{if $maddr.addr_id}>
+          <a class="btn btn-default pull-right" onclick="if(!confirm('确认删除？')){return false;}" href="<{link app=b2c ctl=mobile_member act=receiver args0=delete args1=$maddr.addr_id}>">删除该收货信息</a>
+          <{/if}>
+        </div>
+    </div>
+</form>
+<{case}> <!-- default -->
+<div class="list-group">
+    <{foreach from=$list item=maddr}>
+        <dl class="list-group-item">
+            <dt><{$maddr.name}></dt>
+            <dd>
+                <ul class="list-inline">
+                    <li><{$maddr.area|region}></li>
+                    <li ><small><{$maddr.addr}><{if $maddr.zip}>,<{$maddr.zip}><{/if}></small></li>
+                    <li><{$maddr.mobile}></li>
+                    <li><{$maddr.tel}></li>
+                    <li><{$maddr.email}></li>
+                </ul>
+            </dd>
+            <dd class="clearfix">
+                <{if $maddr.is_default=='true'}>
+                    <span class="label label-success">默认地址</span>
+                <{/if}>
+                <div class="btn-group pull-right">
+                    <{if $maddr.is_default!='true'}>
+                    <a class="btn btn-default btn-xs" href="<{link app=b2c ctl=mobile_member act=receiver args0=set_default args1=$maddr.addr_id}>">设置为默认</a>
+                    <{/if}>
+                    <a class="btn btn-default btn-xs" href="<{link app=b2c ctl=mobile_member act=receiver args0=edit args1=$maddr.addr_id}>">编辑</a>
+                </div>
+            </dd>
+
+        </dl>
+    <{/foreach}>
+</div>
+<{/switch}>

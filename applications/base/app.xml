@@ -1,0 +1,13 @@
+<app>
+    <name>基础系统</name>
+	<description>基本的MVC框架。带有队列，key-value存储接口。类smarty的模版系统</description>
+
+    <author>
+        <name>辰商软件</name>
+        <email>dev@vmcshop.com</email>
+        <url>http://www.vmcshop.com</url>
+    </author>
+
+    <version>1.0</version>
+    <license>http://www.vmcshop.com/license</license>
+</app>

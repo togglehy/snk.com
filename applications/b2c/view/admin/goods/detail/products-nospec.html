@@ -1,0 +1,373 @@
+
+<div class="row">
+        <label class="col-md-2 control-label">
+            货品信息
+        </label>
+        <div class="col-md-9">
+                <div id="no_spec">
+                    <{assign var=product value=$goods.product|current}>
+                    <input type='hidden'  name='goods[product][new_0][marketable]' value='true'/>
+                    <input type='hidden'  name='goods[product][new_0][product_id]' value='<{$product.product_id}>'>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">货号 <span class="required" aria-required="true">*</span></label>
+                            <{input class="form-control" data-map='bn' required=true type="text" value=$product.bn name="goods[product][new_0][bn]"  }>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">条码</label>
+                            <div class="input-icon">
+                            <i class="fa fa-barcode"></i>
+                            <{input class="form-control" data-map='barcode' type="text" value=$product.barcode name="goods[product][new_0][barcode]"  }>
+                            </div>
+                        </div>
+                        <{permission perm_id='editprice'}>
+                        <div class="col-md-2">
+                            <label class="control-label">销售价</label>
+                            <div class="input-icon">
+                                <i class="fa fa-yen"></i>
+                                <{input clas="form-control" data-map='price'  class="form-control" value=$product.price name="goods[product][new_0][price]" }>
+                            </div>
+                        </div>
+                        <{/permission}>
+                        <{permission perm_id='editmktprice'}>
+                        <div class="col-md-2">
+                            <label class="control-label">市场价</label>
+                            <div class="input-icon">
+                                <i class="fa fa-yen"></i>
+                                <{input clas="form-control" data-map='mktprice' class="form-control" value=$product.mktprice name="goods[product][new_0][mktprice]" }>
+                            </div>
+                        </div>
+                        <{/permission}>
+                        <div class="col-md-2">
+                            <label class="control-label">重量</label>
+                            <div class="input-icon right">
+                                <i class="fa">克</i>
+                                <{input class="form-control" data-map='weight' type="number"  value=$product.weight name="goods[product][new_0][weight]" }>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">单位</label>
+                            <{input class="form-control" type="number" data-map='unit'  value=$product.unit|default:'件' name="goods[product][new_0][unit]" }>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+
+<div class="row"  id="spec_edit_pane">
+    <div class="col-md-9 col-md-offset-2  text-success">
+        <hr>
+        <label>
+            <div class="checker">
+                <span><input type="checkbox" ></span>
+            </div>有多种规格。如，多个颜色、尺码;
+        </label>
+    </div>
+    <div class="col-md-9 col-md-offset-2 spec-edit">
+            <table class="table table-striped  table-hover">
+                <thead>
+                    <tr>
+                        <th width="25%">规格名称</th>
+                        <th>规格项 <i class="fa fa-lightbulb-o"></i><small>每输入一个规格项后，回车确认</small></th>
+                        <th width="10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input class="form-control spec-t" name="goods[spec_desc][t][]" type="text" value="" placeholder="如:颜色">
+                                <{if $has_spec_history>0}>
+                                <div class="input-group-btn">
+                                    <button type="button"  class="btn btn default btn-spec-history"><i class="fa fa-angle-down"></i></button>
+                                </div>
+                                <{/if}>
+                            </div>
+                        </td>
+                        <td>
+                            <input  class='form-control spec-v' name="goods[spec_desc][v][]" type="text"  value="">
+                        </td>
+                        <td>
+                            <!-- <button type=button class="btn btn-sm default hide"><i class="fa fa-trash-o"></i></button> -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input class="form-control spec-t" name="goods[spec_desc][t][]" type="text" value="" placeholder="如:尺码">
+                                <{if $has_spec_history>0}>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn default btn-spec-history"><i class="fa fa-angle-down"></i></button>
+                                </div>
+                                <{/if}>
+                            </div>
+                        </td>
+                        <td>
+                            <input  class='form-control spec-v' name="goods[spec_desc][v][]" type="text"  value="">
+                        </td>
+                        <td>
+                            <button type=button class="btn btn-sm default spec-del" ><i class="fa fa-trash-o"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan=3>
+                                <button type=button class="btn btn-sm blue-madison new-spec-item"><i class="fa fa-plus"></i> 新增其他名称</button>
+                                <button type=button class="btn btn-sm green-meadow create-product-items"><i class="fa fa-cogs"></i> 根据以上信息生成多规格货品</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+    </div>
+    <div class="col-md-12 product-items">
+        <table class="table table-striped  table-hover">
+            <thead>
+                <tr>
+                    <th width="150px">规格</th>
+                    <th>
+                        货号
+                    </th>
+                    <th>
+                        条码
+                    </th>
+                    <th>
+                        销售价
+                    </th>
+                    <th>
+                        市场价
+                    </th>
+                    <th>
+                        重量
+                    </th>
+                    <th>
+                        单位
+                    </th>
+                    <th width="50px;">
+                        上架
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<{if $has_spec_history>0}>
+<div class="modal modal-cached" id="spec_history_modal" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            loading...
+        </div>
+    </div>
+</div>if
+<{/if}>
+<textarea class="spec-item-tpl hide">
+ <tr>
+     <td>
+         <div class="input-group">
+             <input class="form-control spec-t" name="goods[spec_desc][t][]" type="text" value="" placeholder="规格名称">
+             <{if $has_spec_history>0}>
+             <div class="input-group-btn">
+                 <button type="button" class="btn btn default btn-spec-history"><i class="fa fa-angle-down"></i></button>
+             </div>
+             <{/if}>
+         </div>
+     </td>
+     <td>
+         <input  class='form-control spec-v' name="goods[spec_desc][v][]" type="text"  value="">
+     </td>
+     <td>
+         <button type=button class="btn btn-sm spec-del default"><i class="fa fa-trash-o"></i></button>
+     </td>
+ </tr>
+</textarea>
+<textarea class="product-item-tpl hide">
+<tr>
+    <td>
+    <input type="text"  name="goods[product][{key}][spec_info]" class="form-control input-sm spec-info" value="{spec_info}" readonly=true>
+    <input type="hidden" name="goods[product][{key}][spec_desc]" class="spec-desc"  value="{spec_desc}" >
+    </td>
+    <td>
+        <input type="text" required="true" data-map="bn" class="form-control input-sm" name="goods[product][{key}][bn]" value="">
+    </td>
+    <td>
+        <input type="text" data-map="barcode" class="form-control input-sm" name="goods[product][{key}][barcode]" value="">
+    </td>
+    <td>
+        <input type="text" data-map="price" class="form-control input-sm" name="goods[product][{key}][price]" value="">
+    </td>
+    <td>
+        <input type="text" data-map="mktprice" class="form-control input-sm" name="goods[product][{key}][mktprice]" value="">
+    </td>
+    <td>
+        <input type="text" data-map="weight" name="goods[product][{key}][weight]" class="form-control input-sm input-xsmall" value="" placeholder="克">
+    </td>
+    <td>
+    <input type="text" data-map="unit" name="goods[product][{key}][unit]" class="form-control input-sm input-xsmall" value="">
+    </td>
+    <td>
+        <input type="checkbox"  name="goods[product][{key}][marketable]" value="true" checked>
+    </td>
+</tr>
+</textarea>
+<script charset="utf-8">
+!function(){
+    $('#spec_edit_pane .checker :checkbox').on('change',function(){
+        var checked = $(this).is(':checked');
+        $('#spec_edit_pane .spec-edit,#spec_edit_pane .product-items')[checked?'removeClass':'addClass']('hide');
+        $('#spec_edit_pane .spec-edit,#spec_edit_pane .product-items').find('input,:checkbox,:radio,textarea').attr('disabled',checked?false:true);
+        $(this).parent('span')[checked?'addClass':'removeClass']('checked');
+    });
+    $('#spec_edit_pane .checker :checkbox').change();
+
+
+     var substitute = function(str,obj){
+            return str.replace(/\\?\{([^{}]+)\}/g, function(match, name){
+                if (match.charAt(0) == '\\') return match.slice(1);
+                return (obj[name] != undefined) ? obj[name] : '';
+            });
+    }
+
+    var tagsinput_options = {
+       width: 'auto',
+       'defaultText':'新规格项',
+       onAddTag:function(){
+           product_items_change();
+       },
+       onRemoveTag:function(){
+           product_items_change();
+       }
+    };
+   $('#spec_edit_pane .spec-edit .spec-v').tagsInput(tagsinput_options);
+   $('#spec_edit_pane .spec-edit .new-spec-item').on('click',function(){
+       $('#spec_edit_pane .spec-edit tbody').append($('.spec-item-tpl').val());
+       $('#spec_edit_pane .spec-edit tbody tr:last .spec-v').tagsInput(tagsinput_options);
+   });
+   $('#spec_edit_pane .spec-edit').on('click','.spec-del',function(e){
+       e.stopPropagation();
+       if(!confirm('确定删除？'))return;
+       $(this).closest('tr').remove();
+       product_items_change();
+   });
+   /**
+    * 货号、条码 粘贴监听
+    * @see desktop.js
+    */
+   var listen_postpaste = function(els){
+
+       //只监听第一个
+       $(els).eq(0).on("postpaste", function(e) {
+           var val = $(this).val(),val_arr = val.split(/\s/);;
+           if(val_arr.length && val_arr.length>1){
+               $.each(val_arr,function(i,v){
+                   $(els).eq(i).val(v);
+               });
+           }
+        }).pasteEvents();
+
+        //便捷性提示
+        $(els).eq(0).wrap('<div class="input-icon right"></div>');
+        $('<i class="fa fa-paste text-success tooltips" data-container="body" data-toggle="tooltip" data-placement="top" title="粘贴含有`空格`或`换行`的数据,将自动被分隔填充。例：你可以从Excel批量复制粘贴数据到此"></i>').tooltip().insertBefore($(els).eq(0));
+
+   }
+
+   var create_product_items_func = function(){
+
+       var spec_v = $('#spec_edit_pane .spec-v');
+       /*计算规格交集*/
+       var spec_v_item = new Array();
+        $.each(spec_v,function(idx,item){
+            if($.trim($(item).val()) == '')return;
+            spec_v_item[idx] = $(item).val().split(',');
+        });
+        $('#spec_edit_pane .product-items table')[spec_v_item.length?'removeClass':'addClass']('hide');
+        if(!spec_v_item.length){
+                return Messagebox.warning('您还没有填写任何规格值。','操作提醒');
+        }
+
+        var root_arr = spec_v_item.shift();
+        var loop_arr;
+        var lnk_arr = function(r,a){
+            var _return = [];
+            $.each(a,function(i,n){
+                _return.push(r+':::'+n);
+            });
+            return _return;
+        }
+        while(loop_arr = spec_v_item.shift()){
+            var cur_len = root_arr.length;
+            for(var i=0;i<cur_len;i++){
+                root_arr = root_arr.concat(lnk_arr(root_arr.shift(),loop_arr));
+            }
+            root_arr.slice(cur_len);
+        }
+        /*计算规格交集*/
+        var pit_content = "";
+        $.each(root_arr,function(idx,n){
+            pit_content += substitute($('.product-item-tpl').val(),{key:'new_'+idx,spec_info:n.replace(/:::/g,'/'),spec_desc:n});
+        });
+        $('.product-items tbody').empty().append(pit_content);
+
+        /*支持货号条码换行字符粘贴*/
+        listen_postpaste($('.product-items tbody input[name$="[bn]"]'));
+        listen_postpaste($('.product-items tbody input[name$="[barcode]"]'));
+
+        var item_length = $('.product-items tbody').find('> tr').length;
+        $(this).next('.text-success').remove();
+        if(item_length){
+            $(this).after('<span class="text-success">将会新建<span class="badge badge-success">'+item_length+'</span>个货品</span>');
+        }
+
+        $.each($('.product-items input[data-map]'),function(i,n){
+            var map = $(n).attr('data-map'),val = $('#no_spec input[data-map="'+map+'"]').val();
+            if(map == 'bn'||map == 'barcode'){
+                if(!val||val==''){
+                    val = new String(new Date().getTime()).slice(-5);
+                }
+                val+=map == 'bn'?'-'+i:i;
+            }
+            $(n).val(val);
+        });
+
+
+
+   };
+
+   var timer_delay = 0;
+   $('#spec_edit_pane .create-product-items').on('click',function(e){
+       e.stopPropagation();
+       clearTimeout(timer_delay);
+       var _this = this;
+       timer_delay = setTimeout(function(){
+           return create_product_items_func.apply(_this);
+       },0);//TODO 性能问题
+   });
+
+   var product_items_change = function(){
+       if($('#spec_edit_pane .product-items tbody > tr').length){
+           $('#spec_edit_pane .create-product-items').trigger('click');
+       }
+   };
+
+
+   <{if $has_spec_history>0}>
+   $('#spec_edit_pane').on('click','.btn-spec-history',function(e){
+       e.stopPropagation();
+       $('#spec_history_modal').modal({
+           remote:'index.php?app=b2c&ctl=admin_goods_editor&act=get_spec_history'
+       });
+
+       return false;
+   });
+   <{/if}>
+
+
+
+
+}();
+
+
+</script>

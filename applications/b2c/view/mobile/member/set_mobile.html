@@ -1,0 +1,88 @@
+<div class="container my-pam-local">
+    <ol class="breadcrumb">
+      <li><a href="<{link app=mobile ctl=index}>">首页</a></li>
+      <li><a href="<{link app=b2c ctl=mobile_member}>">会员中心</a></li>
+      <li class="active">绑定手机</li>
+    </ol>
+</div>
+<form class="form-horizontal" action="<{link app=b2c ctl=mobile_member act=set_pam_mobile args0=save}>" method="post" id="set_mobile_form">
+    <{foreach from=$pam_data key=key item=item}>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">
+            <{$pam_type.{$key}}>
+        </label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" readonly=true value="<{$item.login_account}>">
+            <span class="help-block">设置完后，依然可以用<{$pam_type.{$key}}>登录</span>
+        </div>
+    </div>
+    <{/foreach}>
+    <div class="form-group">
+        <label  class="col-md-2 control-label">手机号</label>
+        <div class="col-md-4">
+            <input type="text" id="mobile_input" required="true" class="form-control" name="mobile"  value="">
+            <span class="help-block">设置完后，可使用 手机号 登录</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="input_vcode" class="col-md-2 control-label">验证码<span class="text-danger">*</span></label>
+        <div class="col-md-3">
+          <input type="text" required="true" name="vcode" class="form-control" id="input_vcode" placeholder="验证码">
+        </div>
+        <div class="col-md-2">
+            <div class="mobile-vcode">
+                <button type="button" class="btn btn-default">获取短信验证码</button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-7 col-md-offset-2">
+          <button type="submit" class="btn btn-primary">立即绑定</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+
+var alert_timer = 0;
+var _alert_error = function(msg){
+    $('#set_mobile_form .alert-error').remove();
+    $('#set_mobile_form').append($('<div class="alert alert-danger">'+msg+'</div>'));
+    alert_timer = setTimeout(function(){
+        clearTimeout(alert_timer);
+        $('#set_mobile_form').find('.alert-danger').fadeOut('fast',function(){
+            $(this).remove();
+        });
+    },3000);
+}
+//获得短信验证码
+var _cutdown_sms = function(btn){
+
+    var cutdown = 120,btn_o_text = btn.text(),timer =
+    setInterval((function(){
+        btn.text('短信已发送,'+(cutdown--)+'秒后可重试');
+        if(cutdown<1){
+            clearInterval(timer);
+            btn.text(btn_o_text).removeClass('disabled');
+        }
+        return arguments.callee;
+    })(),1000);
+};
+$('#set_mobile_form .mobile-vcode button').on('click',function(e){
+    var btn = $(this);
+    if(btn.hasClass('disabled'))return;
+    btn.addClass('disabled');
+    $.post('<{link app=b2c ctl=mobile_passport act=send_vcode_sms}>',{mobile:$('#mobile_input').val()},function(re){
+        if(re && re.error){
+            btn.removeClass('disabled');
+            _alert_error(re.error);
+        }
+        if(re && re.success){
+            _cutdown_sms(btn);
+        }
+    },'json');
+
+
+});
+</script>

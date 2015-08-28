@@ -1,0 +1,8 @@
+<services>
+    <service id="b2c.member_menu_extends" opt="会员中心菜单扩展">
+        <class>aftersales_member_menuextends</class>
+    </service>
+	<service id="desktop_finder.aftersales_mdl_request" opt="售后服务后台请求列表Finder扩展">
+        <class>aftersales_finder_request</class>
+    </service>
+</services>

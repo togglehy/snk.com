@@ -1,0 +1,76 @@
+<div class="page-header">
+  <h1>安全中心 <small>Security Center</small></h1>
+</div>
+<div class="list-group">
+    <div class="list-group-item <{if $pam_data.mobile}>text-success<{else}>text-danger<{/if}>">
+        <div class="row">
+            <div class="col-md-2 text-center">
+                <h2 class="glyphicon glyphicon-phone"></h2>
+                <p>
+                    绑定手机
+                </p>
+            </div>
+            <div class="col-md-8">
+                <{if $pam_data.mobile}>
+                    <h3><{$pam_data.mobile.login_account}></h3>
+                    <{else}>
+                    <h3>未绑定手机</h3>
+                    <a href="<{link app=b2c ctl=mobile_member act=set_pam_mobile}>" class="btn btn-xs btn-link"><i class="glyphicon glyphicon-chevron-right"></i> 立即绑定</a>
+                <{/if}>
+            </div>
+            <div class="col-md-2">
+                <{if $pam_data.mobile}>
+                    <h2 class="glyphicon glyphicon-ok-sign"></h2>
+                    <{else}>
+                    <h2 class="glyphicon glyphicon-warning-sign"></h2>
+                <{/if}>
+            </div>
+        </div>
+    </div>
+    <div class="list-group-item <{if $pam_data.email}><{if $pam_data.email.disabled=='true'}>text-warning<{else}>text-success<{/if}><{else}>text-danger<{/if}>">
+        <div class="row">
+            <div class="col-md-2 text-center">
+                <h2 class="glyphicon glyphicon-envelope"></h2>
+                <p>
+                    绑定邮箱
+                </p>
+            </div>
+            <div class="col-md-8">
+                <{if $pam_data.email}>
+                    <h3><{$pam_data.email.login_account}></h3>
+                    <{if $pam_data.email.disabled=='true'}>
+                    <!-- <span class="label label-warning">未激活</span> -->
+                    <a href="<{link app=b2c ctl=mobile_member act=active_pam_email}>" class="btn btn-xs btn-success">验证&激活</a>
+                    <{/if}>
+                <{else}>
+                    <h3>未绑定邮箱</h3>
+                    <a href="<{link app=b2c ctl=mobile_member act=set_pam_email}>" class="btn btn-xs btn-link"><i class="glyphicon glyphicon-chevron-right"></i> 立即绑定</a>
+                <{/if}>
+            </div>
+            <div class="col-md-2">
+                <{if $pam_data.email && $pam_data.email.disabled!='true'}>
+                    <h2 class="glyphicon glyphicon-ok-sign"></h2>
+                <{else}>
+                    <h2 class="glyphicon glyphicon-warning-sign"></h2>
+                <{/if}>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="list-group">
+    <a class="list-group-item" href="#">
+        <div class="row">
+            <div class="col-md-2 text-center">
+                <h2 class="glyphicon glyphicon-lock"></h2>
+                <p>
+                    重置密码
+                </p>
+            </div>
+            <div class="col-md-2 col-md-offset-8">
+                <h2>
+                <i class="glyphicon glyphicon-chevron-right"></i>
+                </h2>
+            </div>
+        </div>
+    </a>
+</div>

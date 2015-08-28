@@ -1,0 +1,111 @@
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <h3 class="modal-title"><{if $cat.cat_id }>分类编辑<{else}>添加新分类<{/if}></h3>
+
+</div>
+<form method="post" action="index.php?app=b2c&ctl=admin_goods_cat&act=save" id='cat_form' calss="form">
+<div class="modal-body  form-horizontal">
+<div class="form-body">
+    <{if $cat.cat_id }><input type="hidden" value="<{$cat.cat_id}>" name="cat[cat_id]" /><{/if}>
+    <div class="form-group">
+        <label class="col-md-3 control-label">父级分类</label>
+        <div class="col-md-5">
+            <{input class="form-control" type="select"  name="cat[parent_id]" style="font-size:12px;" required='1' value=$cat.parent_id rows=$catList valueColumn="cat_id" labelColumn="cat_name"}>
+            <span class="help-block">若要添加顶级分类，此项可不选择</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">分类名称
+            <span class="required" aria-required="true">*</span>
+       </label>
+        <div class="col-md-5">
+            <input type="text" required=true value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]" vtype='required' class='form-control'/>
+        </div>
+    </div>
+<{if !$env.get.callback_func}>
+    <div class="form-group hide">
+        <label class="col-md-3 control-label">商品类型</label>
+        <div class="col-md-5">
+            <select name="cat[type_id]" class="form-control">
+                <{foreach from=$gtypes item=type}> <option value="<{$type.type_id}>" <{if $type.type_id == $cat.type_id}>selected="selected"<{/if}>><{$type.name}>
+                </option>
+                <{/foreach}>
+              </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label">同级分类排名</label>
+        <div class="col-md-5">
+        <input  value="<{if $cat.p_order}> <{$cat.p_order}> <{else}>0<{/if}>" name="cat[p_order]" class="form-control" type="number"/>
+        </div>
+    </div>
+
+    <hr>
+    <h5>分类相关设置</h5>
+    <div class="form-group">
+        <label class="col-md-3 control-label">PC前台模板</label>
+        <div class="col-md-5">
+        <{template_filter class="form-control" type="list" selected=$gallery_setting.site_template name="cat[gallery_setting][site_template]"}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">HTML5前台模板</label>
+        <div class="col-md-5">
+        <{template_filter_m class="form-control" type="list" selected=$gallery_setting.mobile_template name="cat[gallery_setting][mobile_template]"}>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label">标题<span class="badge badge-default">title</span></label>
+        <div class="col-md-7">
+            <input type="text" name="cat[seo_info][seo_title]"  class="form-control"  value="<{$seo_info.seo_title}>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">关键词<span class="badge badge-default">keywords</span></label>
+        <div class="col-md-7">
+        <input type="text" name="cat[seo_info][seo_keywords]" class="form-control"  value="<{$seo_info.seo_keywords}>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">描述<span class="badge badge-default">description</span></label>
+        <div class="col-md-7">
+        <textarea name="cat[seo_info][seo_description]" rows=2  class="form-control" /><{$seo_info.seo_description}></textarea>
+        </div>
+    </div>
+<{/if}>
+
+</div>
+
+
+
+
+</div>
+
+
+<div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn blue">保存</button>
+</div>
+
+<{if $env.get.callback_func}>
+<!-- 保存后，不跳转 -->
+<input type="hidden" name="no_redirect" value="1">
+<{/if}>
+</form>
+
+<{if $env.get.callback_func}>
+<script charset="utf-8">
+    //临时添加分类
+    $('#cat_form').data('ajax:success',function(re){
+        $('#cat_form').closest('.modal').modal('hide');
+        re = jsonDecode(re);
+        if(re.the_cat){
+            if('<{$env.get.callback_func}>' in window){
+                window['<{$env.get.callback_func}>'](re.the_cat);
+            }
+        }
+    });
+</script>
+<{/if}>

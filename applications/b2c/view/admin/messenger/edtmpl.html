@@ -1,0 +1,74 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+	<h3 class="modal-title">
+		<{$sender_name}>模板编辑
+			<small>
+				<{$action_label}>
+			</small>
+	</h3>
+
+</div>
+<form method="post" action="index.php?app=b2c&ctl=admin_member_messenger&act=saveTmpl" id='edittmpl_form' calss="form">
+	<input type="hidden" name="action_name" value="<{$action_name}>">
+	<input type="hidden" name="sender_class" value="<{$sender_class}>">
+	<div class="modal-body  form-horizontal">
+		<div class="form-body">
+				<{if $sender_class !='b2c_messenger_sms' }>
+				<div class="form-group">
+					<label class="col-md-2 control-label">标题</label>
+					<div class="col-md-10">
+						<{input type="text" name="title" value=$title}>
+					</div>
+				</div>
+				<{/if}>
+					<div class="form-group">
+						<label class="col-md-2 control-label">内容模板：
+							<span class="required" aria-required="true">*</span><br>
+						</label>
+						<div class="col-md-10">
+							<div class="well well-sm">
+								<h5>模板可用变量</h5>
+								<ul class="list-inline">
+									<{foreach from=$env_list key=key item=label}>
+										<li class="margin-bottom-5"><span class="label bg-grey-gallery">&lt;{$<{$key}>}&gt;</span><span class="label bg-blue-steel"><{$label}></span></li>
+									<{/foreach}>
+								</ul>
+							</div>
+							<{if $sender_class !='b2c_messenger_sms' }>
+							<{input type=code value=$body height='450px' name="content" }>
+							<{else}>
+							<span class="help-block">
+								短信签名(发送时会追加到短信末尾)：<{$env.conf.desktop.sms_sign}>
+								<a href="index.php?app=desktop&ctl=sms&act=setting"><i class="fa fa-pencil-square-o"></i></a>
+							</span>
+							<{input type=textarea value=$body  name="content" rows=5}>
+							<{/if}>
+							<button type="button" id="recorvery_tmpl_content" class="btn btn-xs btn-default">回到默认</button>
+						</div>
+					</div>
+		</div>
+	</div>
+
+
+	<div class="modal-footer">
+		<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+		<button type="submit" class="btn blue">保存</button>
+	</div>
+
+</form>
+
+<script type="text/javascript">
+	$('#recorvery_tmpl_content').on('click',function(e){
+		if(!confirm("确认回到默认吗？"))return false;
+		$.post("index.php?app=b2c&ctl=admin_member_messenger&act=recovery_tmpl",$(this).closest('form').serialize(),function(re){
+			if(!re)return Messagebox.error('操作失败!');
+			if(re.success){
+				$('#edittmpl_form').closest('.modal').modal('hide');
+				return Messagebox.success('操作成功!');
+			}
+			if(re.error){
+				return Messagebox.error('操作失败!');
+			}
+		},'json');
+	});
+</script>

@@ -1,0 +1,23 @@
+<{switch from=$msg.msg_type}>
+<{case value='normal'}>
+<div class="well">
+    <{if $msg.subject}>
+    <h5><{$msg.subject}></h5>
+    <{/if}>
+    <{$msg.content}>
+</div>
+<{case value='sms'}>
+<div class="well">
+发送至：<{$msg.target}><br>
+<{$msg.content}>
+</div>
+<{case value='email'}>
+发送至：<{$msg.target}><br>
+<form target="_blank" method="post" action="index.php?app=desktop&ctl=email&act=email_display">
+    <input type="text" class="form-control" name="subject" readonly="true" value="<{$msg.subject}>">
+    <textarea rows=5 class="form-control" name="content" readonly="true">
+        <{$msg.content|escape:'html'}>
+    </textarea>
+    <button type="submit" class="btn btn-block btn-default"><i class="fa fa-eye"></i> 浏览</button>
+</form>
+<{/switch}>

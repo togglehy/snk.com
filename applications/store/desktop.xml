@@ -1,0 +1,18 @@
+<desktop>
+    <permissions>
+        <permission id="sell_in_store" display='true'>门店经营</permission>
+        <permission id="store_setting" display='true'>门店配置</permission>
+        <permission id="store_pos" display='true'>门店收银</permission>
+    </permissions>
+
+    <workground name="门店" icon="icon-home" id="wrokground.store" order='68'>
+        <menugroup name="门店管理">
+            <menu controller='admin_store' action='index' permission='store_setting' display='true' order='10'>门店列表</menu>
+            <menu controller='admin_store' action='edit' permission='store_setting' display='false'>添加/编辑门店</menu>
+        </menugroup>
+        <menugroup name="门店收银">
+            <menu controller='admin_pos' action='index' permission='store_pos' display='true' order='10'>门店收银</menu>
+        </menugroup>
+    </workground>
+
+</desktop>

@@ -1,0 +1,22 @@
+<desktop>
+    <permissions>
+        <permission id="currency" display="true" parent='0'>支付,货币管理</permission>
+        <permission id="regions" display="true" parent='0'>地区管理</permission>
+        <permission id="bills" display="true" parent='0'>应收应付</permission>
+    </permissions>
+
+    <panelgroup id="currency" icon="icon-credit-card" order="20">支付</panelgroup>
+    <!-- <adminpanel group="ectools_currency" controller="currency" action="index" permission='currency' order="20" display='true'>货币管理</adminpanel> -->
+    <adminpanel group="ectools_currency" controller="setting" action="index" permission='currency' order="30" display='true'>价格精度设置</adminpanel>
+    <adminpanel group="ectools_currency" controller="payment_apps" action="index" permission='currency' order="10" display='true'>支付方式管理</adminpanel>
+    <adminpanel group="b2c_shipment" controller="regions" action="index" permission='regions' order="10" display='true'>地区管理</adminpanel>
+    <!-- <adminpanel group="b2c_shipment" controller="regionssetting" action="index" permission='regions' order="20" display='true'>地区设置</adminpanel> -->
+
+    <workground icon="icon-basket-loaded" name="交易" id="ectools.wrokground.order" order="10">
+        <menugroup name="应收应付账单">
+            <menu controller='admin_payment' action='index' permission='bills' display='true' order='30'>应收款</menu>
+            <menu controller='admin_refund' action='index' permission='bills' display='true' order='31'>应付款</menu>
+        </menugroup>
+    </workground>
+
+</desktop>

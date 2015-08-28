@@ -1,0 +1,28 @@
+
+<ol class="breadcrumb">
+  <li><a href="<{link app=mobile ctl=index}>">首页</a></li>
+  <li><a href="<{link app=b2c ctl=mobile_list}>">商品列表</a></li>
+  <li class="active">品牌专区</li>
+</ol>
+
+<div class="page-header">
+    <div class="container">
+        <h1>品牌专区<small>Brand Center</small></h1>
+    </div>
+</div>
+<div class="brand-container">
+    <{foreach from=$brand_list key=key item=blist}>
+            <h3><{$key}></h3>
+            <hr>
+            <ul class="list-inline">
+                <{foreach from=$blist item=item}>
+                <li class="text-center">
+                    <a href="<{link app=b2c ctl=mobile_list args0=$item.brand_id}>">
+                    <img src="<{$item.brand_logo|storager:'90x90'}>" alt="<{$item.brand_name}>"/>
+                    <h4><{$item.brand_name}></h4>
+                    </a>
+                </li>
+                <{/foreach}>
+            </ul>
+    <{/foreach}>
+</div>

@@ -1,0 +1,94 @@
+<div class="row">
+	<div class="col-md-6">
+		<h3 class="page-title">
+			<{if $goods.goods_id}>编辑<{else}>添加<{/if}>商品
+
+		</h3>
+	</div>
+	<div class="col-md-6 text-right">
+		<div class="btn-group">
+			<{if $goods.goods_id}>
+			<a class="btn btn-sm btn-default" href='<{link router='site' app=b2c ctl=site_product act=index args0="g{$goods.goods_id}"}>' target="_blank"><i class="fa fa-external-link"></i> 前台预览</a>
+			<a class="btn btn-sm btn-default" href='<{link app=b2c ctl=admin_stock act=index}>&p[0]=<{$goods.goods_id}>' target="_blank"><i class="fa fa-th"></i> 库存管理</a>
+			<{/if}>
+		</div>
+	</div>
+</div>
+
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<a href="index.php?app=b2c&ctl=admin_goods&act=index">商品列表</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="javascript:;"><{if $goods.goods_id}>编辑:<{$goods.name}><{else}>添加商品<{/if}></a>
+		</li>
+	</ul>
+</div>
+<form action="index.php?app=b2c&ctl=admin_goods_editor&act=save" method="post" class="form" id="goods_edit_form">
+  <input type="hidden" name="goods[goods_id]" value="<{$goods.goods_id}>" />
+  <div class="form-horizontal">
+
+		<ul class="nav nav-tabs">
+			<{foreach from=$sections item=section key=key name=tab_nav}>
+				<li class="<{if $env.foreach.tab_nav.first}>active<{/if}>">
+					<a href="#tab_edit_<{$key}>" data-toggle="tab"><{$section.label}></a>
+				</li>
+			<{/foreach}>
+		</ul>
+		<div  class="tab-content">
+			<{foreach from=$sections item=section key=key name=tab_content}>
+				<div id="tab_edit_<{$key}>" class="tab-pane<{if $env.foreach.tab_content.first}> active<{/if}>">
+					<{include app=$section.app file=$section.file}>
+				</div>
+	         <{/foreach}>
+		</div>
+
+	<div class="form-actions">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-9">
+				<button type="submit" data-redirect="<{link app=b2c ctl=admin_goods_editor act=edit}>&p[0]={goods_id}" class="btn blue"><i class="fa fa-check"></i> 保存</button>
+				<{if $goods.goods_id}>
+				<button type="submit" data-redirect="<{link app=b2c ctl=admin_goods act=index}>" class="btn blue-hoki"><i class="fa fa-check-circle"></i> 保存并返回商品列表</button>
+				<{else}>
+				<button type="submit" data-redirect="<{link app=b2c ctl=admin_goods_editor act=add}>" class="btn blue-hoki"><i class="fa fa-check-circle"></i> 保存并继续添加新商品</button>
+				<{/if}>
+				<a href="<{link app=b2c ctl=admin_goods act=index}>" class="btn default"><i class="fa fa-angle-left"></i>返回商品列表</a>
+			</div>
+		</div>
+	</div>
+  </div>
+
+</form>
+<script charset="utf-8">
+/**
+ * 商品编辑表单提交
+ */
+	$('#goods_edit_form button[data-redirect]').on('click',function(e){
+			var find_required = false;
+			//定位到必填项,防止浏览器内部错误无提示
+			$.each($('#goods_edit_form input[required]'),function(i,ipt){
+				if(find_required)return;
+				if($.trim($(ipt).val()) == ''){
+					var tab = $('#goods_edit_form .nav-tabs li a[href$="#'+$(ipt).closest('.tab-pane').prop('id')+'"]');
+					tab.tab('show');
+					find_required = true;
+				}
+			});
+			var redirect = $(this).attr('data-redirect');
+			if(redirect.match(/goods_id/)){
+				$('#goods_edit_form').data('ajax:success',function(re){
+					re = jsonDecode(re);
+					if(re.goods_id){
+						load_page(substitute(redirect,re));
+					}
+				});
+			}else{
+				$('<input type="hidden" name="redirect">').val(redirect)
+				.appendTo($(this.form));
+			}
+
+
+	});
+</script>

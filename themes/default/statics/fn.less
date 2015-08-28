@@ -1,0 +1,24 @@
+/*Rounded Corners*/
+.fn_rounded_corners (@radius: 4px) {
+    -moz-border-radius: @radius;
+    -webkit-border-radius: @radius;
+    border-radius: @radius;
+}
+.fn_rounded_corners_cs (@radius_lt: 4px,@radius_rt: 4px,@radius_lb: 4px,@radius_rb: 4px) {
+    -moz-border-radius: @radius_lt @radius_rt @radius_lb @radius_rb;
+    -webkit-border-radius: @radius_lt @radius_rt @radius_lb @radius_rb;
+    border-radius: @radius_lt @radius_rt @radius_lb @radius_rb;
+}
+/*Box Shadow*/
+.fn_box_shadow (@hor: 3px, @vert: 2px, @blur: 5px, @shadow: #757171) {
+    -webkit-box-shadow: @hor @vert @blur @shadow;
+    -moz-box-shadow: @hor @vert @blur @shadow;
+    box-shadow: @hor @vert @blur @shadow;
+}
+
+/*Transition*/
+.fn_transition (@range: all, @time: 1s, @ease: ease-in-out) {
+    -moz-transition: @range @time @ease;
+    -webkit-transition: @range @time @ease;
+    -o-transition: @range @time @ease;
+}

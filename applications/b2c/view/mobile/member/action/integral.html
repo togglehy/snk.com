@@ -1,0 +1,113 @@
+<div class="page-header">
+    <h1>我的积分
+        <small>My Integral</small>
+    </h1>
+</div>
+<div class="well">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>当前积分额度：</h4><h2 class="text-danger"><{$member.integral|number_format}></h2>
+        </div>
+        <{if $integral_list && $integral_list.0}>
+        <div class="col-md-8">
+            <h4>最近一次积分变更：</h4>
+            <dl class="dl-horizontal">
+                <dt>发生时间</dt>
+                <dd><{$integral_list.0.change_time|cdate}></dd>
+                <dt>变更前余额</dt>
+                <dd><{$integral_list.1.balance|number_format}></dd>
+                <dt>变更后余额</dt>
+                <dd><{$integral_list.0.balance|number_format}></dd>
+                <dt>变更原因</dt>
+                <dd>
+                    <{$integral_list.0.change_reason|integral_reason}>
+                    <{if $integral_list.0.order_id}>
+                    <br>
+                    相关订单:<a target="_blank" href="<{link app=b2c ctl=mobile_order act=detail args0=$integral_list.0.order_id}>"><{$integral_list.0.order_id}></a>
+                    <{/if}>
+                </dd>
+
+            </dl>
+        </div>
+        <{/if}>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                余额
+            </th>
+            <th>
+                变更
+            </th>
+            <th>
+                变更原因
+            </th>
+            <th>
+                变更时间
+            </th>
+            <th>
+                有效期
+            </th>
+
+
+            <!-- <th>
+                说明
+            </th> -->
+        </tr>
+    </thead>
+    <tbody>
+        <{foreach from=$integral_list item=item}>
+        <tr>
+            <td>
+                <{$item.balance|number_format}>
+            </td>
+            <td>
+                <{if $item.change>0}>
+                <big class="text-danger"><strong>+</strong> <{$item.change|number_format}></big>
+                <{else}>
+                <big class="text-success"><strong>-</strong> <{$item.change|number_format|abs}></big>
+                <{/if}>
+                <{if $item.remark}>
+                    <i class="glyphicon glyphicon-question-sign" data-toggle="popover"></i>
+                    <p class="hide">
+                        <{$item.remark}>
+                    </p>
+                <{/if}>
+            </td>
+            <td>
+                <{$item.change_reason|integral_reason}>
+            </td>
+            <td>
+                <{$item.change_time|cdate}>
+            </td>
+            <td>
+                <{if $item.change_expire}>
+                    <{$item.change_expire|cdate}>
+                <{else}>
+                    无限
+                <{/if}>
+            </td>
+
+            <!-- <td>
+                <{$item.remark}>
+            </td> -->
+        </tr>
+        <{/foreach}>
+    </tbody>
+</table>
+<{pagers data=$pager}>
+<script type="text/javascript">
+var _popover_options = {
+    container:'body',
+    html:true,
+    placement:'right',
+    trigger:'hover',
+    delay:300,
+    content:function(){
+        return $(this).next().html()
+    }
+};
+$('[data-toggle="popover"]').popover(_popover_options);
+</script>

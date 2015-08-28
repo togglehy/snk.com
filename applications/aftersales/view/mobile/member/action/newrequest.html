@@ -1,0 +1,365 @@
+<div class="page-header">
+  <h1>售后服务申请 <small>Services  Request</small></h1>
+</div>
+<div class="list-unstyled row order-process-bar">
+    <div class="col-xs-3"><div class="well well-sm"><a href="<{link app=aftersales ctl=mobile_member act=order}>">选择需服务商品</a> &raquo;</div></div>
+    <div class="col-xs-3 active"><div class="well well-sm">填写申请表 &raquo;</div></div>
+    <div class="col-xs-3"><div class="well well-sm">客服处理 &raquo;</div></div>
+    <div class="col-xs-3"><div class="well well-sm">服务承诺兑现 <i class="glyphicon glyphicon-heart"></i></div></div>
+</div>
+<div class="panel panel-default panel-assrule">
+    <div class="panel-body">
+    <{$gtype_assrule}>
+    <{$env.conf.aftersales.default_assrule}>
+    </div>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                请求售后服务商品描述
+            </th>
+            <!-- <th>包装清单</th>
+            <th>赠品清单</th> -->
+            <th>
+                已发货数量
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="warning">
+            <td>
+                <div class="row">
+                    <div class="col-xs-2">
+                        <img class="img-thumbnail" src="<{$request_item.image_id|storager:'xs'}>" alt="<{$request_item.name}>" />
+                    </div>
+                    <div class="col-xs-6">
+                        <{$request_item.name}><{if $request_item.spec_info}><br><small><{$request_item.spec_info}></small><{/if}>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <ul class="list-unstyled">
+                            <li><del><{$request_item.price|cur}></del></li>
+                            <li><{$request_item.buy_price|cur}></li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <!-- <td></td><td></td> -->
+            <td>
+                <{$request_item.sendnum}>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<form target="new_request_frame" class="form-horizontal" action="<{link app=aftersales ctl=mobile_member act=newrequest args0=$order.order_id args1=$request_item.product_id args2='save'}>" method="post" enctype="multipart/form-data" id="ass_newrequest_form">
+    <div class="form-group">
+        <label  class="col-xs-2 control-label">售后服务类型<span class="text-danger">*</span></label>
+        <div class="col-xs-7">
+          <select class="form-control" name="request[req_type]">
+                  <option value='1'>退货</option>
+                  <option value='2'>更换</option>
+                  <option value='3'>维修</option>
+                  <option value='4'>投诉\建议</option>
+          </select>
+          <!-- <span class="help-block">并非最终处理结果。例如您选择了“维修”,最终处理结果可能为 “更换”</span> -->
+        </div>
+    </div>
+    <div class="form-group" data-extend="req_type">
+        <label  class="col-xs-2 control-label">商品返回方式</label>
+        <div class="col-xs-7">
+          <span class="help-block"><{$env.conf.aftersales.return_item_helpinfo}></span>
+        </div>
+    </div>
+    <div class="form-group" data-extend="req_type">
+        <label  class="col-xs-2 control-label">提交数量<span class="text-danger">*</span></label>
+        <div class="col-xs-7">
+            <div class="product-quantity input-group" style="width:150px;">
+                <div class="spinner-buttons input-group-btn">
+                    <button type="button" class="btn btn-default">
+                    -
+                    </button>
+                </div>
+                <input type="text" name="product_return_num" class="spinner-input form-control"  value=1 data-max="<{$request_item.sendnum}>">
+                <div class="spinner-buttons input-group-btn">
+                    <button type="button" class="btn btn-default">
+                    +
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group checkout-container" data-extend="req_type">
+        <label  class="col-xs-2 control-label">
+            收货地址<span class="text-danger">*</span>
+        </label>
+        <div class="col-xs-10 checkout-maddr">
+            <ul class="list-group">
+                <{foreach from=$member_addr_list key=k item=addr name=maddr}>
+                    <li class="list-group-item clearfix <{if $addr.selected}>active<{/if}> <{if $env.foreach.maddr.iteration>2}>hide list-group-item-more<{/if}>">
+                        <address class="pull-left">
+                          <input type="radio" <{if $addr.selected}>checked<{/if}> name="request[member_addr_id]" value="<{$addr.addr_id}>">
+                          <big data-bind="name"><{$addr.name}></big>&nbsp;
+                          <small>
+                              <span data-bind="area"><{$addr.area|region}></span>
+                              <span data-bind="addr"><{$addr.addr}></span>
+                              <{if $addr.zip}>,邮编:<span data-bind="zip"><{$addr.zip}></span><{/if}>
+                              &nbsp;手机号:<span data-bind="mobile"><{$addr.mobile}></span>
+                          </small>
+                        </address>
+                        <div class="btn-group btn-list-edit btn-group-xs pull-right" role="group" aria-label="收货人信息操作">
+                          <button data-addrid="<{$addr.addr_id}>" type="button" class="btn btn-default btn-edit-maddr">编辑收货地址</button>
+                          <{if $env.foreach.maddr.iteration ==2}>
+                              <button type="button" class="pull-right btn-list-more btn btn-default btn-xs">
+                                  更多&nbsp;<span class="caret"></span>
+                              </button>
+                          <{/if}>
+                        </div>
+                    </li>
+                <{/foreach}>
+            </ul>
+            <span class="help-block">若使用其他收货地址,可以<button type="button" class="btn btn-xs btn-default"  data-toggle="modal" data-target="#member_addr_edit_modal" >新增收货地址</button></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label">问题描述<span class="text-danger">*</span></label>
+        <div class="col-xs-7">
+          <{input type="textarea" required="true" name="request[description]" placeholder="售后问题描述" rows=3}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label">照片</label>
+        <div class="col-xs-7">
+                <{input type="file" class="request-image"  name="images[]"}>
+                <span class="help-block">最多上传5张,每张大小不能超过<span class="text-danger"><{$env.conf.aftersales.request_image_size}>MB</span>,支持bmp,gif,jpg,png,jpeg</span>
+        </div>
+    </div>
+    <hr>
+    <div class="form-group">
+        <div class="col-xs-7 col-xs-offset-2">
+          <button type="submit" class="btn btn-lg btn-primary" data-loading-text="正在提交...">提交申请</button>
+        </div>
+    </div>
+</form>
+
+
+
+<form class="modal" id="member_addr_edit_modal" action="<{link app=b2c ctl=mobile_member act=quick_maddr args0=save}>">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">收货地址信息<span>新增</span></h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-horizontal">
+              <div class="form-group">
+                <label for="maddr_name" class="col-sm-2 control-label">姓名<em class="text-danger">*</em></label>
+                <div class="col-sm-5">
+                  <input type="text" required="true" name="maddr[name]" class="form-control" id="maddr_name" placeholder="收货人姓名">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_mobile" class="col-sm-2 control-label">手机<em class="text-danger">*</em></label>
+                <div class="col-sm-5">
+                  <input type="text" required="true" name="maddr[mobile]" class="form-control" id="maddr_mobile" placeholder="手机号码">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_area"  class="col-sm-2 control-label">收货地区<em class="text-danger">*</em></label>
+                <div class="col-sm-10">
+                  <{input type=region name="maddr[area]" id="maddr_region"}>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_addr" class="col-sm-2 control-label">收货地址<em class="text-danger">*</em></label>
+                <div class="col-sm-10">
+                    <input type="text" required="true" name="maddr[addr]" class="form-control" id="maddr_addr" placeholder="街道\门牌号码">
+                </div>
+              </div>
+              <hr>
+              <div class="form-group">
+                <label for="maddr_zip" class="col-sm-2 control-label">邮编</label>
+                <div class="col-sm-3">
+                    <input type="text" name="maddr[zip]" class="form-control input-sm" id="maddr_zip" placeholder="邮政编码">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_tel" class="col-sm-2 control-label">固话</label>
+                <div class="col-sm-5">
+                    <input type="text" name="maddr[tel]" class="form-control input-sm" id="maddr_tel" placeholder="固定电话">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_tel" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-5">
+                    <input type="email" name="maddr[email]" class="form-control input-sm" id="maddr_tel" placeholder="填写此项可接收订单状态通知" >
+                </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <div class="form-group">
+              <div class="col-sm-5 col-sm-offset-2 text-left hide">
+                  <label class="control-label"><input type="checkbox" name="maddr[is_default]" value="true"> 默认收货地址</label>
+              </div>
+              <div class="col-sm-5">
+                  <button type="reset" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="submit" class="btn btn-primary">保存</button>
+              </div>
+          </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</form><!-- /.modal -->
+
+<iframe src="about:blank" class="hide" name="new_request_frame"></iframe>
+
+<script type="text/javascript">
+    //图片选择输入框自动复制
+    $('.request-image').on('change',function(){
+        $(this).off('change',arguments.callee);
+        var images_length = $('.request-image').length;
+        if(images_length>4)return;
+        var file_ipt_clone = $($(this).clone());
+        file_ipt_clone.insertAfter($(this));
+        file_ipt_clone.on('change',arguments.callee);
+        //file_ipt_clone.prop('name','images['+images_length+']');
+    });
+
+
+    /**
+     * 收货地址相关
+     */
+
+     //收货地址编辑窗体设置
+     $('#member_addr_edit_modal').on('show.bs.modal',function(){
+         /**
+          * @see javascripts/region_sel.js
+          */
+         region_sel.tryselected($('#maddr_region'));
+
+     });
+     $('#member_addr_edit_modal').on('hide.bs.modal',function(){
+         //重置
+         this.reset();
+         $(this).find('input.tmp-hidden').remove();
+         $(this).find('.modal-title span').text('新增');
+         $(this).removeData('list-item');
+         /**
+          * @see javascripts/region_sel.js
+          */
+          region_sel.unselected($('#maddr_region'),'0');
+     });
+     //收货地址编辑提交
+     $('#member_addr_edit_modal').on('submit',function(e){
+         e.stopPropagation();
+         var list_item = $(this).data('list-item');
+         $.post($(this).prop('action'),$(this).serialize(),function(re){
+                 if(re.data){
+                     if(list_item){ //编辑保存
+                         $.each(list_item.find('[data-bind]'),function(i,el){
+                             el = $(el);
+                             el.text(re.data[el.attr('data-bind')]);
+                         });
+                     }else{ //新增
+                         return location.reload();//新增地址成功后刷新页面
+                     }
+                 }
+                 $('#member_addr_edit_modal').modal('hide');
+         },'json');
+
+         return false;
+     });
+
+
+     //编辑收货地址
+     $('.checkout-maddr').on('click','.btn-edit-maddr',function(e){
+         e.stopPropagation();
+         var this_btn = $(this),
+         addr_id = this_btn.attr('data-addrid'),
+         el_group_item = this_btn.closest('.list-group-item');
+         $('#member_addr_edit_modal').find('.modal-title span').text('编辑');
+         $.getJSON('<{link app=b2c ctl=mobile_member act=quick_maddr args0=edit args1="__addr_id__"}>'.replace('__addr_id__',addr_id),function(re){
+             if(!re||!re.data){
+                 return alert('编辑失败!请到会员中心编辑!');
+             }
+             $.each(re.data,function(k,v){
+                 var look_ipt = $('#member_addr_edit_modal input[name="maddr['+k+']"]');
+                 if(look_ipt.length){
+                     if(look_ipt.is(':checkbox')){
+                         look_ipt.prop('checked',v == look_ipt.val());
+                     }else{
+                         look_ipt.val(v);
+                     }
+                 }else{
+                     $('#member_addr_edit_modal').append($('<input type="hidden" class="tmp-hidden remove-on-modal-close" name="maddr['+k+']" value="'+v+'">'));
+                 }
+                 $('#member_addr_edit_modal').data('list-item',el_group_item);
+                 $('#member_addr_edit_modal').modal('show');
+             });
+         });
+         return false;
+     });
+
+     //更多收货地址按钮
+     $('.btn-list-more').on('click',function(e){
+         e.stopPropagation();
+         $(this).hide();
+         $('.checkout-maddr .list-group-item-more').removeClass('hide');
+     });
+     //显示隐藏无用元素
+     $('select[name="request[req_type]"]').on('change',function(e){
+         if($(this).val() == '4'){
+             $('.form-group[data-extend="req_type"]').hide();
+             $('.form-group[data-extend="req_type"]').find('input,select,file').prop('disabled',true);
+         }else{
+             $('.form-group[data-extend="req_type"]').show();
+             $('.form-group[data-extend="req_type"]').find('input,select,file').prop('disabled',false);
+         }
+     });
+     //收货地址选择事件
+     $('.checkout-maddr').on('click','.list-group-item',function(e){
+         $(this).find('input:radio').prop('checked',true);
+         var current_flow = $(this).closest('.checkout-maddr')
+         current_flow.find('.list-group-item').removeClass('active');
+         $(this).addClass('active');
+     });
+     //提交处理
+     $('#ass_newrequest_form').on('submit',function(){
+         var sub_btn = $(this).find('button[type=submit]');
+         sub_btn.attr('data-loading-text','正在提交...').button('loading');
+         $('iframe[name=new_request_frame]').on('load',function(){
+             $(this).off('load',arguments.callee);
+             sub_btn.button('reset');
+             try{
+                 var response = $(this.contentWindow.document.body.innerHTML).text();
+                 response = $.parseJSON(response);
+             }catch(e){
+                 try{
+                     var response = this.contentWindow.document.body.innerHTML;
+                         response = $.parseJSON(response);
+                 }catch(e){
+
+                 }
+             }
+             if(typeof(response)!='object'){
+                 alert('提交失败!请稍后重试');
+             }
+             if('fipt_idx' in response){
+                 //上传错误
+                 var error_info = $('<span class="span-info dropup text-danger"><span class="caret"></span>'+response.error+'</span>'),ipt = $('.request-image').eq(response.fipt_idx);
+                 error_info.insertAfter(ipt);
+                 return setTimeout(function(){
+                     error_info.fadeOut(function(){
+                         error_info.remove();
+                     });
+                 },5000);
+             }
+             if('error' in response){
+                 //其他异常
+                 alert('提交失败!'+response.error);
+             }
+             location = "<{link app=aftersales ctl=mobile_member act=request}>";
+         });
+     });
+</script>

@@ -1,0 +1,96 @@
+<script charset="utf-8">
+    var _params_group_index = 0;
+
+    var substitute = function(str,obj){
+            return str.replace(/\\?\{([^{}]+)\}/g, function(match, name){
+                if (match.charAt(0) == '\\') return match.slice(1);
+                return (obj[name] != undefined) ? obj[name] : '';
+            });
+    }
+</script>
+<div class="form-group">
+    <label class="col-md-2 control-label">商品参数表</label>
+    <textarea class="new-pcol-tpl hide">
+            <div class="col-md-4">
+            <div class="input-group input-small">
+                <input type="text" required=true class="form-control input-sm" name="gtype[params][{key1}][name][{key2}]" value="">
+                <span class="input-group-addon" onclick="$(this).closest('.col-md-4').remove();">
+                    <i class="fa fa-trash-o"></i>
+                </span>
+            </div>
+            </div>
+    </textarea>
+    <textarea  class="new-params-tpl hide">
+        <tr>
+            <td>
+                <input class="form-control input-sm" required=true name="gtype[params][{key}][group]"  value="<{$key|escape:html}>" />
+            </td>
+            <td>
+                <div class="row">
+                    <div class="col-md-1" onclick="$(this).before(substitute($('.new-pcol-tpl').val(),{key1:'{key}',key2:'new_'+(_params_group_index++)}));">
+                        <button type="button" class="btn default btn-xs btn-block" ><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <button type="button" class="btn default btn-xs" onclick="if(confirm('确认删除？'))$(this).closest('tr').remove();"><i class="fa fa-trash-o"></i> 删除</button>
+            </td>
+        </tr>
+    </textarea>
+    <div class="col-md-9">
+    <div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover" id="params_edit_panel">
+        <thead>
+            <tr class="heading">
+                <th>参数组名称</th>
+                <th width="70%">参数项名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <{assign var=grpItem value=0}>
+            <{foreach from=$gtype.params key=key item=groupitems}>
+                <tr>
+                    <td>
+                        <input class="form-control input-sm" name="gtype[params][<{$grpItem}>][group]"  value="<{$key|escape:html}>" />
+                    </td>
+                    <td>
+                        <div class="row">
+                        <{assign var=grpPrmItem value=0}>
+                        <{foreach from=$groupitems key=keyx item=option}>
+                        <div class="col-md-4">
+                                <div class="input-group input-small">
+                                    <input type="text" class="form-control input-sm" name="gtype[params][<{$grpItem}>][name][<{$grpPrmItem}>]" value="<{$keyx|escape:html}>">
+                                    <span class="input-group-addon" onclick="$(this).closest('.col-md-4').remove();">
+										<i class="fa fa-trash-o"></i>
+									</span>
+                                </div>
+                            </div>
+                        <{assign var=grpPrmItem value=$grpPrmItem+1}>
+                        <{/foreach}>
+                            <div class="col-md-1" onclick="$(this).before(substitute($('.new-pcol-tpl').val(),{key1:'<{$grpItem}>',key2:'new_'+(_params_group_index++)}));">
+                                <button type="button" class="btn default btn-xs btn-block"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn default btn-xs" onclick="if(confirm('确认删除？'))$(this).closest('tr').remove();"><i class="fa fa-trash-o"></i> 删除</button>
+                    </td>
+                </tr>
+                <{assign var=grpItem value=$grpItem+1}>
+            <{/foreach}>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan=4>
+                    <button type="button" class="btn default btn-sm btn-block" onclick="$('#params_edit_panel tbody').append(substitute($('.new-params-tpl').val(),{key:'new_'+(_params_group_index++)}));"><i class="fa fa-plus"></i> 新建参数组</button>
+                </td>
+            </tr>
+        </tfoot>
+</tbody>
+</table>
+</div>
+</div>
+</div>

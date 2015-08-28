@@ -1,0 +1,48 @@
+<div class="well well-sm">
+    <{input type="object" callback_func="goods_select_callback_func" object="goods"  multiple="true" }>
+    <table class="object-goods-rows table">
+        <tbody id="objgoods_rows">
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+$(function(){
+    goods_select_callback_func = function(selected){
+        var gids = [];
+        $.each(selected,function(k,v){
+            gids.push(v.value);
+        });
+        _render(gids);
+    };
+    var _render = function(gids){
+        $.post('<{link app=desktop ctl=finder act=object_row}>',{
+            'app':'b2c',
+            'model':'goods',
+            'cols':'goods_id,name,gid',
+            'name':"<{$data.name}>[]",
+            'pkey':'goods_id',
+            'filter':{goods_id:gids}
+        },function(re){
+            $('#objgoods_rows').append(re);
+            var tmp = [];
+            $($.grep($('#objgoods_rows tr'),function(tr,i){
+                var gid = $.trim($(tr).find('td:last').text());
+                if($.inArray(gid,tmp)>-1){
+                    return true;
+                }else{
+                    tmp.push(gid);
+                }
+            })).remove();
+        });
+    }
+    <{if $data.default}>
+    var gids = [];
+    <{foreach from=$data.default item=gid}>
+    gids.push(<{$gid}>);
+    <{/foreach}>
+    _render(gids);
+    <{/if}>
+});
+
+</script>

@@ -1,0 +1,115 @@
+<{if $brand}>
+    <{include file='site/brand/inlist.html'}>
+<{/if}>
+<div class="glist-container">
+    <{if !$brand}>
+    <ol class="breadcrumb">
+        <{if $cat_path}>
+        <li><a href="<{link app=b2c ctl=mobile_list act=index}>">全部</a></li>
+        <{foreach from=$cat_path item=cat name=cp}>
+        <{if $env.foreach.cp.last}>
+        <li class="active"><{$cat.title}> （<span><{$count}></span>）</li>
+        <{else}>
+        <li><a href="<{link app=b2c ctl=mobile_list act=index}>?cat_id=<{$cat.ident}>"><{$cat.title}></a></li>
+        <{/if}>
+        <{/foreach}>
+        <{else}>
+        <li class="active">全部商品（<span><{$all_count}></span>）</li>
+        <{/if}>
+    </ol>
+    <{/if}>
+    <{if $data_screen}>
+    <div class="panel panel-default gfilter">
+      <div class="panel-body">
+          <dl class="dl-horizontal gfilter-list">
+              <{foreach from=$data_screen key=pkey item=item}>
+              <{assign var=options_count value=count($item.options)}>
+              <{if $options_count<1}><{continue;}><{/if}>
+              <{if !$env.get.cat_id && $pkey!='cat_id'}><{continue;}><{/if}>
+                  <dt>
+                      <{$item.title}>
+                  </dt>
+                  <dd>
+                      <ul class="list-inline">
+                          <{if $pkey!='cat_id'}>
+                          <li><a href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:$pkey}>">不限</a></li>
+                          <{/if}>
+                          <{foreach from=$item.options key=vkey item=item}>
+                           <li>
+                               <{if $pkey=='cat_id'}>
+                               <a href="<{link app=b2c ctl=mobile_list act=index}>?cat_id=<{$vkey}>"><{$item}></a>
+                               <{else}>
+                               <a href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:$pkey:$vkey}>"><{$item}></a>
+                               <{/if}>
+                           </li>
+                          <{/foreach}>
+                      </ul>
+                  </dd>
+              <{/foreach}>
+          </dl>
+      </div>
+    </div>
+    <{/if}>
+    <div class="goods-list">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+                  <div class="form-inline" role="search">
+                      <div class="btn-group order-btn btn-sm" role="group" aria-label="...">
+                          <a class="btn  btn-sm <{if !$env.get.orderby}>btn-danger<{else}>btn-default<{/if}>" href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'orderby'}>">
+                              综合排序
+                              <i class="glyphicon glyphicon-sort-by-attributes-alt"></i>
+                          </a>
+                          <a class="btn  btn-sm <{if $env.get.orderby=='buy_count-desc'}>btn-danger<{else}>btn-default<{/if}>" href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'orderby':'buy_count-desc'}>">
+                              销量
+                              <i class="glyphicon glyphicon-sort-by-order-alt"></i>
+                          </a>
+                          <!-- <{if $env.get.orderby=='price-desc'}>
+                          <a class="btn  btn-sm btn-danger" href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'orderby':'price-asc'}>">价格 <i class="glyphicon glyphicon-sort-by-order-alt"></i></a>
+                          <{elseif $env.get.orderby=='price-asc'}>
+                          <a class="btn  btn-sm btn-danger" href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'orderby':'price-desc'}>">价格 <i class="glyphicon glyphicon-sort-by-order"></i></a>
+                          <{else}>
+                          <a class="btn  btn-sm btn-default" href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'orderby':'price-desc'}>">价格</a>
+                          <{/if}> -->
+                          <a class="btn  btn-sm <{if $env.get.orderby=='comment_count-desc'}>btn-danger<{else}>btn-default<{/if}>" href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'orderby':'comment_count-desc'}>">
+                              评价数
+                              <i class="glyphicon glyphicon-sort-by-order-alt"></i>
+                          </a>
+                          <a class="btn  btn-sm <{if $env.get.orderby=='uptime-desc'}>btn-danger<{else}>btn-default<{/if}>" href="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'orderby':'uptime-desc'}>">
+                              上架时间
+                              <i class="glyphicon glyphicon-sort-by-order-alt"></i>
+                           </a>
+                      </div>
+
+                        <input type="text" id="input_keyword" class="form-control input-sm input-small" placeholder="在结果中搜索">
+                        <button type="button" data-action="<{link app=b2c ctl=mobile_list act=index}>?<{$query|merge_query:'keyword'}>" onclick="location=$(this).attr('data-action')+'&keyword='+$('#input_keyword').val()" class="btn btn-sm btn-default">确定</button>
+                  </div>
+            </div>
+        </div>
+
+        <div class="row goods-list gl-default">
+            <{foreach from=$data_list item=item}>
+              <div class="col-md-3">
+                <div class="thumbnail goods-item">
+                    <div class="gi-image-wrapper">
+                        <a href="<{link app=b2c ctl=mobile_product args0=$item.product.product_id}>">
+                            <img src="<{$item.image_default_id|storager:'s'}>" alt="<{$item.name}>">
+                        </a>
+                    </div>
+                  <div class="caption">
+                    <h3 class="g-name">
+                        <a href="<{link app=b2c ctl=mobile_product args0=$item.product.product_id}>"><{$item.name}></a>
+                    </h3>
+                    <p class="avg-mark">
+                        <span class="text-warning"><{$item.mark_star|star}></span> <small><{$item.mark_star|number_format:'1'}></small>
+                    </p>
+                    <ul class="list-inline">
+                        <li class="price-1 text-danger"><{$item.product.buy_price|cur}></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            <{/foreach}>
+        </div>
+        <{pagers data=$pager}>
+    </div>
+</div>

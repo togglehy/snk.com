@@ -1,0 +1,143 @@
+<ul class="chats" id="chats_<{$env.get.id}>">
+    <li class="in">
+        <img class="avatar" src="<{$comment.member_id|avatar:'xs'}>">
+        <div class="message">
+            <span class="arrow"></span>
+            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$comment.member_id}>" target="_blank" class="name"><{$comment.author_name}></a>
+            <span class="datetime"><{$comment.createtime|cdate}></span>
+            <span class="btn-group">
+                <button data-commentid="<{$comment.comment_id}>" type="button" class="btn btn-act-display btn-xs btn-default">
+                    <{if $comment.display == 'false'}>
+                    <i class="fa  fa-eye"></i> <span>可见</span>
+                    <{else}>
+                    <i class="fa  fa-eye-slash"></i> <span>隐藏</span>
+                    <{/if}>
+                </button>
+            </span>
+            <div class="body">
+                <p>
+                    综合评价：<span class="text-warning"><{$comment.mark.mark_star|star}></span>
+                </p>
+                <div class="content">
+                        <{$comment.content}>
+                </div>
+                <{foreach from=$comment.images item=image}>
+                    <a href="<{$image.image_id|storager}>" target="_blank">
+                        <img class="img-thumbnail" width="70" src="<{$image.image_id|storager}>" />
+                    </a>
+                <{/foreach}>
+            </div>
+        </div>
+    </li>
+    <{foreach from=$reply_list item=item}>
+    <{assign var=reply value=$item.{$comment.comment_id}|current|current}>
+    <{if $reply.member_id!=$comment.member_id}><{continue;}><{/if}>
+    <li class="in">
+        <img class="avatar" src="<{$reply.member_id|avatar:'xs'}>">
+        <div class="message">
+            <span class="arrow"></span>
+            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$comment.member_id}>" target="_blank" class="name"><{$reply.author_name}></a>
+            <span class="datetime"><{$reply.createtime|cdate}></span>
+            <span class="btn-group">
+                <button data-commentid="<{$reply.comment_id}>" type="button" class="btn btn-act-display btn-xs btn-default">
+                    <{if $reply.display == 'false'}>
+                    <i class="fa  fa-eye"></i> <span>可见</span>
+                    <{else}>
+                    <i class="fa  fa-eye-slash"></i> <span>隐藏</span>
+                    <{/if}>
+                </button>
+            </span>
+            <div class="body">
+                <{$reply.content}>
+            </div>
+        </div>
+    </li>
+    <{/foreach}>
+    <{foreach from=$reply_list item=item}>
+    <{assign var=reply value=$item.{$comment.comment_id}|current|current}>
+    <{if $reply.member_id==$comment.member_id}><{continue;}><{/if}>
+    <li class="out">
+        <img class="avatar" src="<{$reply.member_id|avatar:'xs'}>">
+        <div class="message">
+            <span class="arrow"></span>
+            <span class="name"><{$reply.author_name}></span>
+            <span class="datetime"><{$reply.createtime|cdate}></span>
+            <div class="body">
+                <{$reply.content}>
+            </div>
+        </div>
+    </li>
+    <{/foreach}>
+    <li class="reply-panel">
+        <div class="chat-form">
+            <div class="input-cont">
+                <input data-forcommentid="<{$comment.comment_id}>" class="form-control" type="text" placeholder="请输入回复内容...">
+            </div>
+            <div class="btn-cont">
+                <span class="arrow">
+                </span>
+                <button type="button" class="btn blue icn-only">
+                    <i class="fa fa-check icon-white"></i>
+                </button>
+            </div>
+        </div>
+    </li>
+</ul>
+<script type="text/javascript">
+    //前台隐藏、显示
+    $('#chats_<{$env.get.id}> .btn-act-display').on('click',function(e){
+        var btn = $(this),comment_id = btn.attr('data-commentid')
+        ,act=$(this).find('.fa-eye').length?'show':'hide';
+        if(act == 'show'){
+            var next_btn_icon = 'fa-eye-slash',next_btn_text = '隐藏';
+        }else{
+            var next_btn_icon = 'fa-eye',next_btn_text = '可见';
+        }
+        $.getJSON('index.php?app=b2c&ctl=admin_member_comment&act='+act+'&p[0]='+comment_id,function(re){
+            if(re.success){
+                Messagebox.success(re.success);
+                btn.fadeOut(function(){
+                    btn.find('.fa').prop('className','fa '+next_btn_icon);
+                    btn.find('span').text(next_btn_text);
+                    btn.fadeIn();
+                });
+            }else{
+                Messagebox.error(re.error);
+            }
+        });
+    });
+    //管理员回复操作
+    $('#chats_<{$env.get.id}> .reply-panel .btn-cont').on('click',function(e){
+        var ipt = $('#chats_<{$env.get.id}> .reply-panel input[data-forcommentid]'),
+        forcommentid=ipt.attr('data-forcommentid'),
+        reply_content = $.trim(ipt.val()),
+        update_panel =$('#chats_<{$env.get.id}>').parent();
+        if(!reply_content){
+                return ipt.eq(0).focus();
+        }
+        bootbox.confirm('确认回复以下内容？<br>'+reply_content,function(flag){
+            if(flag){
+                //loading
+                BlockLoading({
+                    target:update_panel,
+                    animate:true
+                });
+                //发送回复请求
+                $.post('index.php?app=b2c&ctl=admin_member_comment&act=reply',{
+                    'forcommentid':forcommentid,
+                    'reply_content':reply_content
+                },function(re){
+                    //loading end
+                    UnblockLoading(update_panel);
+                    if(re.success){
+                        //刷新
+                        $(update_panel).load("index.php?app=b2c&ctl=admin_member_comment&act=index&action=detail&id=<{$env.get.id}>&finderview=detail_comment");
+                    }else{
+                        //报错
+                        Messagebox.error(re.error);
+                    }
+                },'json');
+            }
+        });
+    });
+</script>

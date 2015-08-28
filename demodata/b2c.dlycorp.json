@@ -1,0 +1,32 @@
+{
+	"data":
+	[
+		{
+			"corp_id": 1,
+			"corp_code": "EMS",
+			"name": "中国邮政特快专递",
+			"disabled": "false",
+			"ordernum": null,
+			"website": "http://www.ems.com.cn",
+			"request_url": "http://www.ems.com.cn"
+		},
+		{
+			"corp_id": 2,
+			"corp_code": "ZJS",
+			"name": "宅急送",
+			"disabled": "false",
+			"ordernum": null,
+			"website": "http://www.zjs.com.cn",
+			"request_url": "http://www.zjs.com.cn"
+		},
+		{
+			"corp_id": 3,
+			"corp_code": "SF",
+			"name": "顺丰速运",
+			"disabled": "false",
+			"ordernum": null,
+			"website": "http://www.sf-express.com",
+			"request_url": "http://www.sf-express.com"
+		}
+	]
+}

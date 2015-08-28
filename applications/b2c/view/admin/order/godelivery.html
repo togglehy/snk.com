@@ -1,0 +1,145 @@
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <h3 class="modal-title">订单发货 # <{$order.order_id}></h3>
+
+</div>
+
+<{if $order.pay_status<1 && $order.is_cod!='Y'}>
+<div class="alert alert-danger">
+    <i class="fa fa-warning"></i>该订单是非货到付款订单，且未完成支付！
+</div>
+<{/if}>
+<form method="post" action="index.php?app=b2c&ctl=admin_order&act=dodelivery" id='order_delivery_form' class="form">
+    <input type="hidden" name="order_id" value="<{$order.order_id}>">
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th width="25%">订单号</th>
+                            <td><{$order.order_id}><{if $order.is_cod=='Y'}><span class="label label-default">货到付款订单</span><{/if}></td>
+                        </tr>
+                        <tr>
+                            <th>订单应付金额</th>
+                            <td><{$order.order_total|cur}></td>
+                        </tr>
+                        <tr>
+                            <th>订单已付金额</th>
+                            <td><{$order.payed|cur}></td>
+                        </tr>
+                        <tr>
+                            <th>收货人</th>
+                            <td>
+                                姓名：<{$order.consignee.name}> <{if $order.consignee.telephone}>/ 电话：<{$order.consignee.telephone}><{/if}> <{if $order.consignee.mobile}> /手机：<{$order.consignee.mobile}><{/if}> /地址： <{$order.consignee.area|region}>,<{$order.consignee.addr}><{if $order.consignee.zip}>,邮编:<{$order.consignee.zip}><{/if}>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>发货状态</th>
+                            <td><{$order.ship_status|order_ship_status}></td>
+                        </tr>
+                        <tr>
+                            <th>运费</th>
+                            <td><span class="text-danger">
+                                <{$order.cost_freight|cur}>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>保价费</th>
+                            <td>
+                                <{$order.cost_protect|cur}>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>货到付款</th>
+                            <td><{if $order.is_cod=='Y'}>是<{else}>否<{/if}>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <{if $order.need_shipping eq "Y"}>
+            <div class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">物流\快递单号
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{input type='text' name='logistics_no' required=true }>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">物流公司
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{input  type="select" name='dlycorp_id' rows=$dlycorp_list valueColumn="corp_id" labelColumn="name" value=$order.dlytype.corp_id required=true}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">始发地点
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{input  type="select" name='dp_id' rows=$dlyplace_list valueColumn="dp_id" labelColumn="dp_title"  required=true}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">备注
+                       </label>
+                        <div class="col-md-8">
+                            <{input type='textarea' name='memo' rows=2 value=$order.memo }>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <{else}>
+                此订单无需发货
+            <{/if}>
+        </div>
+        <div class="col-md-12">
+            <{if count($order.items) > 0}>
+            <div class="table-responsive">
+            <table  class="table">
+                  <thead>
+                    <tr>
+                      <th>货号</th>
+                      <th>名称</th>
+                      <th>购买数量</th>
+                      <th>已发货数量</th>
+                      <th>本次发货数量</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <{foreach from=$order.items item=item}>
+                  <tr>
+                    <td><{$item.bn}></td>
+                    <td><{$item.name}>
+                       <br><small><{$item.spec_info}></small>
+                    </td>
+                    <td><{$item.nums}></td>
+                    <td><{$item.sendnum}></td>
+                    <td>
+                      <{if $item.sendnum < $item.nums}><{input type="number" required=true name="send[{$item.item_id}]" value=$item.nums-$item.sendnum|number_format:0  class="input-xsmall"}><{else}>已发货<{/if}></td>
+                  </tr>
+                  <{/foreach}>
+                  </tbody>
+                </table>
+            </div>
+            <{/if}>
+        </div>
+    </div> <!--end row-->
+</div>
+
+<div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn blue <{if $order.pay_status<1 && $order.is_cod!='Y'}>disabled<{/if}>">保存</button>
+</div>
+
+</form>

@@ -1,0 +1,41 @@
+<div class="form-body">
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">相关商品配置</label>
+        <div class="col-md-9">
+            <{input type="object" object="goods" base_filter=$goodslink_filter multiple="true" callback_func="goods_link_callback_func"}>
+            <div class="table-scrollable">
+                <table class="table">
+                    <tbody id="goods_rel_items_body">
+                        <{foreach from=$goods.glink key=k item=item}>
+                        <tr>
+                        	<td>
+                        		<button onclick="$(this).closest('tr').remove();" type="button" class="btn btn-xs default"><i class="fa fa-trash-o"></i></button>
+                        	</td>
+                        	<td>
+                        		<input type="hidden" name="linkid[]"  value="<{$item.goods_id}>">
+                        		<{$item.name}>
+                        	</td>
+                        	<td>
+                        	<label class="control-label">
+                        		<input type="radio" name="linktype[<{$item.goods_id}>]" value="left" <{if $item.manual=='left' || $item.manual==''}>checked="checked"<{/if}> />单向与相关
+                        	</label>
+                        	<label class="control-label">
+                        		&nbsp;<input type="radio" name="linktype[<{$item.goods_id}>]" value="both" <{if $item.manual=='both'}>checked="checked"<{/if}> />双向相关
+                        	</label>
+                        	</td>
+                        </tr>
+                        <{/foreach}>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script charset="utf-8">
+    var goods_link_callback_func = function(gids){
+        $('<table></table>').load('<{link app=b2c ctl=admin_goods_editor act=ajax_goods_rel}>',gids,function(){
+            $(this).find('tr').appendTo($('#goods_rel_items_body'));
+        });
+    };
+</script>

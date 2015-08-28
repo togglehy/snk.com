@@ -1,0 +1,39 @@
+<{assign var=tcount value=count($themes)}>
+<h3 class="page-title">H5触屏端模板中心 <small>共<{$tcount}>套</small></h3>
+<div class="row">
+    <{foreach from=$themes item=theme}>
+    <div class="col-sm-4 col-md-3 col-xs-12">
+    	<div class="thumbnail" <{if $theme.is_used!='true'}>style="border-style:dashed"<{/if}>>
+            <div class="text-center <{if $theme.is_used=='true'}>bg-info<{/if}>">
+                <i class='fa  fa-file-image-o' style="font-size:400%;line-height:200%;"></i>
+            </div>
+
+    		<div class="caption">
+    			<h4><{$theme.name}></h4>
+    			<p>
+                    <small><{$theme.theme_id}></small>.<{$theme.version}>
+    			</p>
+                <ul class="list-unstyled" <{if $theme.is_used!='true'}>style="visibility:hidden;"<{/if}>>
+                    <li>配置更新时间：<{$theme.last_modify|cdate:'SDATE_FTIME'}></li>
+                    <li>缓存更新时间：<{$theme.cache_version|cdate:'SDATE_FTIME'}></li>
+                </ul>
+                    <{if $theme.is_used!='true'}>
+                    <a target="_command" href="index.php?app=mobile&ctl=admin_theme_manage&act=set_default&p[0]=<{$theme.theme_dir}>" class="btn btn-default">
+                        启用
+                    </a>
+                    <{else}>
+                    <span class="btn disabled btn-default">
+                        使用中
+                    </span>
+                    <a target="_command" href="index.php?app=mobile&ctl=admin_theme_manage&act=cache_version&p[0]=<{$theme.theme_dir}>" class="btn btn-default">
+                        <i class="fa fa-recycle"></i>刷新模板缓存
+                    </a>
+                    <{/if}>
+
+
+    		</div>
+
+    	</div>
+    </div>
+    <{/foreach}>
+</div>

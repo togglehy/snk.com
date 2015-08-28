@@ -1,0 +1,43 @@
+<h3 class="page-title">打印模板编辑</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?app=b2c&ctl=admin_order&act=index">订单列表</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;">打印模板编辑</a>
+        </li>
+    </ul>
+</div>
+
+<form id="print_style_form" data-rollbackaction="index.php?app=b2c&ctl=admin_order&act=rebackPrintStyle" method='post' action='index.php?app=b2c&ctl=admin_order&act=savePrintStyle' class="form">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="#tab_1" data-toggle="tab">模板1 </a>
+		</li>
+		<li>
+			<a href="#tab_2" data-toggle="tab">模板2 </a>
+		</li>
+		<li>
+			<a href="#tab_3" data-toggle="tab">模板3 </a>
+		</li>
+	</ul>
+
+	<div class="tab-content">
+		<div id="tab_1" class="tab-pane active">
+			<{input type="code" name="txtcontentcart" height=700  value=$styleContentCart }>
+		</div>
+		<div id="tab_2" class="tab-pane">
+			<{input type="code" name="txtcontentsheet" height=700  value=$styleContentSheet }>
+		</div>
+		<div id="tab_3" class="tab-pane">
+			<{input type="code" name="txtcontent" height=700   value=$styleContent }>
+		</div>
+	</div>
+
+    <div class="form-actions">
+                    <button type="submit" class="btn btn-block blue">保存</button>
+    </div>
+
+</form>

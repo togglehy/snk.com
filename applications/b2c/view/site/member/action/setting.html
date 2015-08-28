@@ -1,0 +1,85 @@
+<div class="page-header">
+  <h1>我的个人信息 <small>My Setting</small></h1>
+</div>
+<form id="member_setting_form" class="form-horizontal" action="<{link app=b2c ctl=site_member act=save_setting}>" method="post">
+    <div class="form-group">
+        <label  class="col-xs-2 control-label">
+            头像
+        </label>
+        <div class="col-xs-2">
+            <img class="img-thumbnail img-circle"  src="<{$member.avatar|storager:'avatar'}>" alt="<{$member.uname}>头像" />
+        </div>
+        <div class="col-xs-5">
+            <a class="btn btn-link" href="<{link app=b2c ctl=site_member act=avatar}>">
+                <i class="glyphicon glyphicon-pencil"></i>编辑头像
+            </a>
+            <small class="help-block">建议头像图片长宽为1:1尺寸</small>
+        </div>
+    </div>
+    <{foreach from=$pam_data key=key item=item}>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label">
+            <{switch from=$key}>
+                <{case value='mobile'}>手机号
+                <{case value='email'}>邮箱
+                <{case value='local'}>昵称\用户名
+            <{/switch}>
+        </label>
+        <div class="col-xs-5">
+            <div class="input-group">
+                <input type="text" readonly=true class="form-control"  value="<{$item.login_account}>">
+                <{if $key=='email' && $item.disabled=='true'}>
+                <div class="input-group-addon">
+                    <i class="glyphicon glyphicon-warning-sign"></i>
+                </div>
+                <{else}>
+                <div class="input-group-addon">
+                    <i class="glyphicon glyphicon-ok"></i>
+                </div>
+                <{/if}>
+            </div>
+            <{if $key=='email' && $item.disabled=='true'}>
+            <a href="<{link app=b2c ctl=site_member act=set_pam_email}>" class="btn btn-link btn-xs">立即验证激活邮箱&raquo;</a>
+            <{/if}>
+        </div>
+    </div>
+    <{/foreach}>
+    <hr>
+    <{foreach from=$attr item=item name="item" key='row'}>
+    <{if $item.attr_type == 'select'}>
+    <div class="form-group">
+        <label class="col-xs-2 control-label"><{$item.attr_name}></label>
+        <div class="col-xs-5">
+            <{input type=$item.attr_type name=$item.attr_column value=$item.attr_value options=$item.attr_option}>
+        </div>
+    </div>
+    <{elseif $item.attr_type == 'checkbox' }>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label"><{$item.attr_name}></label>
+        <div class="col-xs-5">
+            <{input type=$item.attr_type name=$item.attr_column value=$item.attr_value options=$item.attr_option}>
+        </div>
+    </div>
+    <{elseif $item.attr_type=='date'}>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label"><{$item.attr_name}></label>
+        <div class="col-xs-5">
+            <input type="date" class="form-control" name="<{$item.attr_column}>" value="<{$item.attr_value|default:'YYYY-MM-DD'}>">
+        </div>
+    </div>
+    <{else}>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label"><{$item.attr_name}></label>
+        <div class="col-xs-5">
+            <{input type=$item.attr_type name=$item.attr_column value=$item.attr_value}>
+        </div>
+    </div>
+    <{/if}>
+    <{/foreach}>
+
+    <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-5">
+          <button type="submit" data-loading-text="正在提交..." class="btn btn-lg btn-primary">保存修改</button>
+        </div>
+    </div>
+</form>

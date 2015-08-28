@@ -1,0 +1,79 @@
+<div class="container my-pam-local">
+    <ol class="breadcrumb">
+      <li><a href="<{link app=mobile ctl=index}>">首页</a></li>
+      <li><a href="<{link app=b2c ctl=mobile_member}>">会员中心</a></li>
+      <li><a href="<{link app=b2c ctl=mobile_member act=securitycenter}>">安全中心</a></li>
+      <li class="active">激活邮箱</li>
+    </ol>
+</div>
+<form class="form-horizontal" action="<{link app=b2c ctl=mobile_member act=active_pam_email args0=save}>" method="post" id="active_email_form">
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">邮箱Email</label>
+        <div class="col-md-4">
+            <input type="email" readonly=true id="email_input" required="true" class="form-control" name="email"  value="<{$email}>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="input_vcode" class="col-md-2 control-label">验证码<span class="text-danger">*</span></label>
+        <div class="col-md-2">
+          <input type="text" required="true" name="vcode" class="form-control" id="input_vcode" placeholder="验证码">
+        </div>
+        <div class="col-md-2">
+            <div class="email-vcode">
+                <button type="button" class="btn btn-default">向邮箱发送验证码</button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-7 col-md-offset-2">
+          <button type="submit" class="btn btn-primary">立即激活</button>
+        </div>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+
+
+var alert_timer = 0;
+var _alert_error = function(msg){
+    $('#active_email_form .alert-error').remove();
+    $('#active_email_form').append($('<div class="alert alert-danger">'+msg+'</div>'));
+    alert_timer = setTimeout(function(){
+        clearTimeout(alert_timer);
+        $('#active_email_form').find('.alert-danger').fadeOut('fast',function(){
+            $(this).remove();
+        });
+    },3000);
+}
+//获得短信验证码
+var _cutdown_sms = function(btn){
+
+    var cutdown = 120,btn_o_text = btn.text(),timer =
+    setInterval((function(){
+        btn.text('验证码已发送,'+(cutdown--)+'秒后可重试');
+        if(cutdown<1){
+            clearInterval(timer);
+            btn.text(btn_o_text).removeClass('disabled');
+        }
+        return arguments.callee;
+    })(),1000);
+};
+$('#active_email_form .email-vcode button').on('click',function(e){
+    var btn = $(this);
+    if(btn.hasClass('disabled'))return;
+    btn.addClass('disabled');
+    $.post('<{link app=b2c ctl=mobile_passport act=member_vcode}>',{account:$('#email_input').val()},function(re){
+        if(re && re.error){
+            btn.removeClass('disabled');
+            _alert_error(re.error);
+        }
+        if(re && re.success){
+            _cutdown_sms(btn);
+        }
+    },'json');
+
+
+});
+</script>

@@ -1,0 +1,27 @@
+{
+	"data":
+	[
+		{
+			"cpns_id": 1,
+			"cpns_name": "98折优惠暗号",
+			"cpns_prefix": "AHELLOVMCSHOP2015",
+			"cpns_gen_quantity": 0,
+			"cpns_key": "tzOjY6ImNv",
+			"cpns_status": "1",
+			"cpns_type": "0",
+			"cpns_point": null,
+			"rule_id": 3
+		},
+		{
+			"cpns_id": 2,
+			"cpns_name": "10元红包",
+			"cpns_prefix": "BTEN",
+			"cpns_gen_quantity": 10,
+			"cpns_key": "zOjY6ImNvd",
+			"cpns_status": "1",
+			"cpns_type": "1",
+			"cpns_point": null,
+			"rule_id": 4
+		}
+	]
+}

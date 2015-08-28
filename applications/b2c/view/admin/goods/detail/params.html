@@ -1,0 +1,75 @@
+<div class="form-body">
+<div id="goods_prototype">
+        <div class="goods-prototype-pane">
+        <div class="form-group">
+            <label class="col-md-2 control-label">类型</label>
+            <div class="col-md-3">
+                <select name="goods[type][type_id]" class="form-control">
+                    <option value='0'>普通商品类型</option>
+                    <{foreach from=$gtype item=type}>
+                    <option  value='<{$type.type_id}>' <{if $type.type_id==$goods_prototype.type_id}>selected<{/if}>><{$type.name}>
+                    </option>
+                    <{/foreach}>
+                 </select>
+            </div>
+        </div>
+
+        <{if $goods_prototype.props}>
+        <div class="form-group">
+            <label class="col-md-2 control-label">扩展属性
+            <span class="help-block">根据类型</span>
+            </label>
+            <div class="col-md-10">
+                <div class="row">
+                <{foreach from=$goods_prototype.props key=key item=aProp name=g_props_each}>
+                        <div class="col-md-2">
+                            <label class="control-label"><{$aProp.name}></label>
+                            <{assign var="p_col" value="p_{$key}"}>
+                              <{if $aProp.type eq 'select'}>
+                              <{input class="form-control input-sm" name="goods[props][p_{$key}][value]" type="select" nulloption="1" options=$aProp.options value="{$goods.props[$p_col].value}" }>
+                              <{else}>
+                              <{input class="form-control input-sm" type="text" name="goods[props][p_{$key}][value]"  value="{$goods.props[$p_col].value}"}>
+                              <{/if}>
+                        </div>
+                <{/foreach}>
+                </div>
+            </div>
+        </div>
+        <{/if}>
+        <{if $goods_prototype.params}>
+        <div class="form-group">
+            <label class="col-md-2 control-label">参数表 <span class="help-block">根据类型</span></label>
+            <div class="col-md-10">
+                <{assign var="paramsItem" value="0"}>
+                <{foreach from=$goods_prototype.params item=param key=group}>
+                 <div class="row">
+                     <label class="control-label col-md-12 text-primary" style="text-align:left;"><{$group}></label>
+                    <{foreach from=$param item=value key=item}>
+                    <{assign var="paramsItem" value=$paramsItem+1}>
+                    <div class="col-md-2">
+                        <label class="control-label"><{$item}></label>
+                        <{assign var="params" value="params"}>
+                        <{input class="form-control input-sm" type="text" name="goods[params][{$paramsItem}]" value="{$goods[$params][$group][$item]}" }>
+                        <input type='hidden' name='goodsParams[group][<{$paramsItem}>]' value='<{$group}>'/>
+                        <input type='hidden' name='goodsParams[item][<{$paramsItem}>]' value='<{$item}>'/>
+                    </div>
+                    <{/foreach}>
+                </div>
+                <{/foreach}>
+            </div>
+        </div>
+        <{/if}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">品牌 </label>
+        <div class="col-md-3">
+            <{input class="form-control" type="select" name="goods[brand][brand_id]" nulloption="1" rows=$brandList valueColumn="brand_id" labelColumn="brand_name" value=$goods.brand.brand_id}>
+        </div>
+    </div>
+</div>
+<script charset="utf-8">
+    $('#goods_prototype').on('change','select[name="goods[type][type_id]"]',function(){
+        load_page('index.php?app=b2c&ctl=admin_goods_editor&act=prototype&p[0]='+$(this).val()+'&p[1]=true #goods_prototype .goods-prototype-pane',$('#goods_prototype'));
+    });
+</script>

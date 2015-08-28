@@ -1,0 +1,35 @@
+<button type="button" class="btn btn-default" name="button">新增菜单 <i class="fa fa-plus"></i></button>
+<button type="button" class="btn green" name="button">发布菜单到微信 <i class="fa fa-save"></i></button>
+<div class="menu-list table-scrollable">
+    <table class="table  table-striped table-hover">
+        <thead>
+            <tr>
+                <th>菜单</th>
+                <th>目标</th>
+                <th width="5%">同级排名<button class="btn btn-xs default" type="submit"><i class="fa fa-refresh"></i> 更新排名</button></th>
+                <th>操作</th>
+            </tr>
+        </thead>
+    <tbody id="menu_list">
+        <{foreach from=$menulist.selfmenu_info.button item=btn}>
+            <tr data-step="<{if $btn.sub_button}>2<{else}>1<{/if}>">
+                <td><{$btn.name}></td>
+                <td>
+                    <{switch from=$btn.type}>
+                        <{case value='click'}>
+                        事件消息 <label class="label"><{$btn.key}></label>
+                        <{case value='view'}>
+                        超链接<a href="<{$btn.url}>" target="_blank"><i class="fa fa-link"></i></a>
+                    <{/switch}>
+                </td>
+                <td><input class="form-control input-sm" type="number" size="5"  name="p_order[<{$item.cat_id}>]" value="<{$item.p_order|default:0}>"  ></td>
+                <td>
+                    <a data-target="#menu_edit" data-toggle="modal" href="index.php?app=wechat&ctl=admin_menu&act=edit&p[0]=" class="btn btn-xs btn-default"><i class="fa fa-edit"></i> 编辑</a>
+                    <button type="button" data-mname=""  data-action="index.php?app=b2c&ctl=admin_menu&act=delete&p[0]=" class="btn btn-xs btn-default cat-del"><i class="fa fa-trash-o"></i> 删除</button>
+                    <button data-target="#menu_edit" data-toggle="modal"><i class="fa fa-plus"></i> 添加子菜单</a>
+                </td>
+            </tr>
+        <{/foreach}>
+    </tbody>
+    </table>
+</div>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<theme>
+    <name>VMCSHOP PC默认模板</name>
+    <id>vmcshop_pc_default</id>
+    <version>1.0</version>
+    <info>VMCSHOP官方默认PC端模板</info>
+    <author>ued@vmcshop.com</author>
+    <views>
+        <file type="index" use="默认首页"></file>
+        <file type="list" use="默认商品列表页">list-default.html</file>
+        <file type="list" use="女装商品列表页">list-women.html</file>
+        <file type="list" use="男装商品列表页">list-men.html</file>
+        <file type="item" use="默认商品详情页">item1.html</file>
+        <file type="item" use="特别的商品详情页">item1.html</file>
+        <file type="item" use="大促中的商品详情页">item2.html</file>
+        <file type="brand" use="默认品牌专区页"></file>
+        <file type="brandlist" use="默认品牌商品列表页"></file>
+        <file type="brandlist" use="重要的品牌商品列表页">brandlist-important.html</file>
+        <file type="node" use="默认站点栏目页"></file>
+        <file type="article" use="默认内容页"></file>
+        <file type="cart" use="默认购物车页">cart.html</file>
+        <file type="order" use="默认订单详情页">order-detail.html</file>
+        <file type="checkout" use="默认订单确认页">checkout.html</file>
+        <file type="member" use="默认会员中心页"></file>
+        <file type="passport" use="默认登录注册页"></file>
+    </views>
+</theme>

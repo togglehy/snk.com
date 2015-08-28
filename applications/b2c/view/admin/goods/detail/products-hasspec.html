@@ -1,0 +1,474 @@
+<div class="row" id="spec_edit_pane">
+    <div class="col-md-12 spec-edit">
+        <table class="table table-bordered table-striped  table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        排序
+                    </th>
+                    <th width="15%">规格名称</th>
+                    <th>
+                        规格项
+                    </th>
+                    <th width="50%">
+                        新规格项
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <{foreach from=$goods.spec_desc.t key=key item=item}>
+                    <tr>
+                        <td>
+                            <div class="btn-group btn-spec-sort">
+                                <button type="button" class="btn btn-xs s-asc btn-default">
+                                    <i class="fa fa-sort-asc"></i>
+                                </button>
+                                <button type="button" class="btn btn-xs s-desc btn-default">
+                                    <i class="fa fa-sort-desc"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <input readonly='true' class="form-control spec-t" name="goods[spec_desc][t][]" type="text" value="<{$item}>">
+                        </td>
+                        <td>
+                            <input class='form-control spec-v-has' name="goods[spec_desc][v][]" type="text" value="<{$goods.spec_desc.v[$key]}>" readonly="true">
+                        </td>
+                        <td>
+                            <input class='form-control spec-v' name="goods[spec_desc][vplus][]" type="text" value="">
+                        </td>
+                    </tr>
+                    <{/foreach}>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan=4>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">指定规格套用货品默认图 </label>
+                            <div class="col-md-3">
+                                <select class="form-control" name="goods[goods_setting][spec_info_vimage]">
+                                    <option value="-1">无</option>
+                                    <{foreach from=$goods.spec_desc.t key=key item=item}>
+                                    <option value="<{$item}>" <{if $goods.goods_setting.spec_info_vimage == $item}>selected<{/if}>>
+                                        <{$item}>
+                                    </option>
+                                    <{/foreach}>
+                                </select>
+                            </div>
+                            <div class="col-md-7">
+                                <button type=button class="btn btn-sm green-meadow create-product-items"><i class="fa fa-cogs"></i> 根据新规格项生成规格货品</button>
+                                <span class="help-blok">仅会新增货品,不会影响已生成的货品</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div class="product-items">
+    <table class="table table-striped table-bordered table-hover text-nowrap">
+        <thead>
+            <tr>
+                <th>规格</th>
+                <th width="5%">
+                    默认图
+                </th>
+                <th width="25%">
+                    <small>SKU 货号</small><br><small>Barcode 条码</small>
+                </th>
+                <th width="11%">
+                    销售价
+                </th>
+                <th width="11%">
+                    市场价
+                </th>
+                <th width="7%">
+                    重量(克)
+                </th>
+                <th width="5%">
+                    单位
+                </th>
+                <th>
+                    设置
+                </th>
+            </tr>
+        </thead>
+        <tbody class="exist-products">
+            <{foreach from=$goods.product key=key item=product}>
+                <tr>
+                    <td>
+                        <input type="hidden" name="goods[product][<{$key}>][product_id]" value="<{$product.product_id}>">
+                        <input type="hidden" name="goods[product][<{$key}>][spec_info]" class="form-control input-sm spec-info" value="<{$product.spec_info}>">
+                        <span class="text-nowrap">
+                            <{$product.spec_info}>
+                        </span>
+                        <input type="hidden" name="goods[product][<{$key}>][spec_desc]" class="spec-desc" value="<{$product.spec_desc}>">
+                    </td>
+                    <td style="padding:2px;">
+                        <div class="product-image-select btn-xs btn" data-target="#product_image_select_modal" data-toggle="modal" data-specinfo="<{$product.spec_info}>">
+                            <img src="<{$product.image_id|default:$goods.image_default_id|storager:'xs'}>" class="img-thumbnail" />
+                            <input type="hidden" name="goods[product][<{$key}>][image_id]" value="<{$product.image_id|default:$goods.image_default_id}>">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">货号:</span>
+                            <input type="text" required="true" data-map="bn" class="form-control" name="goods[product][<{$key}>][bn]" value="<{$product.bn}>">
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">条码:</span>
+                        <input type="text" data-map="barcode" class="form-control" name="goods[product][<{$key}>][barcode]" value="<{$product.barcode}>">
+                        </div>
+                    </td>
+                    <td>
+                        <input type="text" data-map="price" class="form-control input-sm" name="goods[product][<{$key}>][price]" value="<{$product.price|number_format:'2':'.':''}>">
+                    </td>
+                    <td>
+                        <input type="text" data-map="mktprice" class="form-control input-sm" name="goods[product][<{$key}>][mktprice]" value="<{$product.mktprice|number_format:'2':'.':''}>">
+                    </td>
+                    <td>
+                        <input type="text" data-map="weight" name="goods[product][<{$key}>][weight]" class="form-control input-sm input-xsmall" value="<{$product.weight|number_format:'0':'':''}>" placeholder="克">
+                    </td>
+                    <td>
+                        <input type="text" data-map="unit" name="goods[product][<{$key}>][unit]" class="form-control input-sm input-xsmall" value="<{$product.unit}>">
+                    </td>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="goods[product][<{$key}>][marketable]" value="true" <{if $product.marketable!='false' }>checked
+                            <{/if}>>
+                            上架
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="goods[goods_setting][list_extension][]" value="<{$key}>" <{if $key|in_array:$goods.goods_setting.list_extension}>checked
+                            <{/if}>>
+                            在列表冗余显示
+                        </label><br>
+                        <label>
+                            <input type="radio" name="goods[default_product]" value="<{$key}>" <{if $product.is_default!='false' }>checked
+                            <{/if}>>
+                            默认货品
+                        </label>
+                    </td>
+                </tr>
+                <{/foreach}>
+        </tbody>
+        <tbody class="new-products">
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" id="product_image_select_modal" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <h3 class="modal-title">选择或新上传图片&nbsp;&nbsp;
+                    <small class="spec-info-tip"></small>
+                </h3>
+                <span class="help-block">新上传图片，不会进入商品相册,仅会作为具体规格货品默认图</span>
+            </div>
+            <div class="modal-body  form-horizontal">
+                <div class="tiles">
+                    <{foreach from=$goods.images item=gimage}>
+                        <div class="tile image bg-grey">
+                            <div class="tile-body">
+                                <img src="<{$gimage.image_id|storager:'xs'}>" data-imageid="<{$gimage.image_id}>" />
+                            </div>
+                        </div>
+                        <{/foreach}>
+                            <div class="tile bg-grey product-image-upload-pane fileinput-button">
+                                <div class="tile-body">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                </div>
+                                <input id="product_image_upload" type="file" multiple data-url="index.php?app=image&ctl=admin_manage&act=gimages_upload" accept="image/*">
+                            </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<textarea class="product-item-tpl hide">
+    <tr>
+        <td>
+            <input type="text" name="goods[product][{key}][spec_info]" class="form-control input-sm spec-info" value="{spec_info}" readonly=true>
+            <input type="hidden" name="goods[product][{key}][spec_desc]" class="spec-desc" value="{spec_desc}">
+        </td>
+        <td>
+            <div class="product-image-select btn-xs btn" data-target="#product_image_select_modal" data-toggle="modal" data-specinfo="{spec_info}">
+                <img width=40 src="<{$product.image_id|default:$goods.image_default_id|storager:'xs'}>" class="img-thumbnail" />
+                <input type="hidden" name="goods[product][{key}][image_id]" value="<{$product.image_id|default:$goods.image_default_id}>">
+            </div>
+        </td>
+        <td>
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">货号:</span>
+                <input type="text" required="true" data-map="bn" class="form-control" name="goods[product][{key}][bn]">
+            </div>
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">条码:</span>
+            <input type="text" data-map="barcode" class="form-control" name="goods[product][{key}][barcode]" >
+            </div>
+        </td>
+        <td>
+            <input type="text" data-map="price" class="form-control input-sm" name="goods[product][{key}][price]" value="">
+        </td>
+        <td>
+            <input type="text" data-map="mktprice" class="form-control input-sm" name="goods[product][{key}][mktprice]" value="">
+        </td>
+        <td>
+            <input type="text" data-map="weight" name="goods[product][{key}][weight]" class="form-control input-sm input-xsmall" value="" placeholder="克">
+        </td>
+        <td>
+            <input type="text" data-map="unit" name="goods[product][{key}][unit]" class="form-control input-sm input-xsmall" value="">
+        </td>
+        <td>
+            <input type="checkbox" name="goods[product][{key}][marketable]" value="true" checked>
+        </td>
+    </tr>
+</textarea>
+
+<script type="text/javascript">
+    $(function() {
+
+        var substitute = function(str, obj) {
+            return str.replace(/\\?\{([^{}]+)\}/g, function(match, name) {
+                if (match.charAt(0) == '\\') return match.slice(1);
+                return (obj[name] != undefined) ? obj[name] : '';
+            });
+        }
+
+        var product_items_change = function() {
+            if ($('.product-items tbody.new-products > tr').length) {
+                $('#spec_edit_pane .create-product-items').trigger('click');
+            }
+        };
+
+        /**
+         * 货号、条码 粘贴监听
+         * @see desktop.js
+         */
+         var listen_postpaste = function(els){
+
+             //只监听第一个
+             $(els).eq(0).on("postpaste", function(e) {
+                 var val = $(this).val(),val_arr = val.split(/\s/);;
+                 if(val_arr.length && val_arr.length>1){
+                     $.each(val_arr,function(i,v){
+                         $(els).eq(i).val(v);
+                     });
+                 }
+              }).pasteEvents();
+
+              //便捷性提示
+              $(els).eq(0).wrap('<div class="input-icon right"></div>');
+              $('<i class="fa fa-paste text-success tooltips" data-container="body" data-toggle="tooltip" data-placement="top" title="粘贴含有`空格`或`换行`的数据,将自动被分隔填充。例：你可以从Excel批量复制粘贴数据到此"></i>').tooltip().insertBefore($(els).eq(0));
+
+         };
+         /*支持货号条码换行字符粘贴*/
+         listen_postpaste($('.product-items tbody input[name$="[bn]"]'));
+         listen_postpaste($('.product-items tbody input[name$="[barcode]"]'));
+         listen_postpaste($('.product-items tbody input[name$="[price]"]'));
+         listen_postpaste($('.product-items tbody input[name$="[mktprice]"]'));
+         listen_postpaste($('.product-items tbody input[name$="[weight]"]'));
+         listen_postpaste($('.product-items tbody input[name$="[unit]"]'));
+
+
+        var create_product_items_func = function(handle) {
+
+            var spec_v_has = $('#spec_edit_pane .spec-v-has');
+            var spec_v = $('#spec_edit_pane .spec-v'),not_null = false;
+
+            /*计算规格交集*/
+            var spec_v_item = new Array();
+            $.each(spec_v, function(idx, item) {
+                var exist_sv = $(spec_v_has.eq(idx)).val();
+                if(!!$(item).val()){
+                    not_null = true;
+                    spec_v_item[idx] = $.merge(exist_sv?exist_sv.split(','):[],$(item).val().split(','));
+                }else{
+                    spec_v_item[idx] = exist_sv?exist_sv.split(','):[];
+                }
+            });
+            if (!not_null) {
+                 Messagebox.warning('您还没有填写任何规格值。', '操作提醒');
+            }
+
+            var root_arr = spec_v_item.shift();
+            var loop_arr;
+            var lnk_arr = function(r, a) {
+                var _return = [];
+                $.each(a, function(i, n) {
+                    _return.push(r + ':::' + n);
+                });
+                return _return;
+            }
+            while (loop_arr = spec_v_item.shift()) {
+                var cur_len = root_arr.length;
+                for (var i = 0; i < cur_len; i++) {
+                    root_arr = root_arr.concat(lnk_arr(root_arr.shift(), loop_arr));
+                }
+                root_arr.slice(cur_len);
+            }
+            /*计算规格交集*/
+            var context = "";
+            $.each(root_arr, function(idx, n) {
+                var spec_info = n.replace(/:::/g, '/');
+                if($('.exist-products input[value="'+spec_info+'"]').length){
+                    return; //已存在的不能再生成
+                }
+                context+= substitute($('.product-item-tpl').val(), {
+                    key: 'new_' + idx,
+                    spec_info: spec_info,
+                    spec_desc: n
+                });
+            });
+            $('.product-items tbody.new-products').empty().append(context);
+
+            /*支持字符批量分隔粘贴*/
+            listen_postpaste($('.product-items tbody.new-products input[name$="[bn]"]'));
+            listen_postpaste($('.product-items tbody.new-products input[name$="[barcode]"]'));
+            listen_postpaste($('.product-items tbody.new-products input[name$="[price]"]'));
+            listen_postpaste($('.product-items tbody.new-products input[name$="[mktprice]"]'));
+            listen_postpaste($('.product-items tbody.new-products input[name$="[weight]"]'));
+            listen_postpaste($('.product-items tbody.new-products input[name$="[unit]"]'));
+
+            var item_length = $('.product-items tbody.new-products').find('> tr').length;
+            $(this).next('.text-success').remove();
+            if (item_length) {
+                $(this).after('<span class="text-success">将会新建<span class="badge badge-success">' + item_length + '</span>个货品</span>');
+            }
+
+            $.each($('.product-items tbody.new-products input[data-map]'),function(i,n){
+                var map = $(n).attr('data-map'),val = $('.product-items tbody.exist-products tr:last input[data-map="'+map+'"]').val();
+                if(map == 'bn'||map == 'barcode'){
+                    val+='-'+i;
+                }
+                $(n).val(val);
+            });
+
+
+        };
+        var timer_delay = 0;
+        $('#spec_edit_pane .create-product-items').on('click', function(e){
+            e.stopPropagation();
+            clearTimeout(timer_delay);
+            var _this = this;
+            timer_delay = setTimeout(function(){
+                return create_product_items_func.apply(_this);
+            },0);//TODO 性能问题
+        });
+
+        var tagsinput_options = {
+            'width': 'auto',
+            'defaultText': '新规格项',
+            onAddTag: function(t) {
+                var exist_str = $(this).closest('tr').find('input.spec-v-has').val();
+                if($.inArray(t,exist_str.split(','))>-1){
+                    return ti_ins.removeTag(t);
+                }
+                product_items_change();
+            },
+            onRemoveTag: function(t) {
+                product_items_change(1);
+            }
+        };
+
+        var ti_ins = $('#spec_edit_pane .spec-edit .spec-v').tagsInput(tagsinput_options);
+
+        //关联货品默认图更新区域
+        $('.product-items').on('click','.product-image-select' ,function(e) {
+            $('#product_image_select_modal').data('handle', this).find('.spec-info-tip').text($(this).attr('data-specinfo'));
+        });
+
+        //设置货品默认图
+        var _set_product_image = function(data) {
+            var handle = $($('#product_image_select_modal').data('handle')),
+                ipt_image_id = handle.find('input'),
+                el_img = handle.find('img');
+            $('#product_image_select_modal').modal('hide');
+            if(el_img.prop('src')!=data.image_url){
+                ipt_image_id.val(data.image_id);
+                handle.fadeOut(function(){
+                    el_img.prop('src', data.image_url);
+                }).fadeIn();
+            }
+        }
+
+        //选中相册图设置货品默认图
+        $('#product_image_select_modal .image').on('click', function(e) {
+            _set_product_image({
+                'image_id': $(this).find('img').attr('data-imageid'),
+                'image_url': $(this).find('img').prop('src')
+            });
+        });
+        //单独上传图片设置货品默认图
+        $('#product_image_upload').fileupload({
+            add: function(e, data) {
+                if (!data.files[0]['type'].match(/^image/)) {
+                    return toastr.warning(data.files[0]['name'] + '不是允许的图片类型', '类型错误');
+                }
+                $('#product_image_select_modal .modal-body').find('.alert').remove();
+                $('#product_image_select_modal .modal-body').append('<div class="alert alert-info"><strong>正在上传图片...</strong></div>');
+                data.submit();
+            },
+            progress: function() {
+                //console.info('progress',arguments);
+            },
+            progressall: function() {},
+            done: function(e, data) {
+                var info = $('#product_image_select_modal .modal-body').find('.alert');
+                var re = $.parseJSON(data.result);
+                if (re && re.image_id && re.url) {
+                    info.remove();
+                    _set_product_image({
+                        'image_id': re.image_id,
+                        'image_url': re.url
+                    });
+                } else {
+                    info.removeClass('alert-info').addClass('alert-error').html('<strong>上传失败!</strong>');
+                }
+            }
+        });
+
+        //规格排序
+        $('.btn-spec-sort').on('click','button',function(e){
+            var _last_spec = [];
+            $.each($('.spec-edit input.spec-t'),function(i,el){
+                _last_spec.push($(el).val());
+            });
+            var tr = $($(this).closest('tr')),prev = $(tr.prev()),next = $(tr.next()),sort_spec_info = function(){
+                var current_spec = [],new_index = [];
+                $.each($('.spec-edit input.spec-t'),function(i,el){
+                    current_spec.push($(el).val());
+                });
+                $.each(_last_spec,function(i,v){
+                    new_index[i] = $.inArray(v,current_spec);
+                });
+                $.each($('.product-items input.spec-desc'),function(i,el){
+                    var desc = el.value.split(':::'),
+                    new_desc = [],
+                    ipt_spec_info = $('.product-items input.spec-info').eq(i);
+                    for (var i = 0; i < new_index.length; i++) {
+                        new_desc.push(desc[new_index[i]]);
+                    }
+                    el.value = new_desc.join(':::');
+                    ipt_spec_info.val(new_desc.join('/'));
+                    ipt_spec_info.next('.text-nowrap').text(new_desc.join('/'));
+                });
+            };
+            if($(this).hasClass('s-asc') && prev.length){ //向上
+                    tr.insertBefore(prev);
+            }else if($(this).hasClass('s-desc') && next.length){//向下
+                    tr.insertAfter(next);
+            }
+            sort_spec_info();
+
+        });
+        //规格排序-结束
+    });
+</script>

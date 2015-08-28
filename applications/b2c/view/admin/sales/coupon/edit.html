@@ -1,0 +1,289 @@
+<h3 class="page-title">
+    <{if !$rule.rule_id}>添加<{else}>编辑<{/if}>优惠券
+    <small>优惠券是一个订单促销规则的抽象</small>
+</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?app=b2c&ctl=admin_sales_coupon&act=index">优惠券列表</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;"><{if !$rule.rule_id}>添加<{else}>编辑<{/if}>优惠券</a>
+        </li>
+    </ul>
+</div>
+<form action="index.php?app=b2c&ctl=admin_sales_coupon&act=toAdd" method="post" >
+<{input type='hidden' value=$coupon.cpns_id name='coupon[cpns_id]'}>
+<{input type='hidden' value=$rule.rule_id name='coupon[rule_id]'}>
+<{input type='hidden' value=$coupon.cpns_key name='coupon[cpns_key]'}>
+<div class="form-horizontal">
+    <div class="form-body form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">优惠券名称
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-4">
+                <{input type='text' value=$coupon.cpns_name name='coupon[cpns_name]' required='true'}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">优惠券说明
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-6">
+                <{input type="textarea" class="form-control"  value=$rule.description name="rule[description]" rows="1" required="true"}>
+            </div>
+        </div>
+        <div class="form-group <{if $coupon.cpns_id}>hide<{/if}>">
+            <label class="col-md-2 control-label">优惠券类型
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-6">
+                <label class="control-label">
+                    <input type='radio' name='coupon[cpns_type]' value=0  <{if $coupon.cpns_type eq 0}>checked="checked"<{/if}> <{if $coupon.cpns_id}>disabled='disabled'<{/if}>/>
+                    暗号A型 <span class="label label-default">有效期内,可多人多次使用。单个订单不可重复使用</span>
+                </label>
+                <label class="control-label">
+                    <input type='radio' name='coupon[cpns_type]' value=1  <{if $coupon.cpns_type eq 1}>checked="checked"<{/if}> <{if $coupon.cpns_id}>disabled='disabled'<{/if}>/>
+                    红包B型 <span class="label label-default">需要发行或申领,每券限用一次</span>
+                <label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">优惠券批次号
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-4">
+                <div class="input-group">
+                <span class="input-group-addon" id="c_type_str"><{if $coupon.cpns_type eq 1}>B<{else}>A<{/if}></span>
+                <{if $coupon.cpns_id}><{assign var="disabledElement" value=true}><{/if}>
+                <{input type='alphaint' value=$coupon.cpns_prefix name='coupon[cpns_prefix]' disabled=$disabledElement required="true"}>
+                </div>
+            </div>
+        </div>
+        <div class="form-group cpns-point <{if $coupon.cpns_type neq 1}>hide<{/if}>">
+            <label class="col-md-2 control-label">兑换所需积分
+            </label>
+            <div class="col-md-2">
+                <{input type='number' value=$coupon.cpns_point name='coupon[cpns_point]' }>
+                <span class="help-block">为空时不能用积分兑换</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">
+                排它
+            </label>
+            <div class="col-md-1">
+                <select onchange="$('.hst-rules')[$(this).val()=='false'?'addClass':'removeClass']('hide')" class="form-control" name="rule[stop_rules_processing]">
+                    <option value="false">否</option>
+                    <option value="true" <{if $rule.stop_rules_processing=='true'}>selected<{/if}>>是</option>
+                </select>
+            </div>
+            <label class="col-md-1 control-label">优先级
+            </label>
+            <div class="col-md-1">
+                <{input type="number" value=$rule.sort_order name="rule[sort_order]" }>
+            </div>
+        </div>
+        <{if $sales_list}>
+        <div class="form-group hst-rules <{if $rule.stop_rules_processing!='true'}>hide<{/if}>">
+        <div class="col-md-offset-2 col-md-4">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th>
+                        已启用的促销
+                    </th>
+                    <th>
+                        优先级
+                    </th>
+                    <th>
+                        排它
+                    </th>
+                </thead>
+                <tbody>
+                    <{foreach from=$sales_list item=item}>
+                    <tr>
+                        <td>
+                            <{$item.name}>
+                        </td>
+                        <td>
+                            <{$item.sort_order}>
+                        </td>
+                        <td>
+                            <{if $item.stop_rules_processing=='true'}>是<{else}>否<{/if}>
+                        </td>
+                    </tr>
+                    <{/foreach}>
+                </tbody>
+
+            </table>
+            <span class="help-block"><i class="fa fa-info-circle"></i>&nbsp;促销会按优先级依次触发，直到遇到排它</span>
+        </div>
+        </div>
+        <{/if}>
+        <hr>
+        <div class="form-group">
+            <label class="col-md-2 control-label">是否启用
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-1">
+                <select class="form-control" name="coupon[cpns_status]">
+                    <option value="1">是</option>
+                    <option value="0" <{if $rule.status=='false'}>selected<{/if}>>否</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">有效期
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-4">
+                <{input type=time name="from_time" placehoder="开始时间" value=$rule.from_time}>
+                <{input type=time name="to_time" placehoder="结束时间" value=$rule.to_time}>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-inline margin-top-20">
+                    <li><button class="btn btn-default btn-xs" data-drange="from_time|to_time|7" type="button">一周</button></li>
+                    <li><button class="btn btn-default btn-xs" data-drange="from_time|to_time|30" type="button">一个月</button></li>
+                    <li><button class="btn btn-default btn-xs" data-drange="from_time|to_time|90" type="button">三个月</button></li>
+                    <li><button class="btn btn-default btn-xs" data-drange="from_time|to_time|180" type="button">六个月</button></li>
+                    <li><button class="btn btn-default btn-xs" data-drange="from_time|to_time|N" type="button">长期</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">促销对象
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-5">
+                <ul class="list-inline">
+                    <{foreach from=$member_level item=ml}>
+                    <li>
+                    <label class="control-label"><input type="checkbox" value="<{$ml.member_lv_id}>" name="rule[member_lv_ids][]" <{if ($rule.member_lv_ids == '') || in_array($ml.member_lv_id,$rule.member_lv_ids)}>checked<{/if}>/><{$ml.name}></label>
+                    </li>
+                    <{/foreach}>
+                </ul>
+            </div>
+
+        </div>
+        <hr>
+        <div class="form-group">
+            <label class="col-md-2 control-label">订单促销条件
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-3">
+                <select  class="form-control" name="rule[c_template]">
+                    <{foreach from=$pt_list item=item key=key}>
+                        <option value="<{$key}>"  <{if ($key == $rule.c_template)}>selected<{/if}>><{$item.name}></option>
+                    <{/foreach}>
+                </select>
+            </div>
+            <div class="col-md-7 rule-c-tpl-extends">
+                <{$conditions}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">促销规则
+                <span class="required" aria-required="true">*</span>
+            </label>
+            <div class="col-md-3">
+                <{if $stpl_list}>
+                    <select class="form-control" name="rule[s_template]">
+                        <{foreach from=$stpl_list item=name key=key}>
+                             <option value="<{$key}>" <{if ($key == $rule.s_template)}>selected<{/if}>><{$name}>
+                             </option>
+                        <{/foreach}>
+                    </select>
+                <{/if}>
+            </div>
+            <div class="col-md-7 rule-s-tpl-extends font-red">
+                <{$action_solution}>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-9">
+                    <button type="submit" class="btn blue">保存</button>
+                    <a href="index.php?app=b2c&ctl=admin_sales_coupon&act=index" class="btn default">返回</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</form>
+
+<script charset="utf-8">
+/**
+ * 时间对象的格式化;
+ */
+Date.prototype._format = function(format) {
+    /*
+     * eg:format="yyyy-MM-dd hh:mm:ss";
+     */
+    var o = {
+        "M+" : this.getMonth() + 1, // month
+        "d+" : this.getDate(), // day
+        "h+" : this.getHours(), // hour
+        "m+" : this.getMinutes(), // minute
+        "s+" : this.getSeconds(), // second
+        "q+" : Math.floor((this.getMonth() + 3) / 3), // quarter
+        "S" : this.getMilliseconds()
+        // millisecond
+    }
+
+    if (/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4
+                        - RegExp.$1.length));
+    }
+
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                            ? o[k]
+                            : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+};
+    $('button[data-drange]').on('click',function(e){
+        var params = $(this).attr('data-drange'),
+        params = params.split('|'),
+        from_ipt = $('input[name="'+params[0]+'"]'),
+        to_ipt  = $('input[name="'+params[1]+'"]'),
+        range = params[2];
+        from_ipt.val(new Date()._format('yyyy-MM-dd hh:mm'));
+        to_ipt.val(new Date(new Date().getTime()+(range=='N'?10000:range)*1000*60*60*24)._format('yyyy-MM-dd hh:mm'));
+    });
+
+    $('input[name="coupon[cpns_type]"]').on('click',function(){
+        var v = $(this).val();
+        $('#c_type_str').text(v=='1'?'B':'A');
+        if(v == '0'){
+                $('.cpns-point').addClass('hide');
+                $('.cpns-point').find('input[name="coupon[cpns_point]"]').val('');
+        }else{
+                $('.cpns-point').removeClass('hide');
+        }
+    });
+
+
+    $('select[name="rule[c_template]"]').on('change',function(){
+        $('.rule-c-tpl-extends').load('index.php?app=b2c&ctl=admin_sales_<{$promotion_type}>&act=template',{template:$(this).val()},function(){
+
+        })
+    });
+
+    $('select[name="rule[s_template]"]').on('change',function(){
+        $('.rule-s-tpl-extends').load('index.php?app=b2c&ctl=admin_sales_<{$promotion_type}>&act=solution',{template:$(this).val()},function(){
+
+        })
+    });
+    <{if !$rule.rule_id}>
+    $('select[name="rule[c_template]"],select[name="rule[s_template]').trigger('change');
+    <{/if}>
+</script>

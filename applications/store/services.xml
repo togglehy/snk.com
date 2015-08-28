@@ -1,0 +1,5 @@
+<services>
+    <service id="desktop_finder.store_mdl_store">
+        <class>store_finder_store</class>
+    </service>
+</services>

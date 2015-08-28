@@ -1,0 +1,134 @@
+<div class="form-group">
+    <label class="col-md-2 control-label">商品扩展属性</label>
+    <textarea class="new-propscol-tpl hide">
+        <div class="col-md-4">
+            <div class="input-group input-small">
+                <input type="hidden" name="gtype[props][{key}][options][id][]"  value=""  />
+                <input type="text" required=true class="form-control input-sm" name="gtype[props][{key}][options][value][]" value=""/>
+                <span class="input-group-addon" onclick="props_remove(this);">
+                    <i class="fa fa-trash-o"></i>
+                </span>
+            </div>
+        </div>
+    </textarea>
+    <textarea class="new-props-tpl hide">
+    <tr>
+        <td>
+            <input type='hidden' name='gtype[props][{key}][props_id]' value='<{$prop.props_id}>'/>
+            <input type="hidden" name="gtype[props][{key}][alias]"   value="<{$prop.alias|default:$prop.name}>"/>
+            <input type='hidden' class="props-type" name='gtype[props][{key}][type]' value='1'/>
+            <input type="hidden" name="gtype[props][{key}][show]" value="1" />
+            <input class="form-control input-sm" required=true name="gtype[props][{key}][name]"  value="" />
+        </td>
+        <td>
+            <div class="row">
+                <div class="col-md-1">
+                    <button type="button" class="btn default btn-xs" onclick="props_add(this,'{key}');"><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+        </td>
+        <td>
+            <input type="number" name="gtype[props][{key}][ordernum]" class="form-control input-sm input-xsmall" value="0">
+        </td>
+        <td>
+            <button type="button" class="btn default btn-xs" onclick="if(confirm('确认删除？'))$(this).closest('tr').remove();"><i class="fa fa-trash-o"></i> 删除</button>
+        </td>
+    </tr>
+    </textarea>
+    <div class="col-md-9">
+    <div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover" id="props_edit_panel">
+        <thead>
+            <tr class="heading">
+                <th width="15%">属性名</th>
+                <th width="65%">可选值
+                    <small class="help-block">
+                        留空时，可在商品编辑时录入具体属性值。但不能用于商品列表筛选条件
+                    </small>
+                </th>
+                <th width="10%">排名</th>
+                <th width="10%">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <{foreach from=$gtype.props item=prop key=k}>
+                <tr>
+                    <td>
+                        <input type='hidden' name='gtype[props][<{$k}>][props_id]' value='<{$prop.props_id}>'/>
+                        <input type="hidden" name="gtype[props][<{$k}>][alias]"   value="<{$prop.alias|default:$prop.name}>"/>
+                        <input type="hidden" name="gtype[props][<{$k}>][show]" value="1" />
+                        <{if count($prop.options)>0}>
+                        <input class="props-type" type='hidden' name='gtype[props][<{$k}>][type]' value='2'/>
+                        <{else}>
+                        <input class="props-type" type='hidden' name='gtype[props][<{$k}>][type]' value='1'/>
+                        <{/if}>
+                        <input class="form-control input-sm" name="gtype[props][<{$k}>][name]"  value="<{$prop.name}>" />
+                    </td>
+                    <td>
+                        <div class="row">
+                        <{foreach from=$prop.options item=pop key=popk}>
+                            <{assign var="op1" value=$pop}>
+                            <{if $prop.optionAlias[$popk]}>
+                                <{assign var="op1" value="{$op1}|{$prop.optionAlias[$popk]}"}>
+                            <{/if}>
+                            <{assign var="op1" value=$op1|escape:html}>
+                            <div class="col-md-4">
+                                <div class="input-group input-small">
+                                    <input type="hidden" name="gtype[props][<{$k}>][options][id][]"  value="<{$prop.optionIds[$popk]}>"  />
+                                    <input type="text" class="form-control input-sm" name="gtype[props][<{$k}>][options][value][]" value="<{$op1}>"/>
+                                    <span class="input-group-addon" onclick="props_remove(this);">
+                                        <i class="fa fa-trash-o"></i>
+    								</span>
+                                </div>
+                            </div>
+                        <{/foreach}>
+                            <div class="col-md-1">
+                                <button type="button" class="btn default btn-xs" onclick="props_add(this,'<{$k}>');"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="number" name="gtype[props][<{$k}>][ordernum]" class="form-control input-sm input-xsmall" value="<{$prop.ordernum}>">
+                    </td>
+                    <td>
+                        <button type="button" class="btn default btn-xs" onclick="if(confirm('确认删除？'))$(this).closest('tr').remove();"><i class="fa fa-trash-o"></i> 删除</button>
+                    </td>
+                </tr>
+            <{/foreach}>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan=4>
+                    <button type="button" class="btn default btn-sm btn-block" onclick="$('#props_edit_panel tbody').append(substitute($('.new-props-tpl').val(),{key:'new_'+_propsrow_index++}));"><i class="fa fa-plus"></i> 新建属性</button>
+                </td>
+            </tr>
+        </tfoot>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- form-group end -->
+<script charset="utf-8">
+    var _propscol_index = 0;
+    var _propsrow_index = 0;
+    var substitute = function(str,obj){
+            return str.replace(/\\?\{([^{}]+)\}/g, function(match, name){
+                if (match.charAt(0) == '\\') return match.slice(1);
+                return (obj[name] != undefined) ? obj[name] : '';
+            });
+    }
+    var props_remove = function(el){
+        var tr = $(el).closest('tr');
+        var td = $(el).closest('td');
+        $(el).closest('div[class^="col-md-"]').remove();
+
+        tr.find('td:first .props-type').val(td.find('.col-md-4').length?'2':'1');
+
+    };
+    var props_add = function(el,k){
+        $(el).parent('div[class^="col-md-"]').before(substitute($('.new-propscol-tpl').val(),{key:k}));
+        $(el).closest('tr').find('td:first .props-type').val($(el).closest('td').find('.col-md-4').length?'2':'1');
+    }
+</script>

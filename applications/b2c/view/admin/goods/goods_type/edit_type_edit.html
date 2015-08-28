@@ -1,0 +1,36 @@
+<h3 class="page-title"><{if $gtype.type_id }>类型编辑<{else}>添加新类型<{/if}>
+    <small>类型用于对商品的精细化管理</small>
+</h3>
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<a href="index.php?app=b2c&ctl=admin_goods_type&act=index">类型列表</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="javascript:;"><{if $gtype.type_id }>类型编辑<{else}>添加新类型<{/if}></a>
+		</li>
+	</ul>
+</div>
+
+<form action="index.php?app=b2c&ctl=admin_goods_type&act=save" method="post" id='type_form' >
+    <{if $gtype.type_id }><input type="hidden" name="gtype[type_id]" value=<{$gtype.type_id}>><{/if}>
+    <input type='hidden' name='gtype[setting][use_props]' value='1'/>
+    <input type='hidden' name='gtype[setting][use_params]' value='1'/>
+    <div class="form form-horizontal">
+        <div class="form-body">
+              <{include file="admin/goods/goods_type/form_edit_name.html"}>
+              <{include file="admin/goods/goods_type/form_edit_props.html"}>
+              <{include file="admin/goods/goods_type/form_edit_params.html"}>
+              <hr>
+              <{include file="admin/goods/goods_type/form_edit_setting.html"}>
+        </div>
+        <div class="form-actions">
+            <div class="row">
+                    <div class="col-md-offset-2 col-md-9">
+                        <button type="submit" class="btn blue">保存</button>
+                    </div>
+            </div>
+        </div>
+    <div>
+</form>

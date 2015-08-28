@@ -1,0 +1,45 @@
+<div data-updatecontainer="true"> <!-- data-updatecontainer 标记 内部 A标签 优先加载到容器内 -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        消息标题
+                    </th>
+                    <th>
+                        发送时间
+                    </th>
+                    <th>
+                        当前状态
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <{foreach from=$msgs key=key item=item }>
+                    <tr>
+                        <th>
+                            <a href="javascript:;" target="_blank">
+                                <{$item.subject}>
+                            </a>
+                            </td>
+                            <!-- <td>
+                                <{$item.content|replace:"\n":''|replace:"\t":""|cut:130:'...'}>
+                            </td> -->
+                            <td>
+                                <{$item.createtime|cdate:'FDATE_FTIME'}>
+                            </td>
+                            <td>
+                                <{switch from=$item.status}>
+                                <{case value='sent'}>
+                                已发送
+                                <{case value='received'}>
+                                已送达\已阅读
+                                <{case value='failure'}>
+                                发送失败
+                                <{/switch}>
+                            </td>
+                    </tr>
+                    <{/foreach}>
+            </tbody>
+        </table>
+        <{pagers data=$pager}>
+</div>

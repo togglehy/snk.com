@@ -1,0 +1,188 @@
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <h3 class="modal-title">订单退货 # <{$order.order_id}></h3>
+</div>
+<form method="post" action="index.php?app=b2c&ctl=admin_order&act=doreship" id='order_reship_form' class="form">
+    <input type="hidden" name="order_id" value="<{$order.order_id}>">
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th width="25%">订单号</th>
+                            <td><{$order.order_id}></td>
+                        </tr>
+                        <tr>
+                            <th>收货人</th>
+                            <td>
+                                姓名：<{$order.consignee.name}> <{if $order.consignee.telephone}>/ 电话：<{$order.consignee.telephone}><{/if}> <{if $order.consignee.mobile}> /手机：<{$order.consignee.mobile}><{/if}> /地址： <{$order.consignee.area|region}>,<{$order.consignee.addr}><{if $order.consignee.zip}>,邮编:<{$order.consignee.zip}><{/if}>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>发货状态</th>
+                            <td><{$order.ship_status|order_ship_status}></td>
+                        </tr>
+                        <tr>
+                            <th>发货物流公司</th>
+                            <td><{$last_dlycorp.name}></td>
+                        </tr>
+                        <tr>
+                            <th>发货运费</th>
+                            <td><span class="text-danger"><{$order.cost_freight|cur}></span></td>
+                        </tr>
+                        <tr>
+                            <th>发货保价费</th>
+                            <td><{$order.cost_protect|cur}>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>货到付款</th>
+                            <td><{if $order.is_cod=='Y'}>是<{else}>否<{/if}>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退货到</label>
+                        <div class="col-md-8">
+                            <{input class='input-sm'  type="select" name='dp_id' rows=$dlyplace_list valueColumn="dp_id" labelColumn="dp_title"  required=true}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">物流\快递单号
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{input class='input-sm' type='text' name='logistics_no' required=true }>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">物流公司
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{input class='input-sm' type="select" name='dlycorp_id' rows=$dlycorp_list valueColumn="corp_id" labelColumn="name" value=$last_dlycorp.corp_id required=true}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退货运费</label>
+                        <div class="col-md-8">
+                            <{input class='input-sm' type='text' name='cost_freight'  }>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退货人</label>
+                        <div class="col-md-8">
+                            <{input class='input-sm' type='text' name='consignor[name]' value=$order.consignee.name }>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退货人手机
+
+                       </label>
+                        <div class="col-md-8">
+                            <{input class='input-sm' type='text' name='consignor[mobile]' value=$order.consignee.mobile }>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退货人地区
+
+                       </label>
+                        <div class="col-md-8">
+                            <{input   type='region' app='ectools' name='consignor[area]' value=$order.consignee.area }>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退货人地址
+
+                       </label>
+                        <div class="col-md-8">
+                            <{input class="input-sm" type='text' name='consignor[addr]' value=$order.consignee.addr }>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退货原因
+                       </label>
+                        <div class="col-md-8">
+                            <select name='reason' class="form-control input-sm">
+                              <option value="质量原因">质量原因</option>
+                              <option value="错发货">错发货</option>
+                              <option value="无理由">无理由</option>
+                              <option value="其他">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">备注
+                       </label>
+                        <div class="col-md-8">
+                            <{input type='textarea' name='memo' rows=2 }>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-12">
+            <{if count($order.items) > 0}>
+            <div class="table-responsive">
+            <table  class="table">
+                  <thead>
+                    <tr>
+                      <th>货号</th>
+                      <th>名称</th>
+                      <th>购买数量</th>
+                      <th>已发货数量</th>
+                      <th>本次退货数量</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <{foreach from=$order.items item=item}>
+                      <{if $env.get.product.product_id}>
+                        <{if $item.product_id!=$env.get.product.product_id}>
+                            <{continue;}>
+                        <{/if}>
+                      <{/if}>
+                  <tr>
+                    <td><{$item.bn}></td>
+                    <td><{$item.name}>
+                       <br><small><{$item.spec_info}></small>
+                    </td>
+                    <td><{$item.nums}></td>
+                    <td><{$item.sendnum}></td>
+                    <td>
+                      <{if $item.sendnum>0}>
+                          <{if $env.get.product.quantity}>
+                              <{input type="number" readonly=true required=true name="reship[{$item.item_id}]" value=$env.get.product.quantity|number_format:0  class="input-xsmall"}>
+                          <{else}>
+                             <{input type="number" required=true name="reship[{$item.item_id}]" value=$item.sendnum|number_format:0  class="input-xsmall"}>
+                          <{/if}>
+                      <{else}>
+                            未发货
+                      <{/if}>
+                    </td>
+                  </tr>
+                  <{/foreach}>
+                  </tbody>
+                </table>
+            </div>
+            <{/if}>
+        </div>
+
+    </div> <!--end row-->
+</div>
+<div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn blue">保存</button>
+</div>
+</form>

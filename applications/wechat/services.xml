@@ -1,0 +1,20 @@
+<services>
+    <service id="desktop_finder.wechat_mdl_bind">
+        <class>wechat_finder_bind</class>
+    </service>
+    <service id="desktop_finder.wechat_mdl_replyrule">
+        <class>wechat_finder_replyrule</class>
+    </service>
+    <service id="openapi.wechat">
+        <class>wechat_api</class>
+    </service>
+    <service id="ectools_payment.applications" optname="支付插件列表">
+        <class>wechat_payment_applications_wxpay</class>
+    </service>
+    <service id="toauth.pam" optname="第三方信任登录列表">
+        <class>wechat_toauth_pam</class>
+    </service>
+    <service id="view_helper">
+        <class>wechat_view_helper</class>
+    </service>
+</services>

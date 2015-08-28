@@ -1,0 +1,56 @@
+<div class="page-header">
+    <h1>我的优惠券
+        <small>My Coupons</small>
+    </h1>
+</div>
+<div class="list-group">
+    <{foreach from=$available_coupons item=coupon}>
+        <dl class="list-group-item">
+            <dt><h3><{$coupon.memc_code}></h3>
+                <!-- <{$coupon.cpns_name}><br> -->
+                <small>优惠券获得时间：<{$coupon.memc_gen_time|cdate}></small>
+            </dt>
+            <dd>
+                <ul class="list-unstyled">
+                    <li>优惠规则：<{$coupon.description}></li>
+                    <li>有效期至：<{$coupon.to_time|cdate}></li>
+                </ul>
+            </dd>
+            <dd>
+                <span class="label label-success">有效</span>
+            </dd>
+        </dl>
+    <{/foreach}>
+    <{foreach from=$mycoupons item=coupon}>
+    <{if !$coupon.forbidden}><{continue;}><{/if}>
+        <dl class="list-group-item <{if $coupon.forbidden}>disabled<{/if}>">
+            <dt><h3><{$coupon.memc_code}></h3>
+                <!-- <{$coupon.cpns_name}><br> -->
+                <small>优惠券获得时间：<{$coupon.memc_gen_time|cdate}></small>
+            </dt>
+            <dd>
+                <ul class="list-unstyled">
+                    <li>优惠规则：<{$coupon.description}></li>
+                    <li>有效期至：<{$coupon.to_time|cdate}></li>
+                </ul>
+            </dd>
+            <dd>
+                <{if !$coupon.forbidden}>
+                    <span class="label label-success">有效</span>
+                <{else}>
+
+                    <{assign var=looplog value=$couponlogs[$coupon.memc_code]}>
+                    <{if $looplog}>
+                        <ul class="well well-sm list-unstyled">
+                            <li>应用订单：<a href="<{link app=b2c ctl=site_order act=detail args0=$looplog.order_id}>"><{$looplog.order_id}></a></li>
+                            <li>订单金额：<{$looplog.order_total|cur}></li>
+                            <li>该券抵扣：<{$looplog.coupon_save|cur}></li>
+                        </ul>
+                    <{else}>
+                        <span class="label label-default">失效</span>&nbsp;<{$coupon.forbidden}>
+                    <{/if}>
+                <{/if}>
+            </dd>
+        </dl>
+    <{/foreach}>
+</div>

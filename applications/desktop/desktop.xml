@@ -1,0 +1,32 @@
+<desktop>
+    <permissions>
+    	<permission id="shopsetting" display='true'>商店设置</permission>
+        <permission id="setting" display='true'>数据管理</permission>
+        <permission id="performance" display='true'>系统管理</permission>
+        <permission id="users" display='true'>权限管理</permission>
+
+    </permissions>
+
+    <panelgroup id="setting" icon="icon-home" order="10">商店</panelgroup>
+    <panelgroup id="user" icon="icon-users" order="50">操作者</panelgroup>
+    <panelgroup id="system" icon="icon-settings" order="60">系统</panelgroup>
+
+
+
+
+    <adminpanel group="desktop_setting" controller="email" permission="performance" action="setting" display='false'>系统配置</adminpanel>
+    <adminpanel group="desktop_user" permission="users" controller="users" display='true'>操作员管理</adminpanel>
+    <adminpanel group="desktop_user" permission="users" controller="roles" display='true'>角色及权限</adminpanel>
+
+    <adminpanel group="desktop_setting" controller="adminpanel" action="index" permission="setting" display="false" order='20'>配送方式</adminpanel>
+
+    <adminpanel group="desktop_setting" permission="shopsetting" controller='email' action='setting' display='true' order="30">邮件发送配置</adminpanel>
+    <adminpanel group="desktop_setting" permission="shopsetting" controller='sms' action='setting' display='true' order="30">短信平台配置</adminpanel>
+
+    <adminpanel group="desktop_system" permission="performance" controller="cachestage" display='true'>缓存</adminpanel>
+    <adminpanel group="desktop_system" permission="shopsetting" controller="appcenter" display='true' order="20">应用中心</adminpanel>
+    <adminpanel group="desktop_system" permission="setting" controller="tags" action="remove" display='false' order="20">标签删除</adminpanel>
+
+
+
+</desktop>

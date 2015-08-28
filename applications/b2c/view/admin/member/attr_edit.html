@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <h3 class="modal-title">编辑项</h3>
+</div>
+<form method="post" action="index.php?app=b2c&ctl=admin_member_attr&act=add" id='member_attr_form' calss="">
+    <input type='hidden' name='attr_id' value="<{$memattr.attr_id}>"/>
+    <div class="modal-body form form-horizontal">
+        <div class="form-body">
+            <div class="form-group">
+                <label class="col-md-3 control-label">名称
+                    <span class="required" aria-required="true">*</span>
+                </label>
+                <div class="col-md-5">
+                    <input type="text" required=true value="<{$memattr.attr_name}>"  name="attr_name"  class='form-control' />
+                </div>
+            </div>
+
+            <{if $memattr.attr_group != 'defalut'}>
+            <div class="form-group">
+                <label class="col-md-3 control-label">字段输入类型
+                    <span class="required" aria-required="true">*</span>
+                </label>
+                <div class="col-md-5">
+                    <select data-tgroup="<{$memattr.attr_group}>" data-tvalue="<{$memattr.attr_tyname}>" class="form-control" name='attr_tyname' id="attr_tyname">
+                        <{if $memattr.attr_group == 'input'}>
+                        <option value="输入项">输入项</option>
+                        <{/if}>
+                        <{if $memattr.attr_group == 'select' || $memattr.attr_group == 'radio'}>
+                        <option value="单选项">单选项</option>
+                        <option value="多选项" <{if $memattr.attr_tyname=='多选项'}>selected<{/if}>>多选项</option>
+                        <{/if}>
+                        <{if $memattr.attr_group == 'cal' || $memattr.attr_group == 'date'}>
+                        <option value="日期选择器">日期选择器</option>
+                        <{/if}>
+                    </select>
+                    <{if $memattr.attr_group == 'select' || $memattr.attr_group == 'radio'}>
+                    <div id="attr_options_pane">
+                        <input type="text" name="attr_option" value="<{$memattr.attr_option}>">
+                    </div>
+                    <{/if}>
+                </div>
+            </div>
+            <{/if}>
+            <div class="form-group">
+                <label class="col-md-3 control-label">是否可以为空
+                </label>
+                <div class="col-md-5">
+                    <select class="form-control" name="attr_required">
+                        <option value="false">可以为空</option>
+                        <option value="true" <{if $memattr.attr_required eq 'true'}>selected<{/if}>>不可为空（必填）</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn blue">保存</button>
+    </div>
+</form>
+<script charset="utf-8">
+    $('#attr_options_pane input[name=attr_option]').tagsInput({
+        'width': 'auto',
+        'defaultText':'新选项',
+    });
+
+</script>

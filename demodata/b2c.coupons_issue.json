@@ -1,0 +1,95 @@
+{
+	"data":
+	[
+		{
+			"id": 1,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN3250700001",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 2,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTENF89DF00002",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 3,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN732DB00003",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 4,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN543CB00004",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 5,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN352D000005",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 6,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN2AB4200006",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 7,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTENA056800007",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 8,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN565C300008",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 9,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN57D3500009",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		},
+		{
+			"id": 10,
+			"cpns_prefix": "BTEN",
+			"cpns_no": "BTEN337F00000A",
+			"cpns_id": 2,
+			"remark": "测试发行",
+			"issue_op": "admin",
+			"issue_date": 1433241940
+		}
+	]
+}

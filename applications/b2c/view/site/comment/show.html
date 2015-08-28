@@ -1,0 +1,23 @@
+<ol class="breadcrumb">
+  <li><a href="<{link app=site ctl=index}>">首页</a></li>
+  <li><a href="<{link app=b2c ctl=site_product args0=$goods_detail.product.product_id}>"><{$goods_detail.name}></a></li>
+  <li class="active">评价</li>
+</ol>
+<div class="row">
+    <div class="col-md-3">
+        <div class="thumbnail">
+            <img src="<{$goods_detail.image_default_id|storager:'s'}>" alt="<{$goods_detail.name}>" />
+            <div class="caption">
+                <h3><{$goods_detail.name}></h3>
+                <p><{$goods_detail.biref}></p>
+                <p class="avg-mark">
+                    <span class="text-warning"><{$goods_detail.mark_star|star}></span> <small><{$goods_detail.mark_star|number_format:'1'}></small>
+                </p>
+                <p><a href="<{link app=b2c ctl=site_product args0=$goods_detail.product.product_id}>" class="btn btn-primary" role="button">购买</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <{include file="site/comment/list.html"}>
+    </div>
+</div>

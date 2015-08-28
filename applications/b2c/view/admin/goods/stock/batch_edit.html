@@ -1,0 +1,39 @@
+<{assign var=count_stock value=count($env.post.stock_id)}>
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <h3 class="modal-title">批量编辑库存</h3>
+        正在对选择的<strong class="label label-default"><{$count_stock}></strong>个货品进行库存编辑
+</div>
+
+<form action="index.php?app=b2c&ctl=admin_stock&act=batch_save" method="post"  >
+    <input type="hidden" name="stock_id" value="<{$env.post.stock_id|implode:','}>">
+    <div class="modal-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <select class="form-control" name="warehouse">
+                        <option value="-1">全部仓库/门店</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" name="col">
+                        <option value="quantity">库存量</option>
+                        <option value="freez_quantity">冻结库存</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" name="operation">
+                        <option value="plus">增加</option>
+                        <option value="minus">减少</option>
+                        <option value="multiple">翻倍</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" required=true class="form-control" name="nums" value="">
+                </div>
+            </div>
+    </div>
+    <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn blue">确定</button>
+    </div>
+</form>

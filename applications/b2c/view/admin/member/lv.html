@@ -1,0 +1,71 @@
+<h3 class="page-title">
+    <{if $lv.member_lv_id}>编辑
+        <{else}>添加
+            <{/if}>会员等级
+                <small>可根据会员等级区分不同的促销力度，及商品价格</small>
+</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?app=b2c&ctl=admin_member_lv&act=index">会员等级列表</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;">
+                <{if $lv.member_lv_id}>编辑
+                    <{else}>添加
+                        <{/if}>会员等级</a>
+        </li>
+    </ul>
+</div>
+<form method="post" class="form" action="index.php?app=b2c&ctl=admin_member_lv&act=save">
+		<{if $lv.member_lv_id}><{input type='hidden' name='member_lv_id' value=$lv.member_lv_id}><{/if}>
+    <div class="form-horizontal">
+        <div class="form-body">
+            <div class="form-group">
+                <label class="col-md-2 control-label">等级名称
+                    <span class="required" aria-required="true">*</span>
+                </label>
+                <div class="col-md-4">
+                    <{input type="text" name="name" required="true" value=$lv.name}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">等级ICON图标
+
+                </label>
+                <div class="col-md-4">
+                    <{input type="image" name="lv_logo" value=$lv.lv_logo width=90 height=90}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">折扣率
+                    <span class="required" aria-required="true">*</span>
+                </label>
+                <div class="col-md-2">
+                        <{input type="number" name="dis_count" required="true" value=$lv.dis_count}>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">该等级所需经验值
+                    <span class="required" aria-required="true">*</span>
+                </label>
+                <div class="col-md-2">
+                    <{input type="number" name="experience" required="true" value=$lv.experience}>
+                    <span class="help-block">每消费1元，累计1经验值</span>
+                </div>
+            </div>
+
+			<div class="form-actions">
+				<div class="row">
+					<div class="col-md-offset-2 col-md-9">
+						<button type="submit" class="btn blue">保存</button>
+						<a href="index.php?app=b2c&ctl=admin_member_lv&act=index" class="btn default">返回</a>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+</form>

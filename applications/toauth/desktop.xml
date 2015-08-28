@@ -1,0 +1,7 @@
+<desktop>
+    <permissions>
+        <permission id="toauth" display="true" parent='0'>第三方信任登录配置</permission>
+    </permissions>
+
+    <adminpanel group="desktop_setting" controller="admin_setting" action="index" permission='toauth' order="100" display='true'>第三方信任登录</adminpanel>
+</desktop>

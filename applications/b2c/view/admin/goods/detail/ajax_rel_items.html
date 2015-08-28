@@ -1,0 +1,19 @@
+<{foreach from=$items key=k item=item}>
+<tr>
+	<td>
+		<button onclick="$(this).closest('tr').remove();" type="button" class="btn btn-xs default"><i class="fa fa-trash-o"></i></button>
+	</td>
+	<td>
+		<input type="hidden" name="linkid[]"  value="<{$item.goods_id}>">
+		<{$item.name}>
+	</td>
+	<td>
+	<label class="control-label">
+		<input type="radio" name="linktype[<{$item.goods_id}>]" value="left" <{if $item.manual=='left' || $item.manual==''}>checked="checked"<{/if}> />单向与相关
+	</label>
+	<label class="control-label">
+		&nbsp;<input type="radio" name="linktype[<{$item.goods_id}>]" value="both" <{if $item.manual=='both'}>checked="checked"<{/if}> />双向相关
+	</label>
+	</td>
+</tr>
+<{/foreach}>

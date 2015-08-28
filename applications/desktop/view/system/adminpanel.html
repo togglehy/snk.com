@@ -1,0 +1,44 @@
+<div class="row" id="adminpanel">
+    <div class="col-md-6 col-lg-4">
+    </div>
+    <div class="col-md-6 col-lg-4">
+    </div>
+    <div class="col-md-6 col-lg-4">
+    </div>
+<div>
+
+<div id="tmp_items">
+    <{foreach from=$groups name=groups item=group}>
+    <{if $group.items}>
+	<div class="portlet light bg-inverse">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="<{$group.icon}>"></i><{$group.title}>
+						</div>
+					</div>
+					<div class="portlet-body">
+						<div class="row">
+							<{foreach from=$group.items item=item}>
+							<div class="col-md-6">
+								<a class="btn btn-link" href="index.php?<{$item.menu_path}>">
+									<i class="fa  fa-angle-right"></i>&nbsp;&nbsp;<{$item.menu_title}>
+								</a>
+							</div>
+							<{/foreach}>
+						</div>
+					</div>
+	</div>
+    <{/if}>
+    <{/foreach}>
+</div>
+<script charset="utf-8">
+    !function(){
+        var adminpanel_cols = $('#adminpanel > [class^="col-md"]');
+        var loop_arr = [0,1,2];
+        $.each($('#tmp_items > .portlet'),function(i,n){
+            var loop = loop_arr.shift();
+            $(adminpanel_cols[loop]).append(n);
+            loop_arr.push(loop);
+        });
+    }();
+</script>

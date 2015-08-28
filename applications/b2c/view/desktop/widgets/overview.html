@@ -1,0 +1,279 @@
+<div class="portlet box blue-steel">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-thumb-tack"></i>业务概览
+        </div>
+        <!-- <div class="tools">
+            <a href="javascript:;" class="collapse" data-original-title="" title="">
+            </a>
+            <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">
+            </a>
+            <a href="javascript:;" class="reload" data-original-title="" title="">
+            </a>
+            <a href="javascript:;" class="remove" data-original-title="" title="">
+            </a>
+        </div> -->
+    </div>
+    <div class="portlet-body">
+        <div class="tabbable-line">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#overview_1" data-toggle="tab">
+										热销品 </a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										会员 <i class="fa fa-angle-down"></i>
+										</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#overview_2" tabindex="-1" data-toggle="tab">
+												下单最多 </a>
+                        </li>
+                        <li>
+                            <a href="#overview_3" tabindex="-1" data-toggle="tab">
+												消费最多</a>
+                        </li>
+                        <li>
+                            <a href="#overview_4" tabindex="-1" data-toggle="tab">
+												最新注册</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <!-- <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										订单 TODO<i class="fa fa-angle-down"></i>
+										</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#overview_5" tabindex="-1" data-toggle="tab">
+												最新10个订单 </a>
+                        </li>
+                        <li>
+                            <a href="#overview_6" tabindex="-1" data-toggle="tab">
+												准备中的订单</a>
+                        </li>
+                        <li>
+                            <a href="#overview_7" tabindex="-1" data-toggle="tab">
+												已完成订单</a>
+                        </li>
+
+                    </ul>
+                </li> -->
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="overview_1">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead class="text-nowrap">
+                                <tr>
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        名称
+                                    </th>
+                                    <th>
+                                        价格
+                                    </th>
+                                    <th>
+                                        销量
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <{foreach from=$top_sell item=item name=tsf}>
+                                    <tr>
+                                        <td>
+                                            <{$env.foreach.tsf.iteration}>
+                                        </td>
+                                        <td>
+<a href="index.php?app=b2c&ctl=admin_goods_editor&act=edit&p[0]=<{$item.goods_id}>" target="_blank"><{$item.pname}></a>
+                                        </td>
+                                        <td>
+                                            <{$item.price|cur}>
+                                        </td>
+                                        <td>
+                                            <{$item.sell_count}>
+                                        </td>
+                                        <td>
+                                            <a href="index.php?app=b2c&ctl=admin_goods_editor&act=edit&p[0]=<{$item.goods_id}>" target="_blank" data-pid="<{$item.product_id}>" class="btn default btn-xs green-stripe">
+													查看
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane " id="overview_2">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        会员登录名
+                                    </th>
+                                    <th>
+                                        会员等级
+                                    </th>
+                                    <th>
+                                        下单数
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <{foreach from=$member_top_ordercount item=item name=mtof}>
+                                    <tr>
+                                        <td>
+                                            <{$env.foreach.mtof.iteration}>
+                                        </td>
+                                        <td>
+                                            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$item.member_id}>" target="_blank"><{$item.login_account}></a>
+                                        </td>
+                                        <td>
+                                            <{$item.member_lv_id|lvname}>
+                                        </td>
+                                        <td>
+                                            <{$item.order_num}>
+                                        </td>
+                                        <td>
+                                            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$item.member_id}>" target="_blank"  class="btn default btn-xs green-stripe">
+                                                    查看
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane " id="overview_3">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        会员登录名
+                                    </th>
+                                    <th>
+                                        会员等级
+                                    </th>
+                                    <th>
+                                        消费金额
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <{foreach from=$member_top_amount item=item name=mtaf}>
+                                    <tr>
+                                        <td>
+                                            <{$env.foreach.mtaf.iteration}>
+                                        </td>
+                                        <td>
+                                            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$item.member_id}>" target="_blank"><{$item.login_account}></a>
+                                        </td>
+                                        <td>
+                                            <{$item.member_lv_id|lvname}>
+                                        </td>
+                                        <td>
+                                            <{$item.amount|cur}>
+                                        </td>
+                                        <td>
+                                            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$item.member_id}>" target="_blank"  class="btn default btn-xs green-stripe">
+                                                    查看
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane " id="overview_4">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        会员登录名
+                                    </th>
+                                    <th>
+                                        注册时间
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <{foreach from=$member_top_new item=item name=mtnf}>
+                                    <tr>
+                                        <td>
+                                            <{$env.foreach.mtnf.iteration}>
+                                        </td>
+                                        <td>
+                                            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$item.member_id}>" target="_blank"><{$item.login_account}></a>
+                                        </td>
+                                        <td>
+                                            <{$item.regtime|cdate}>
+                                        </td>
+                                        <td>
+                                            <a href="index.php?app=b2c&ctl=admin_member&act=detail&p[0]=<{$item.member_id}>" target="_blank"  class="btn default btn-xs green-stripe">
+                                                    查看
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- <div class="tab-pane " id="overview_5">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane " id="overview_6">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="overview_7">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+
+                        </table>
+                    </div>
+                </div> -->
+
+            </div><!---->
+        </div>
+    </div>
+</div>

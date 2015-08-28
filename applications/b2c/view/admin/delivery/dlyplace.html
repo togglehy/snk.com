@@ -1,0 +1,91 @@
+<h3 class="page-title"><{if $dlyplace.dp_id }>编辑发货地点<{else}>添加发货地点<{/if}></h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?app=b2c&ctl=admin_dlycorp&act=index">发货地点列表</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;"><{if $dlyplace.dp_id }>编辑发货地点<{else}>添加发货地点<{/if}></a>
+        </li>
+    </ul>
+</div>
+<form action="index.php?app=b2c&ctl=admin_dlyplace&act=save" method="post" id='dlyplace_form' class="form" >
+
+    <{if $dlyplace.dp_id }><input type="hidden" name="dp_id" value="<{$dlyplace.dp_id}>"><{/if}>
+    <div class="form form-horizontal">
+        <div class="form-body">
+            <div class="form-group">
+                <label class="col-md-2 control-label">发货地点类型<span class="required" aria-required="true">*</span></label>
+                <div class="col-md-5">
+                    <select class="form-control" name="dp_type">
+                        <option value='warehouse'>仓库</option>
+                        <option value='store' <{if $dlyplace.dp_type=='store'}>selected<{/if}>>门店</option>
+                    </select>
+                </div>
+            </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">发货地点名称<span class="required" aria-required="true">*</span></label>
+                 <div class="col-md-5">
+                     <input type="text"  name="dp_title"  required="true" value="<{$dlyplace.dp_title}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">所在地区<span class="required" aria-required="true">*</span></label>
+                 <div class="col-md-5">
+                     <{input type=region name='consignor[area]' value=$dlyplace.consignor.area}>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">详细地址<span class="required" aria-required="true">*</span></label>
+                 <div class="col-md-5">
+                     <input type="text"  name="consignor[addr]"   value="<{$dlyplace.consignor.addr}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">邮编</label>
+                 <div class="col-md-5">
+                     <input type="text"  name="consignor[zip]"   value="<{$dlyplace.consignor.zip}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">联系人</label>
+                 <div class="col-md-5">
+                     <input type="text"  name="consignor[name]"  value="<{$dlyplace.consignor.name}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">联系人手机</label>
+                 <div class="col-md-5">
+                     <input type="text"  name="consignor[mobile]"   value="<{$dlyplace.consignor.mobile}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">联系电话</label>
+                 <div class="col-md-5">
+                     <input type="text"  name="consignor[tel]"   value="<{$dlyplace.consignor.tel}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">联系Email</label>
+                 <div class="col-md-5">
+                     <input type="text"  name="consignor[email]"   value="<{$dlyplace.consignor.email}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">备注</label>
+                 <div class="col-md-5">
+                     <textarea class="form-control" name="memo"><{$dlyplace.memo}></textarea>
+                 </div>
+             </div>
+    </div>
+        <div class="form-actions">
+            <div class="row">
+                    <div class="col-md-offset-2 col-md-9">
+                        <button type="submit" class="btn blue">保存</button>
+                    </div>
+            </div>
+        </div>
+
+    <div>
+</form>

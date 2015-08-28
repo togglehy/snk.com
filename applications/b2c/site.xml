@@ -1,0 +1,69 @@
+<site>
+    <module controller='site_list' id='b2c'>
+        <name>list</name>
+        <title>商品列表页</title>
+        <allow_seo act="index">
+            <title>商品列表页</title>
+            <config id="{ENV_goods_cat}">当前分类</config>
+            <config id="{ENV_goods_cat_path}">分类路径</config>
+            <config id="{ENV_goods_brand}">相关品牌</config>
+            <param>
+                <seo_title>{ENV_goods_cat_path}</seo_title>
+                <seo_keywords>{ENV_goods_cat},{ENV_goods_brand}</seo_keywords>
+                <seo_content>{ENV_goods_cat_path},{ENV_goods_brand}</seo_content>
+            </param>
+        </allow_seo>
+    </module>
+    <module controller='site_product' id='b2c'>
+        <name>item</name>
+        <title>商品详细页</title>
+        <allow_seo act="index">
+            <title>商品详细页</title>
+            <config id="{ENV_goods_name}">商品名称</config>
+            <config id="{ENV_goods_brand}">商品品牌</config>
+            <config id="{ENV_goods_cat}">商品分类</config>
+            <config id="{ENV_goods_intro}">商品简介</config>
+            <config id="{ENV_product_bn}">货号</config>
+            <config id="{ENV_product_barcode}">条码</config>
+            <config id="{ENV_goods_keywords}">关键词</config>
+            <config id="{ENV_goods_tags}">标签</config>
+            <param>
+                <seo_title>{ENV_goods_name}_{ENV_goods_brand}</seo_title>
+                <seo_keywords>{ENV_goods_keywords},{ENV_goods_tags}</seo_keywords>
+                <seo_content>{ENV_goods_intro}</seo_content>
+            </param>
+        </allow_seo>
+    </module>
+    <module controller='site_member' id='b2c'>
+        <name>my</name>
+        <title>会员中心</title>
+    </module>
+    <module controller='site_brand' id='b2c'>
+        <name>brand</name>
+        <title>品牌</title>
+    </module>
+    <module controller='site_passport' id='b2c'>
+        <name>passport</name>
+        <title>账户</title>
+    </module>
+    <module controller='site_comment' id='b2c'>
+        <name>comment</name>
+        <title>评价</title>
+    </module>
+    <module controller='site_cart' id='b2c'>
+        <name>cart</name>
+        <title>购物车</title>
+    </module>
+    <module controller='site_checkout' id='b2c'>
+        <name>checkout</name>
+        <title>订单确认</title>
+    </module>
+    <module controller='site_order' id='b2c'>
+        <name>order</name>
+        <title>订单</title>
+    </module>
+    <module controller='site_paycenter' id='b2c'>
+        <name>pay</name>
+        <title>支付中心</title>
+    </module>
+</site>

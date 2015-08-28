@@ -1,0 +1,182 @@
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <h3 class="modal-title">订单退款 # <{$order.order_id}></h3>
+</div>
+<form method="post" action="index.php?app=b2c&ctl=admin_order&act=dorefund" id='order_refund_form' class="form">
+    <input type="hidden" name="order_id" value="<{$order.order_id}>">
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>订单号</th>
+                            <td><{$order.order_id}></td>
+                        </tr>
+                        <tr>
+                            <th>支付状态</th>
+                            <td><{if $order.pay_status == 0}>未支付<{elseif $order.pay_status == 1}>已支付<{elseif $order.pay_status == 2}>处理中<{elseif $order.pay_status == 3}>部分付款<{elseif $order.pay_status == 4}>部分退款<{elseif $order.pay_status == 5}>已退款<{/if}></td>
+                        </tr>
+                        <!-- <tr>
+                            <th>应收金额</th>
+                            <td><span class="text-danger">￥<{$order.order_total|cur}></span></td>
+                        </tr> -->
+                        <tr>
+                            <th>已收金额</th>
+                            <td><span class="text-success">￥<{$order.payed|cur}></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <{foreach from=$bills item=bill}>
+            <div class="alert alert-info">
+            <h5><{$bill.last_modify|cdate}> 成功收款记录 <i class="fa fa-check-circle"></i></h5>
+                <dl class="dl-horizontal">
+                    <dt>支付账单流水号</dt>
+                    <dd><{$bill.bill_id}></dd>
+                    <dt>付款账号</dt>
+                    <dd><{$bill.payer_account}></dd>
+                    <dt>付款金额</dt>
+                    <dd><big class="text-success">￥<{$bill.money|cur}></big><hr></dd>
+                    <dt>收款银行</dt>
+                    <dd><{$bill.payee_bank}></dd>
+                    <dt>收款账号</dt>
+                    <dd><{$bill.payee_account}></dd>
+                </dl>
+            </div>
+            <{/foreach}>
+
+        </div>
+        <div class="col-md-6">
+            <div class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group hidden">
+                        <label class="col-md-4 control-label">退款方式
+                       </label>
+                        <div class="col-md-8">
+                            <{input class="input-sm" type="select" required=true name="pay_mode" options=$mode_list}>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">收款银行\平台
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <input type="text"  required=true value="<{$bills.0.payer_bank}>" name="payee_bank"  class='form-control input-sm'/>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">收款账号
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <input type="text" required=true value="<{$bills.0.payer_account}>" name="payee_account"  class='form-control input-sm'/>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退款金额
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{if $env.get.refund_amount && $env.get.refund_amount<$order.payed}>
+                            <input type="text" required=true value="<{$env.get.refund_amount|default:$order.payed|cur}>" name="money"  class='form-control input-sm'/>
+                            <{else}>
+                            <input type="text" required=true value="<{$order.payed|cur}>" name="money"  class='form-control input-sm'/>
+                            <{/if}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">退款状态
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="status">
+                                <option value="ready">准备中</option>
+                                <option value="succ">已支付成功</option>
+                                <!-- <option value="dead">作废</option> -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">第三方支付流水号
+                       </label>
+                        <div class="col-md-8">
+                            <input type="text"  value="" name="out_trade_no"  class='form-control input-sm'/>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">手续费
+                       </label>
+                        <div class="col-md-8">
+                            <input type="number"  name="pay_fee"  class='form-control input-sm'/>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">付款银行\平台
+                       </label>
+                        <div class="col-md-8">
+                            <input type="text"  value="" name="payer_bank"  class='form-control input-sm'/>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">付款账号
+                       </label>
+                        <div class="col-md-8">
+                            <input type="text"  value="" name="payer_account"  class='form-control input-sm'/>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">扣除会员积分
+                       </label>
+                        <div class="col-md-8">
+                            <{input type='text' class="input-sm" name='return_score' value=$env.get.refund_amount|default:$order.score_g|number_format:'0':'':'' }>
+                            <span class="help-block">最多扣除：<{$order.score_g|number_format:'0':'':''}></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-md-1 control-label">备注
+               </label>
+                <div class="col-md-11">
+                    <{input type=textarea name=memo rows=1 }>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn blue">保存</button>
+</div>
+</form>
+
+<script charset="utf-8">
+    $('#order_refund_form select[name=pay_type]').on('change',function(){
+        if($(this).val()!='online'){
+            $('.pay-online').hide();
+            $('.pay-online input').prop('disabled','disabled');
+        }else{
+            $('.pay-online').show();
+            $('.pay-online input').removeProp('disabled');
+        }
+    });
+
+    $('#order_refund_form select[name=status]').on('change',function(){
+        if($(this).val()!='succ'){
+            $('.pay-online').hide();
+            $('.pay-online input').prop('disabled','disabled');
+        }else{
+            $('.pay-online').show();
+            $('.pay-online input').removeProp('disabled');
+        }
+    }).trigger('change');
+</script>

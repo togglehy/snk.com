@@ -1,0 +1,256 @@
+<services>
+    <service id="desktop.widgets" optname="后台仪表盘挂件">
+<!-- <class>b2c_desktop_widgets_workcount</class> -->
+        <class>b2c_desktop_widgets_stats</class>
+        <class>b2c_desktop_widgets_revenue</class>
+        <class>b2c_desktop_widgets_overview</class>
+    </service>
+    <service id="site.site_theme_tmpl" optname="模板地图">
+        <class>b2c_site_tmpl</class>
+    </service>
+    <service id="view_compile_helper">
+        <class>b2c_view_compiler</class>
+    </service>
+    <service id="view_helper">
+        <class>b2c_view_helper</class>
+    </service>
+    <service id="member_logout">
+        <class>b2c_service_logout</class>
+    </service>
+    <service id="cachemgr_global_vary">
+        <class>b2c_service_cachemgr_globalvary</class>
+    </service>
+    <service id="site_view_helper">
+        <class>b2c_site_view_helper</class>
+    </service>
+    <service id="html_input">
+        <class>b2c_view_input</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_orders">
+        <class>b2c_finder_orders</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_shop">
+        <class>b2c_finder_shop</class>
+    </service>
+<!-- 订单相关SERVICES BEGIN-->
+    <service id="b2c.order.create.before" optname="订单创建前数据检测">
+        <class orderby="30">b2c_order_check_create</class>
+    </service>
+    <service id="b2c.order.create.finish" optname="订单创建完成时触发">
+        <class orderby="30">b2c_order_createfinish</class>
+    </service>
+    <service id="b2c.order.cancel.before" optname="订单作废前触发">
+        <class orderby="30">b2c_order_check_cancel</class>
+    </service>
+    <service id="b2c.order.cancel.finish" optname="订单作废完成时触发">
+        <class orderby="30">b2c_order_cancelfinish</class>
+    </service>
+    <service id="b2c.order.end.before" optname="订单完成前触发">
+        <class orderby="30">b2c_order_check_end</class>
+    </service>
+    <service id="b2c.order.end.finish" optname="订单归档完成时触发">
+        <class orderby="30">b2c_order_endfinish</class>
+    </service>
+    <service id="b2c.order.delivery.send.before" optname="订单发货前数据检测">
+        <class orderby="30">b2c_order_check_send</class>
+    </service>
+    <service id="b2c.order.delivery.reship.before" optname="订单退货前数据检测">
+        <class orderby="30">b2c_order_check_reship</class>
+    </service>
+    <service id="b2c.order.delivery.send.finish" optname="订单发货操作完成触发">
+        <class orderby="30">b2c_order_sendfinish</class>
+    </service>
+    <service id="b2c.order.delivery.reship.finish" optname="订单退货操作完成触发">
+        <class orderby="30">b2c_order_reshipfinish</class>
+    </service>
+    <service id="ectools.bill.payment.order.succ" optname="订单支付完成处理">
+        <class orderby="30">b2c_order_payfinish</class>
+    </service>
+    <service id="ectools.bill.payment.order.progress" optname="订单支付到担保方完成处理">
+        <class orderby="30">b2c_order_payfinish</class>
+    </service>
+    <service id="ectools.bill.refund.order.succ" optname="订单退款完成处理">
+        <class orderby="30">b2c_order_refundfinish</class>
+    </service>
+    <service id="ectools.bill.refund.order.progress" optname="订单退款到担保方完成处理">
+        <class orderby="30">b2c_order_refundfinish</class>
+    </service>
+<!-- 订单相关SERVICES END -->
+
+<!-- FINDER相关SERVICES BEGIN -->
+    <service id="desktop_finder.b2c_mdl_brand">
+        <class>b2c_finder_brand</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_coupons">
+        <class>b2c_finder_coupons</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_coupons.exchange">
+        <class>b2c_finder_coupons_exchange</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_sales_rule_goods">
+        <class>b2c_finder_sales_rule_goods</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_sales_rule_order">
+        <class>b2c_finder_sales_rule_order</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_dlycorp">
+        <class>b2c_finder_dlycorp</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_dlytype">
+        <class>b2c_finder_dlytype</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_stock">
+        <class>b2c_finder_stock</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_dlyplace">
+        <class>b2c_finder_dlyplace</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_goods_type">
+        <class>b2c_finder_gtype</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_delivery">
+        <class>b2c_finder_delivery</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_members">
+        <class>b2c_finder_members</class>
+    </service>
+    <service id="desktop_finder_detail_modifier.b2c_mdl_members.default">
+        <class>b2c_finder_detail</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_goods">
+        <class>b2c_finder_goods</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_member_lv">
+        <class>b2c_finder_member_lv</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_member_comment">
+        <class>b2c_finder_member_comment</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_member_msg">
+        <class>b2c_finder_member_msg</class>
+    </service>
+    <service id="b2c_order.b2c_finder_orders">
+        <class>b2c_order_actionbutton</class>
+    </service>
+    <service id="b2c_goods.b2c_goods_filter" optname="商品筛选器引擎" opttype="select">
+        <class>b2c_goods_filter</class>
+    </service>
+    <!-- FINDER相关SERVICES END -->
+
+
+    <service id="b2c_promotion_tpl_order_apps">
+        <class>b2c_promotion_conditions_order_allorderallgoods</class>
+    </service>
+    <service id="b2c_promotion_tpl_goods_apps">
+        <class>b2c_promotion_conditions_goods_allgoods</class>
+<!-- <class>b2c_promotion_conditions_goods_brand</class>
+        <class>b2c_promotion_conditions_goods_cat</class>
+        <class>b2c_promotion_conditions_goods_selectgoods</class>
+        <class>b2c_promotion_conditions_goods_type</class>
+        <class>b2c_promotion_conditions_goods_typeandbrand</class> -->
+    </service>
+    <service id="b2c_promotion_solution_tpl_apps">
+        <class>b2c_promotion_solutions_byfixed</class>
+        <class>b2c_promotion_solutions_bypercent</class>
+        <class>b2c_promotion_solutions_tofixed</class>
+        <class>b2c_promotion_solutions_topercent</class>
+        <class>b2c_promotion_solutions_addscore</class>
+        <class>b2c_promotion_solutions_toscore</class>
+        <class>b2c_promotion_solutions_freeshipping</class>
+    </service>
+    <service id="b2c_site_goods_detail_block">
+        <class>b2c_site_goods_detail_block_promotion</class>
+    </service>
+    <service id="b2c_cart_object_apps">
+        <class>b2c_cart_object_goods</class>
+        <class>b2c_cart_object_coupon</class>
+    </service>
+    <service id="b2c_cart_process_apps">
+        <class>b2c_cart_process_get</class>
+        <class>b2c_cart_process_prefilter</class>
+        <class>b2c_cart_process_postfilter</class>
+    </service>
+    <service id="b2c_cart_prefilter_apps">
+        <class>b2c_cart_prefilter_promotion_goods</class>
+    </service>
+    <service id="b2c_cart_postfilter_apps">
+        <class>b2c_cart_postfilter_promotion</class>
+    </service>
+    <service id="b2c_cart_render_solutions_apps">
+        <class>b2c_cart_render_solution_goods</class>
+        <class>b2c_cart_render_solution_order</class>
+    </service>
+    <service id="b2c_sales_basic_operator_apps">
+        <class>b2c_sales_basic_operator_equal</class>
+        <class>b2c_sales_basic_operator_equal1</class>
+        <class>b2c_sales_basic_operator_contain</class>
+        <class>b2c_sales_basic_operator_contain1</class>
+        <class>b2c_sales_basic_operator_belong</class>
+        <class>b2c_sales_basic_operator_null</class>
+    </service>
+    <service id="b2c_sales_goods_item_apps">
+        <class>b2c_sales_goods_item_goods</class>
+        <class>b2c_sales_goods_item_brand</class>
+        <class>b2c_sales_goods_item_cat</class>
+        <class>b2c_sales_goods_item_type</class>
+    </service>
+    <service id="b2c_sales_goods_aggregator_apps">
+        <class>b2c_sales_goods_aggregator_combine</class>
+    </service>
+    <service id="b2c_sales_order_item_apps">
+        <class>b2c_sales_order_item_goods</class>
+        <class>b2c_sales_order_item_subgoods</class>
+        <class>b2c_sales_order_item_order</class>
+    </service>
+    <service id="b2c_sales_order_aggregator_apps">
+        <class>b2c_sales_order_aggregator_combine</class>
+<!-- <class>b2c_sales_order_aggregator_found</class>
+        <class>b2c_sales_order_aggregator_subselect</class> -->
+    </service>
+    <service id="extend_filter_b2c_mdl_orders" optname="订单筛选扩展"></service>
+    <service id="extend_filter_b2c_mdl_members" optname="会员筛选扩展"></service>
+<!-- openapi define begin-->
+    <service id="openapi.stock">
+        <class>b2c_openapi_stock</class>
+    </service>
+    <service id="openapi.goods">
+        <class>b2c_openapi_goods</class>
+    </service>
+    <service id="openapi.cart">
+        <class>b2c_openapi_cart</class>
+    </service>
+<!-- openapi define end-->
+    <service id="b2c_messenger_sender">
+        <class>b2c_messenger_email</class>
+        <class>b2c_messenger_msgbox</class>
+        <class>b2c_messenger_sms</class>
+    </service>
+    <service id="tpl_source.messenger">
+        <class>b2c_messenger_tmpl</class>
+    </service>
+
+
+    <service id="desktop_index_seo">
+        <class>b2c_service_desktop_indexseo</class>
+    </service>
+    <service id="image_set">
+        <class>b2c_service_image</class>
+    </service>
+<!--END-->
+<!-- PC全页缓存 -->
+    <service id="site.router.cache">
+        <class>b2c_cache</class>
+    </service>
+<!-- H5全页缓存 -->
+    <service id="mobile.router.cache">
+        <class>b2c_mcache</class>
+    </service>
+    <service id="openapi.widgets.goods">
+        <class>b2c_widgets_goods</class>
+    </service>
+
+    <!--渲染拦截-->
+    <service id="base_render_pre_display">
+        <class orderby="29">b2c_view_pre_render</class>
+    </service>
+</services>

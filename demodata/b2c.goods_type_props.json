@@ -1,0 +1,65 @@
+{
+	"data":
+	[
+		{
+			"props_id": 1,
+			"type_id": 1,
+			"type": "select",
+			"search": "nav",
+			"show": "1",
+			"name": "容量",
+			"alias": "容量",
+			"goods_p": 1,
+			"ordernum": 0,
+			"lastmodify": 1433210796
+		},
+		{
+			"props_id": 2,
+			"type_id": 1,
+			"type": "select",
+			"search": "nav",
+			"show": "1",
+			"name": "屏幕尺寸",
+			"alias": "屏幕尺寸",
+			"goods_p": 2,
+			"ordernum": 0,
+			"lastmodify": 1433210796
+		},
+		{
+			"props_id": 3,
+			"type_id": 1,
+			"type": "select",
+			"search": "nav",
+			"show": "1",
+			"name": "显示屏分辨率",
+			"alias": "显示屏分辨率",
+			"goods_p": 3,
+			"ordernum": 0,
+			"lastmodify": 1433210796
+		},
+		{
+			"props_id": 4,
+			"type_id": 1,
+			"type": "input",
+			"search": "disabled",
+			"show": "1",
+			"name": "前置摄像头像素",
+			"alias": "",
+			"goods_p": 21,
+			"ordernum": 0,
+			"lastmodify": 1433210796
+		},
+		{
+			"props_id": 5,
+			"type_id": 1,
+			"type": "input",
+			"search": "disabled",
+			"show": "1",
+			"name": "后置摄像头像素",
+			"alias": "",
+			"goods_p": 22,
+			"ordernum": 0,
+			"lastmodify": 1433210796
+		}
+	]
+}

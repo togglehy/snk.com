@@ -1,0 +1,186 @@
+<div class="container comment-container">
+<ol class="breadcrumb">
+  <li><a href="<{link app=mobile ctl=index}>">首页</a></li>
+  <li><a href="<{link app=b2c ctl=mobile_member}>">会员中心</a></li>
+  <li><a href="<{link app=b2c ctl=mobile_member act=orders}>">我的订单</a></li>
+  <li class="active">评价 #<{$order.order_id}> 商品</li>
+</ol>
+<div class="page-header">
+  <h1>商品评价 <small>Comment</small></h1>
+</div>
+<form class="form-horizontal" target="comment_frame" enctype="multipart/form-data" action="<{link app=b2c ctl=mobile_comment act=save args0=comment}>" method="post" id="comment_form">
+    <input type="hidden" name="order_id" value="<{$order.order_id}>">
+<{foreach from=$order.items item=item name=oig}>
+    <div class="row <{if $env.foreach.oig.last}>last<{/if}>">
+        <div class="col-md-1">
+            <a href="<{link app=b2c ctl=mobile_product act=index args0=$item.product_id}>">
+            <img class="img-thumbnail" src="<{$item.image_id|storager:'xs'}>" alt="<{$item.name}>" /></a>
+        </div>
+        <div class="col-md-3">
+            <a class="text-muted" href="<{link app=b2c ctl=mobile_product act=index args0=$item.product_id}>"><{$item.name}><{if $item.spec_info}><br><small><{$item.spec_info}></small><{/if}></a>
+            <br>
+            <small>￥</small><{$item.buy_price|cur}> x <{$item.nums}>
+        </div>
+        <div class="col-md-8">
+            <{if $exits_comment[$item.product_id]}>
+            <{foreach from=$exits_comment[$item.product_id] item=i}>
+                <div class="media">
+                    <div class="media-left">
+                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNGUzMGQ1NjE5ZiB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE0ZTMwZDU2MTlmIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy40NjA5Mzc1IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" alt="" />
+                    </div>
+                    <div class="media-body">
+                        <h4><{$i.author_name}>
+                            <small><{$i.createtime|cdate}></small>
+                            <{if $i.mark.mark_star}>
+                                <{switch from=$i.mark.mark_star}>
+                                    <{case value='5'}>
+                                        <span class="text-warning">★★★★★ </span><small>非常满意</small>
+                                    <{case value='4'}>
+                                        <span class="text-warning">★★★★☆ </span><small>满意</small>
+                                    <{case value='3'}>
+                                        <span class="text-warning">☆☆☆☆☆ </span><small>不满意</small>
+                                <{/switch}>
+                            <{/if}>
+                        </h4>
+                        <p>
+                            <{$i.content}>
+                        </p>
+                        <{if $i.images}>
+                            <div class="row">
+                                <{foreach from=$i.images item=image}>
+                                <div class="col-md-2">
+                                    <p>
+                                        <a href="<{$image.image_id|storager:'l'}>" target="_blank">
+                                            <img class="img-thumbnail" src="<{$image.image_id|storager:'xs'}>"/>
+                                        </a>
+                                    </p>
+                                </div>
+                                <{/foreach}>
+                            </div>
+                        <{/if}>
+                        <div class="well well-cm">
+                            <span class="help-block">追加评价：</span>
+                            <input type="hidden" name="reply[<{$i.comment_id}>][goods_id]" value="<{$i.goods_id}>">
+                            <input type="hidden" name="reply[<{$i.comment_id}>][product_id]" value="<{$i.product_id}>">
+                            <textarea name="reply[<{$i.comment_id}>][content]" rows="2" class="form-control"></textarea>
+                        </div>
+                        <{foreach from=$i['reply'] item=j}>
+                                <div class="media">
+                                    <div class="media-left">
+                                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNGUzMGQ1NjE5ZiB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE0ZTMwZDU2MTlmIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy40NjA5Mzc1IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" alt="" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h4><{$j.author_name}> <small><{$j.createtime|cdate}></small></h4>
+                                        <{$j.content}>
+                                    </div>
+                                </div>
+                        <{/foreach}>
+                    </div>
+                </div>
+            <{/foreach}>
+            <!-- <div class="form-group">
+                <label  class="col-md-2 control-label">追加评价</label>
+                <div class="col-md-10">
+                    <textarea class="form-control" required="true" name="comment[word][<{$item.goods_id}>][<{$item.product_id}>]" rows="2"></textarea>
+                </div>
+            </div> -->
+            <{else}>
+            <div class="form-group">
+                <label  class="col-md-2 control-label">满意度</label>
+                <div class="col-md-5">
+                    <select class="form-control" name="comment[mark][<{$item.goods_id}>]">
+                        <optgroup label="非常满意">
+                            <option value="5">★★★★★</option>
+                        </optgroup>
+                        <optgroup label="满意">
+                            <option value="4">★★★★☆</option>
+                        </optgroup>
+                        <optgroup label="不满意">
+                            <option value="3">☆☆☆☆☆</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-2 control-label">说两句</label>
+                <div class="col-md-10">
+                    <textarea class="form-control"  name="comment[word][<{$item.goods_id}>][<{$item.product_id}>]" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-2 control-label">晒一晒</label>
+                <div class="col-md-10">
+                    <{input type="file" class="comment-image"  name="comment[{$item.product_id}][]"}>
+                    <span class="help-block">最多上传5张,每张大小不能超过<span class="text-danger"><{$env.conf.b2c.comment_image_size}>MB</span>,支持bmp,gif,jpg,png,jpeg</span>
+                </div>
+            </div>
+            <{/if}>
+        </div>
+    </div>
+    <{if !$env.foreach.oig.last}><hr><{/if}>
+<{/foreach}>
+<hr>
+<div class="form-group">
+    <div class="col-md-6 col-md-offset-6">
+      <button type="submit" class="btn btn-lg btn-primary">提交评价</button>
+    </div>
+</div>
+</form>
+</div>
+
+<iframe src="about:blank" class="hide" name="comment_frame"></iframe>
+<script type="text/javascript">
+//图片选择输入框自动复制
+$('.comment-image').on('change',function(){
+    $(this).off('change',arguments.callee);
+    var images_length = $('.comment-image').length;
+    if(images_length>4)return;
+    var file_ipt_clone = $($(this).clone());
+    file_ipt_clone.insertAfter($(this));
+    file_ipt_clone.on('change',arguments.callee);
+});
+//提交处理
+$('#comment_form').on('submit',function(){
+    var sub_btn = $(this).find('button[type=submit]');
+    sub_btn.attr('data-loading-text','正在提交...').button('loading');
+    $('iframe[name=comment_frame]').on('load',function(){
+        $(this).off('load',arguments.callee);
+        sub_btn.button('reset');
+        try{
+            var response = $(this.contentWindow.document.body.innerHTML).text();
+            response = $.parseJSON(response);
+        }catch(e){
+            try{
+                var response = this.contentWindow.document.body.innerHTML;
+                    response = $.parseJSON(response);
+            }catch(e){
+
+            }
+        }
+        if(typeof(response)!='object'){
+            alert('提交失败!请稍后重试');
+            return ;
+        }
+        if('fipt_idx' in response){
+            //上传错误
+            var error_info = $('<span class="span-info dropup text-danger"><span class="caret"></span>'+response.error+'</span>'),ipt = $('.comment-image').eq(response.fipt_idx);
+            error_info.insertAfter(ipt);
+            ipt.focus();
+            return setTimeout(function(){
+                error_info.fadeOut(function(){
+                    error_info.remove();
+                });
+            },5000);
+        }
+        if('error' in response){
+            //其他异常
+            alert('提交失败!'+response.error);
+            return;
+        }
+        if('success' in response){
+            location.href = location.href;
+        }
+
+    });
+});
+</script>

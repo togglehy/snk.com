@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>
+                    账单流水号
+                </th>
+                <th>
+                    单据最后更新时间
+                </th>
+                <th>
+                    支付方式
+                </th>
+                <th>
+                    第三方平台流水号
+                </th>
+                <th>
+                    金额
+                </th>
+                <th>
+                    付款者使用银行
+                </th>
+                <th>
+                    付款者账号
+                </th>
+                <!-- <th>
+                    收款银行
+                </th>
+                <th>
+                    收款账号
+                </th> -->
+                <th>
+                    当前状态
+                </th>
+            </thead>
+            <tbody>
+            <{foreach from=$order_payments item=p}>
+                <tr>
+                    <td>
+                        <{$p.bill_id}>
+                    </td>
+                    <td>
+                        <{$p.last_modify|cdate}>
+                    </td>
+                    <td>
+                        <{$p.pay_app_id}>
+                        <br>
+                        <small><{if $p.pay_mode=='online'}>在线支付<{else}>线下支付<{/if}></small>
+                    </td>
+                    <td>
+                        <{$p.out_trade_no}>
+                    </td>
+                    <td>
+                        <{$p.money|cur}>
+                        <{if $p.pay_fee>0}>
+                        <small>+<{$p.pay_fee|cur}>(手续费)</small>
+                        <{/if}>
+                    </td>
+                    <td>
+                        <{$p.payer_bank}>
+                    </td>
+                    <td>
+                        <{$p.payer_account}>
+                    </td>
+                    <!-- <td>
+                        <{$p.payee_bank}>
+                    </td>
+                    <td>
+                        <{$p.payee_account}>
+                    </td> -->
+                    <td>
+                        <{$p.status}>
+                    </td>
+                </tr>
+            <{/foreach}>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>

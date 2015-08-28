@@ -1,0 +1,417 @@
+<div class="product-container">
+    <ol class="breadcrumb">
+        <{if $goods_path}>
+            <{foreach from=$goods_path item=item name=gp}>
+                <{if $env.foreach.gp.last}>
+                <li class="active"><{$data_detail.name}>&nbsp;<{$data_detail.product.spec_info}></li>
+                <{else}>
+                <li><a href="<{link app=b2c ctl=mobile_list act=index}>?cat_id=<{$item.ident}>"><{$item.title}></a></li>
+                <{/if}>
+            <{/foreach}>
+        <{else}>
+        <li class="active"><{$data_detail.name}>&nbsp;<{$data_detail.product.spec_info}></li>
+        <{/if}>
+    </ol>
+    <div class="product-page">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="product-main-image" style="position: relative; overflow: hidden;">
+                    <a href="<{$data_detail.image_default_id|storager:'l'}>" target="_blank">
+                        <img src="<{$data_detail.image_default_id|storager:'m'}>" alt="<{$data_detail.name}>" >
+                    </a>
+                </div>
+                <ul class="product-other-images list-inline">
+                    <{foreach from=$data_detail.images item=image name=poi}>
+                    <li <{if $data_detail.image_default_id == $image.image_id}>class="current"<{/if}>>
+                        <a href="<{$image.image_id|storager:'l'}>" data-middlesrc="<{$image.image_id|storager:'m'}>" target="_blank">
+                            <img height=50 src="<{$image.image_id|storager:'s'}>" />
+                        </a>
+                    </li>
+                    <{/foreach}>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h1>
+                    <{$data_detail.name}><br>
+                    <small><{$data_detail.product.spec_info}></small>
+                </h1>
+                <p class="avg-mark">
+                    <span class="text-warning"><{$data_detail.mark_star|star}></span> <small><{$data_detail.mark_star|number_format:'1'}></small>
+                </p>
+                <div class="description text-danger">
+                    <p><{$data_detail.brief}></p>
+                </div>
+                <div class="price-availability-block clearfix">
+                    <div class="price text-danger">
+                        <small>￥</small><strong><{$data_detail.product.buy_price|cur}></strong>
+                    </div>
+                </div>
+
+
+
+                <ul class="list-unstyled promotion-list">
+                </ul>
+                <{if $data_detail.spec_desc}>
+                <!-- 规格选择器 -->
+                <div class="product-spec-options">
+                    <dl class="dl-horizontal">
+                        <{foreach from=$data_detail.spec_desc.t key=key item=item}>
+                        <dt><{$item}></dt>
+                        <dd>
+                            <{assign var=spec_options value=$data_detail.spec_desc.v.{$key}}>
+                            <ul class="list-inline ps-opt-sel">
+                                <{foreach from=$spec_options item=option }>
+                                    <li class="<{if $option.current}>current <{/if}><{if $option.marketable!='true'}> disabled<{/if}>">
+                                        <{if $option.current}>
+                                        <span>
+                                            <{if $option.p_image_id}>
+                                                <img src="<{$option.p_image_id|storager:'xs'}>">
+                                            <{/if}>
+                                            <{$option.label}>
+                                        </span>
+                                        <i class="check glyphicon glyphicon-ok-sign"></i>
+                                        <{else}>
+                                        <a href="<{if $option.marketable!='true'}>javascript:;<{else}><{link app=b2c ctl=mobile_product args0=$option.product_id}><{/if}>">
+                                            <{if $option.p_image_id}>
+                                                <img  src="<{$option.p_image_id|storager:'xs'}>">
+                                            <{/if}>
+                                            <{$option.label}>
+                                        </a>
+                                        <{/if}>
+                                    </li>
+                                <{/foreach}>
+                            </ul>
+                        </dd>
+                        <{/foreach}>
+                    </dl>
+                </div>
+                <{/if}>
+                <!--购买区-->
+                <div class="product-page-cart">
+                    <div class="product-quantity input-group" style="width:150px;" data-minibuy="<{$data_detail.minibuy}>">
+        				<div class="spinner-buttons input-group-btn">
+        					<button type="button" class="btn btn-default">
+        					-
+        					</button>
+        				</div>
+        				<input type="text" class="spinner-input form-control"  value=1>
+        				<div class="spinner-buttons input-group-btn">
+        					<button type="button" class="btn btn-default">
+        					+
+        					</button>
+        				</div>
+        			</div>
+                    <hr>
+                    <a class="btn btn-danger btn-lg btn-buy" href="<{link app=b2c ctl=mobile_cart act=add args0=$data_detail.product.product_id args1=1}>">加入购物车</a>
+                    <a class="btn btn-success btn-lg btn-buy" href="<{link app=b2c ctl=mobile_cart act=fastbuy args0=$data_detail.product.product_id args1=1}>">立即购买</a>
+                    <a class="btn btn-link btn-lg favorite-button" href='<{link app=b2c ctl=mobile_member act=favorite args0=add args1=$data_detail.goods_id}>'>
+                        <i class="glyphicon glyphicon-heart-empty"></i>
+                        <small>Favorite<em></em></small>
+                    </a>
+                </div>
+                <!--购买区end-->
+            </div>
+        </div>
+        <!-- 相关商品 -->
+        <div class="goods-rel-items hide">
+            <hr>
+            <h4>相关商品</h4>
+            <div class="row glist-container">
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-page-content">
+                    <ul id="myTab" class="nav nav-tabs">
+                        <li class="active"><a href="#desc" data-toggle="tab">详情介绍</a></li>
+                        <li><a href="#comments" data-toggle="tab">评价</a></li>
+                    </ul>
+                    <div  class="tab-content">
+                        <div class="tab-pane fade in active" id="desc">
+                            <!-- data:image/gif;base64,R0lGODlhAQABAIAAAO/v7////yH5BAAHAP8ALAAAAAABAAEAAAICRAEAOw== -->
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>品牌</th>
+                                        <th>分类</th>
+                                        <{if $data_detail.keywords}>
+                                        <th>关键词</th>
+                                        <{/if}>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <{if $data_detail.brand.brand_id}>
+                                                    <a target="_blank" href="<{link app=b2c ctl=mobile_list args0=$data_detail.brand.brand_id}>">
+                                                        <{if $data_detail.brand.brand_logo}>
+                                                        <img src="<{$data_detail.brand.brand_logo|storager:'xs'}>" alt="<{$data_detail.brand.brand_name}>" />
+                                                        <{$data_detail.brand.brand_name}>
+                                                        <{else}>
+                                                        <{$data_detail.brand.brand_name}>
+                                                    <{/if}>
+                                                    </a>
+                                            <{else}>
+                                                无
+                                            <{/if}>
+                                        </td>
+                                        <td>
+                                            <{if $data_detail.category.cat_id}>
+                                                    <a href="<{link app=b2c ctl=mobile_list}>?cat_id=<{$data_detail.category.cat_id}>">
+                                                        <{$data_detail.category.cat_name}>
+                                                    </a>
+                                            <{else}>
+                                                无
+                                            <{/if}>
+                                        </td>
+                                        <{if $data_detail.keywords}>
+                                        <td>
+                                            <ul class="list-inline">
+                                                <{foreach from=$data_detail.keywords item=item}>
+                                                <li>
+                                                    <a href="<{link app=b2c ctl=mobile_list}>?keyword=<{$item.keyword}>">
+                                                            <{$item.keyword}>
+                                                    </a>
+                                                </li>
+                                                <{/foreach}>
+                                            </ul>
+                                        </td>
+                                        <{/if}>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <{if $data_detail.params}>
+                                <div class="row">
+                                    <{foreach from=$data_detail.params key=key item=item}>
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <tr>
+                                                <td>
+                                                    <{$key}>
+                                                </td>
+                                                <td>
+                                                    <dl class="dl-horizontal">
+                                                        <{foreach from=$item key=k item=v}>
+                                                            <dt><{$k}></dt>
+                                                            <dd>
+                                                                <{$v}>
+                                                            </dd>
+                                                        <{/foreach}>
+                                                    </dl>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <{/foreach}>
+                                </div>
+                            <{/if}>
+                            <div class="description">
+                                <{$data_detail.description}>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="comment">
+                            //COMMENTS TODO
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<textarea class="hide" id='related_tpl'>
+    <div class="col-md-3">
+        <div class="thumbnail goods-item">
+            <div class="gi-image-wrapper">
+                <a href="{item_url}">
+                    <img src="{image_default_url}" alt="{name}">
+                </a>
+            </div>
+            <div class="caption">
+                <h3 class="g-name"><a href="{item_url}">{name}</a></h3>
+                <ul class="list-inline">
+                    <li class="price-1 text-danger"><small>￥</small>{price}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</textarea>
+<script type="text/javascript" src="<{$base_url}>/openapi/goods/counter/goods_id/<{$data_detail.goods_id}>/view_count/1/uv.js"></script>
+<{script src="jquery.zoom.js"}>
+<script charset="utf-8">
+    /*
+    * 商品详情页脚本
+    * @author vmcshop.com
+    * @version 1.150620
+    */
+$(function(){
+    //模板填充
+    var substitute = function(str, obj) {
+        return str.replace(/\\?\{([^{}]+)\}/g, function(match, name) {
+            if (match.charAt(0) == '\\') return match.slice(1);
+            return (obj[name] != undefined) ? obj[name] : '';
+        });
+    };
+    //倒计时
+    var remaining_time = function (intDiff,show_scope){
+        if(!show_scope)return;
+        setInterval((function(){
+            var day=0,
+                hour=0,
+                minute=0,
+                second=0;//时间默认值
+            if(intDiff > 0){
+                day = Math.floor(intDiff / (60 * 60 * 24));
+                hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+            }
+            if (minute <= 9) minute = '0' + minute;
+            if (second <= 9) second = '0' + second;
+            show_scope.find('.day-show').html(""+day+"天");
+            show_scope.find('.hour-show').html('<s id="h"></s>'+hour+'时');
+            show_scope.find('.minute-show').html('<s></s>'+minute+'分');
+            show_scope.find('.second-show').html('<s></s>'+second+'秒 后结束');
+            intDiff--;
+            return arguments.callee;
+        })(), 1000);
+    };
+
+
+    //修改数量时，影响购买按钮数量参数
+    $('.product-quantity .spinner-input').on('_change',function(e,cur_val){
+        $.each($('.btn-buy'),function(i,a){
+            a.href = a.href.replace(/([\s\S]*?)-([\d]+?)-([\d]+?)\.html/,function(){
+                var args = arguments;
+                return [args[1],args[2],cur_val].join('-')+'.html'
+            });
+        });
+    }).trigger('_change',[$('.product-quantity .spinner-input').val(),0]);
+
+
+    //相册切换
+    var enter_timer = 0;
+    $('.product-other-images a').on('mouseenter',function(e,tout){
+        var oli = $(this).closest('li'),middle_src = $(this).attr('data-middlesrc'),big_src=$(this).prop('href');
+        if(!middle_src)return;
+        clearTimeout(enter_timer);
+        enter_timer = setTimeout(function(){
+            $('.product-main-image img').prop('src',middle_src);
+            //$('.product-main-image a').prop('href',big_src).parent().zoom({url:big_src});
+            $('.product-other-images li').removeClass('current');
+            oli.addClass('current');
+        },tout||500);
+    });
+    $('.product-other-images a').on('click',function(e){
+        clearTimeout(enter_timer);
+        $(this).trigger('mouseenter',[1]);
+        return false;
+    });
+    //$('.product-main-image a').parent().zoom({url:$('.product-main-image a').prop('href')});
+
+
+    /**商品 openapi 调用**/
+    var goods_id = "<{$data_detail.goods_id}>";
+
+    //商品促销
+    var goods_promotions_api = "<{$base_url}>/openapi/goods/promotion/goods_id/<{$data_detail.goods_id}>";
+
+    $.getJSON(goods_promotions_api,function(recv){
+        var phtml = '';
+        if(recv.result == 'success' && recv.data){
+            $.each(recv.data,function(idx,p){
+                phtml+='<li data-ruleid="'+p.rule_id+'" data-remaining="'+(p.to_time-p.now)+'"><span class="label label-danger">'+p.tag+'</span>&nbsp;'+p.description+' <span class="time-show"><span class="day-show"></span><span class="hour-show"></span><span class="minute-show"></span><span class="second-show"></span></span></li>';
+            });
+            $('.promotion-list').append(phtml);
+            $.each($('.promotion-list [data-remaining]'),function(idx,item){
+                item = $(item);
+                remaining_time(item.attr('data-remaining'),$(item.find('.time-show')));
+            });
+        }
+    });
+
+    //库存确认openAPI
+    var stock_confirm_api = "<{$base_url}>/openapi/stock/confirm/";
+    $.post(stock_confirm_api,{sku:'<{$data_detail.product.bn}>'},function(recv){
+        try{
+            data = recv.data;
+            if(!data || !data['<{$data_detail.product.bn}>'] || data['<{$data_detail.product.bn}>']['num']<1){
+                //无法确认库存,或无库存
+                //DO SOMETHING
+                $('.product-page-cart .btn').addClass('disabled');
+                $('<br><div class="alert alert-warning">无库存</div>').insertAfter($('.product-page-cart'));
+            }else{
+                var stock_num = data['<{$data_detail.product.bn}>']['num'];
+                $('.product-quantity input.spinner-input').attr('data-maxbuy',stock_num);
+            }
+        }catch(e){
+            //console.error(e);
+        }
+
+    },'json');
+
+    //相关商品openAPI
+    var related_api = "<{$base_url}>/openapi/goods/related/";
+    $.getJSON(related_api,{goods_id:goods_id},function(recv){
+        try{
+            $.each(recv.data,function(k,v){
+                $('.goods-rel-items .row').append(substitute($('#related_tpl').val(),v));
+            });
+            if($('.goods-rel-items .row .goods-item').length){
+                $('.goods-rel-items').removeClass('hide');
+            }
+        }catch(e){
+            //console.error(e);
+        }
+    });
+    //喜欢收藏openAPI
+    var check_fav_api = "<{$base_url}>/openapi/goods/check_fav/";
+    $.getJSON(check_fav_api,{member_id:$.cookie('MEMBER_IDENT'),'goods_id':goods_id},function(recv){
+        try{
+            data = recv.data;
+            if(data.is_fav && data.is_fav>0){
+                $('.favorite-button i').removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
+                $('.favorite-button').addClass('disabled');
+            }
+            $('.favorite-button em').text(' ('+data.fav_count+')');
+
+        }catch(e){
+        }
+
+
+
+    });
+    $('.favorite-button').on('click',function(e){
+        e.stopPropagation();
+        var _this = $(this);
+        $.get(_this.prop('href'),function(re){
+            if(re && re.success){
+                _this.fadeOut(function(){
+                    _this.find('i').removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
+                    var current_count = parseInt(_this.find('em').text().replace(/[\(|\)]/g,''));
+                    if(isNaN(current_count))current_count = 0;
+                    _this.find('em').text(' ('+(++current_count)+')');
+                }).fadeIn(function(){
+                    _this.addClass('disabled');
+                });
+            }else{
+                _this.find('small').text(re.error);
+
+                if(re.redirect){
+                    location = re.redirect;
+                }
+            }
+        },'json');
+        return false;
+    });
+
+
+});
+
+</script>

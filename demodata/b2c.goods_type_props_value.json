@@ -1,0 +1,93 @@
+{
+	"data":
+	[
+		{
+			"props_value_id": 1,
+			"props_id": 1,
+			"name": "8G",
+			"order_by": 0,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 2,
+			"props_id": 1,
+			"name": "16G",
+			"order_by": 1,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 3,
+			"props_id": 1,
+			"name": "32G",
+			"order_by": 2,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 4,
+			"props_id": 1,
+			"name": "64G",
+			"order_by": 3,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 5,
+			"props_id": 1,
+			"name": "128G",
+			"order_by": 4,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 6,
+			"props_id": 2,
+			"name": "4.7英寸",
+			"order_by": 0,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 7,
+			"props_id": 2,
+			"name": "5.5英寸",
+			"order_by": 1,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 8,
+			"props_id": 2,
+			"name": "小于4.7英寸",
+			"order_by": 2,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 9,
+			"props_id": 2,
+			"name": "大于5.5英寸",
+			"order_by": 3,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 10,
+			"props_id": 3,
+			"name": "1334 x 750 像素",
+			"order_by": 0,
+			"alias": "",
+			"lastmodify": 1433210796
+		},
+		{
+			"props_value_id": 11,
+			"props_id": 3,
+			"name": "1920 x 1080 像素",
+			"order_by": 1,
+			"alias": "",
+			"lastmodify": 1433210796
+		}
+	]
+}

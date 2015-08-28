@@ -1,0 +1,59 @@
+<!-- 成功加入购物车 -->
+<div class="row add-to-cart">
+    <div class="col-xs-8">
+        <{if !$err_msg}>
+        <div class="alert alert-success" role="alert">
+            成功加入购物车
+        </div>
+        <a href="<{link app=b2c ctl=site_cart}>" class="btn btn-danger btn-lg">去购物车结算</a>
+        您还可以&nbsp;<a href="javascript:;" onclick="history.go(-1);" class="alert-link">返回继续操作</a>
+        <{else}>
+        <div class="alert alert-danger" role="alert">
+            <{$err_msg}>&nbsp;&nbsp;&nbsp;
+            <a href="javascript:;" onclick="history.go(-1);" class="alert-link">立即返回</a>
+        </div>
+        <{/if}>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-default mini-cart">
+          <div class="panel-heading">
+              我的购物车
+          </div>
+          <ul class="list-group">
+              <{foreach from=$cart_result.objects.goods item=object}>
+              <li class="list-group-item <{if $object.disabled=='true'}>disabled<{/if}> <{if $object.obj_ident == $last_add}>list-group-item-info<{/if}>" >
+                <div class="row">
+                      <div class="col-xs-3">
+                        <a href="<{link app=b2c ctl=site_product act=index args0=$object.item.product.product_id}>">
+                            <img class="img-thumbnail"  src="<{$object.item.product.image_id|storager:'s'}>" alt="<{$object.item.product.name}>-<{$object.item.product.spec_info}>" />
+                        </a>
+                      </div>
+                      <div class="col-xs-9">
+                        <strong><{$object.item.product.name}></strong>
+                        <p>
+                            <{$object.item.product.spec_info}>
+                        </p>
+                        <strong class="text-danger"><{$object.item.product.buy_price|cur}></strong>
+                        <span class="text-muted">x <{$object.quantity}></span>
+                        <{if $object.warning}>
+                        <p class="warning text-warning <{if !$object.warning}>hide<{/if}>">
+                            <i class="glyphicon glyphicon-warning-sign"></i>&nbsp;
+                            <span data-bind="warning"><{$object.warning}></span>
+                        </p>
+                        <{/if}>
+                      </div>
+                </div>
+               </li>
+              <{/foreach}>
+          </ul>
+          <div class="panel-footer">
+              <ul class="list-unstyled">
+                  <li>共<span><{$cart_result.goods_count}></span>件</li>
+                  <li>金额总计：<strong class="text-danger">￥<{$cart_result.cart_amount-$cart_result.member_discount_amount-$cart_result.promotion_discount_amount|cur}></strong></li>
+              </ul>
+              <a href="<{link app=b2c ctl=site_cart}>" class="btn btn-danger btn-block">去购物车结算</a>
+          </div>
+        </div>
+
+    </div>
+</div>

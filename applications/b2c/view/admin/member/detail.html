@@ -1,0 +1,158 @@
+<h3 class="page-title">
+			会员详情 <small>查看会员基本信息、账户信息、相关交易</small>
+</h3>
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<a href="index.php?app=b2c&ctl=admin_member&act=index">会员列表</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="javascript:;">会员详情</a>
+		</li>
+	</ul>
+</div>
+<div class="row">
+	<div class="col-md-4">
+
+		<h1>
+			<img class="img-thumbnail img-circle" width="70" src="<{$mem.avatar|storager}>">
+			<{if $mem.contact.name}>
+			<{$mem.contact.name|escape:'html'}>
+			<{elseif $mem.contact.phone.mobile}>
+			<{$mem.contact.phone.mobile}>
+			<{elseif $mem.contact.email}>
+			<{$mem.contact.email}>
+			<{/if}>
+			<!-- <small>姓名</small> -->
+			<{if 1-$member_lv_info.dis_count>0}>
+			<span class="btn-group <{if $member_lv_info.dis_count<1}>btn-group-circle<{/if}> btn-group-xs">
+				<span class="btn  red"><{$member_lv_info.name}></span>
+				<{if $member_lv_info.dis_count<1}><span class="btn  blue"><{$member_lv_info.dis_count*10}>折</span><{/if}>
+			</span>
+			<{else}>
+			<span class="btn-group <{if $member_lv_info.dis_count<1}>btn-group-circle<{/if}> btn-group-xs">
+				<span class="btn default"><{$member_lv_info.name}></span>
+				<{if $member_lv_info.dis_count<1}>
+				<span class="btn default"><{$member_lv_info.dis_count*10}>折</span>
+				<{/if}>
+			</span>
+			<{/if}>
+		</h1>
+		<p>登录账号：<{$account.account.login_account}></p>
+
+		<p>
+			<{$mem.remark|default:'暂无备注'}> <a href="index.php?app=b2c&ctl=admin_member&act=edit&onlyremark=1&p[0]=<{$mem.member_id}>" data-target="#member_edit" data-toggle="modal" class="btn btn-link"><i class="fa fa-pencil"></i> 编辑备注</a>
+		</p>
+		<ul class="list-inline">
+			<{foreach from=$attr item=item}>
+			<{if !$item.attr_value}><{continue;}><{/if}>
+			<{if $item.attr_type=='region'}>
+			<li><{$item.attr_name}>：<{$item.attr_value|region}></li>
+			<{elseif $item.attr_type=='gender'}>
+			<li><{$item.attr_name}>：<{$item.attr_value|gender}></li>
+			<{else}>
+			<li><{$item.attr_name}>：<{$item.attr_value}></li>
+			<{/if}>
+			<{/foreach}>
+		</ul>
+		<hr>
+		<ul class="list-inline">
+			<li>积分余额：<{$mem.integral|default:0}></li>
+			<li>经验值（累计消费）：<{$mem.experience|default:0}></li>
+		</ul>
+		<hr>
+		<ul class="list-inline">
+			<{if $mem.reg_ip}>
+			<li>注册IP地址：<{$mem.reg_ip}></li>
+			<{/if}>
+			<li>注册时间：<{$mem.regtime|cdate:FDATE}></li>
+		</ul>
+		<a href="index.php?app=b2c&ctl=admin_member&act=edit&p[0]=<{$mem.member_id}>" data-target="#member_edit" data-toggle="modal" class="btn green btn-sm"><i class="fa fa-edit"></i> 编辑会员资料</a>
+	</div>
+	<div class="col-md-8">
+		<div class="portlet light bordered">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-shopping-cart"></i>订单
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse" data-original-title="" title="">
+								</a>
+								<a href="javascript:;" class="fullscreen" data-original-title="" title="">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body order-list">
+							正在加载...
+						</div>
+		</div>
+
+		 <!-- <div class="portlet">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bitcoin"></i>积分
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse" data-original-title="" title="">
+								</a>
+								<a href="javascript:;" class="fullscreen" data-original-title="" title="">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							 正在加载...
+						</div>
+		</div> -->
+
+		<!-- <div class="portlet light bordered">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-envelope-o"></i>站内信
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse" data-original-title="" title="">
+								</a>
+								<a href="javascript:;" class="fullscreen" data-original-title="" title="">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body msg-list">
+							正在加载...
+						</div>
+		</div> -->
+
+		<!-- <div class="portlet">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-comment"></i>咨询\评价
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse" data-original-title="" title="">
+								</a>
+								<a href="javascript:;" class="fullscreen" data-original-title="" title="">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							 //todo
+						</div>
+		</div> -->
+
+	</div>
+</div>
+
+
+<div class="modal fade" id="member_edit" role="basic" aria-hidden="true">
+              <div class="modal-dialog">
+                      <div class="modal-content">
+
+                      </div>
+              </div>
+</div>
+
+
+<script charset="utf-8">
+	$('.order-list').load('index.php?app=b2c&ctl=admin_member&act=order&p[0]=<{$mem.member_id}>');
+	//$('.msg-list').load('index.php?app=b2c&ctl=admin_member&act=member_msg&p[0]=<{$mem.member_id}>');
+</script>

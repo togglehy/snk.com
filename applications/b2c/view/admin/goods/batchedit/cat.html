@@ -1,0 +1,33 @@
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <h3 class="modal-title">统一设置分类</h3>
+</div>
+<form action="index.php?app=b2c&ctl=admin_goods&act=batch_save" method="post"  >
+    <div class="modal-body">
+            <textarea name="filter" style="display:none"><{$filter}></textarea>
+            <input type="hidden" name="type" value="cat"/>
+            <select name="set[cat_id]" class="form-control">
+                <{foreach from=$cats item=cat}>
+                    <option data-step='<{$cat.step}>' value="<{$cat.cat_id}>" <{if $goods.category.cat_id == $cat.cat_id}>selected<{/if}>>
+                        <{$cat.cat_name}>
+                    </option>
+                <{/foreach}>
+            </select>
+
+    </div>
+    <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn blue">确定</button>
+    </div>
+</form>
+
+<script charset="utf-8">
+    /*分类树逻辑*/
+    $.each($('select[name="set[cat]"] option'),function(i,n){
+        var step = $(n).attr('data-step');
+        while(step>1){
+            $(n).html('&nbsp&nbsp&nbsp&nbsp'+$(n).html());
+            step--;
+        }
+    });
+</script>

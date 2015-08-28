@@ -1,0 +1,150 @@
+<nav class="navbar navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="<{link app=site ctl=index act=index}>">
+              LOGO
+              <!-- <img src="LOGO_URL" alt="" /> -->
+              <!-- class text-hide for hidden text -->
+          </a>
+        </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="<{link app=site ctl=index act=index}>">首页</a></li>
+            <li><a href="<{link app=b2c ctl=site_list act=index}>">商品列表</a></li>
+            <!-- <li><a href="<{link app=b2c ctl=site_promotion act=index}>">活动列表</a></li> -->
+            <li><a href="<{link app=b2c ctl=site_brand act=index}>">品牌专区</a></li>
+            <li><a href="<{link app=b2c ctl=site_member act=index}>">会员中心</a></li>
+          </ul>
+          <ul class="nav navbar-nav top-tools navbar-right">
+              <li class="is-login dropdown hidden">
+                  <a id="member_menu" href="<{link app=b2c ctl=site_member act=index}>" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" role="button">欢迎你，<strong class="uname"></strong><span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="member_menu">
+                    <li><a href="<{link app=b2c ctl=site_member}>">会员中心</a></li>
+                    <li class="divider"></li>
+                    <li><a href="<{link app=b2c ctl=site_member act=orders}>">我的订单</a></li>
+                    <li><a href="<{link app=b2c ctl=site_member act=coupon}>">我的优惠券</a></li>
+                    <li><a href="<{link app=b2c ctl=site_member act=favorite}>">我的收藏夹</a></li>
+                    <li><a href="<{link app=b2c ctl=site_cart}>">我的购物车</a></li>
+                    <li class="divider"></li>
+                    <li><a href="<{link app=b2c ctl=site_passport act=logout}>">退出登录</a></li>
+                  </ul>
+              </li>
+              <li class="is-unlogin"><a href="<{link app=b2c ctl=site_passport act=login}>">登录</a></li>
+              <li class="dropdown mini-cart">
+                  <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" role="button"  href="<{link app=b2c ctl=site_cart}>">
+                      <i class="glyphicon glyphicon-shopping-cart"></i> 购物车
+                      <span class="text-danger cart-count hidden"></span>
+                      <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu mc-content" role="menu" aria-labelledby="member_menu">
+                    <li class="mcc-bottom text-right">
+                        <button onclick="location='<{link app=b2c ctl=site_cart}>'" type="button" class="btn btn-sm btn-danger btn-gocart" name="button">查看我的购物车</button>
+                    </li>
+                  </ul>
+
+              </li>
+          </ul>
+      </div>
+</nav>
+
+<script type="text/template" id="minicart_item_tpl">
+    <li class="mc-item">
+        <div class="row">
+            <div class="col-xs-3">
+                <a href='{item_url}'><img class="img-responsive" src="{image_url}"></a>
+            </div>
+            <div class="col-xs-6">
+                <span>{name}</span>
+                <p class="spec-info text-muted">{spec_info}</p>
+            </div>
+            <div class="col-xs-3">
+                <span class="text-danger text-price">
+                    <small>￥</small>{price}
+                </span>
+                <a href="{remove_url}" class='cart-remove btn btn-xs btn-default'>删除</a>
+            </div>
+        </div>
+    </li>
+</script>
+<script charset="utf-8">
+    $(function(){
+        /**
+         * 模板填充工具
+         */
+        var substitute = function(str, obj) {
+            return str.replace(/\\?\{([^{}]+)\}/g, function(match, name) {
+                if (match.charAt(0) == '\\') return match.slice(1);
+                return (obj[name] != undefined) ? obj[name] : '';
+            });
+        };
+        /**
+         * 登录\注册切换
+         */
+        if($.cookie('UNAME') && $.cookie('MEMBER_IDENT')){
+            $('.top-tools .is-unlogin').addClass('hidden');
+            $('.top-tools .is-login').removeClass('hidden');
+            $('.top-tools .is-login .uname').text($.cookie('UNAME'));
+        }
+        /**
+         * 迷你购物车
+         */
+         //购物车数量加载
+         $.getJSON('<{$base_url}>/openapi/cart/count',function(re){
+             try{
+                 if(re.data.count>0){
+                     $('.cart-count').removeClass('hidden').text(re.data.count);
+                 }
+             }catch(e){
+
+             }
+         });
+         //购物车项
+         var load_minicart = function(e){
+             if($(this).find('.cart-count').text() == '')return false;
+             var mc_content = $(this).find('.mc-content');
+             var li_loading = $(this).find('.mc-loading');
+             var _self = arguments.callee;
+             if(li_loading.length)return true;
+             mc_content.find('.mcc-bottom').before('<li class="mc-loading text-center"><h6>加载中...</h6></li>');
+             li_loading = $(this).find('.mc-loading');
+             mc_content.css('width',$(this).closest('.container').width()*.3);
+             mc_content.find('.mc-item').remove();
+             $.getJSON("<{$base_url}>/openapi/cart/preview",function(re){
+                 try{
+                     if(re.data && re.data.length){
+                         var item_html ='',item_html_tpl = $('#minicart_item_tpl').html();
+                         $.each(re.data,function(idx,item){
+                             item_html+=substitute(item_html_tpl,item);
+                         });
+                         li_loading.replaceWith(item_html);
+                         $('.mini-cart').off('show.bs.dropdown',_self);
+                     }
+                 }catch(e){}
+             });
+         };
+         $('.mini-cart').on('show.bs.dropdown',load_minicart);
+         //购物车快速删除
+         $('.mc-content').on('click','.cart-remove',function(e){
+             e.stopPropagation();
+             var cr_btn = $(this);
+             cr_btn.text('删除中..');
+             $.getJSON(cr_btn.prop('href'),function(re){
+                 if(re){
+                     cr_btn.closest('.mc-item').fadeOut(function(){
+                         $(this).remove();
+                         var cart_count = parseInt($('.cart-count').text());
+                         if(!isNaN(cart_count) && cart_count>1){
+                            $('.cart-count').text(--cart_count);
+                        }else{
+                            $('.cart-count').addClass('hidden');
+                        }
+
+                     });
+                 }
+             });
+             return false;
+         });
+
+    });
+
+
+</script>

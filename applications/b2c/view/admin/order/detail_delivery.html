@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <!-- <th>
+                    发货单号
+                </th> -->
+                <th>
+                    单据创建时间
+                </th>
+                <th>
+                    操作者
+                </th>
+                <th>
+                    物流运单号
+                </th>
+                <th>
+                    运费
+                </th>
+                <th>
+                    发出货品
+                </th>
+
+            </thead>
+            <tbody>
+            <{foreach from=$order_delivery item=item}>
+                <tr>
+                    <td>
+                        <{$item.cretetime|cdate}>
+                    </td>
+                    <td>
+                        <{$item.op_id}>
+                    </td>
+                    <td>
+                        <{$item.logistics_no}>
+                        <a data-target="#logisticstracker" data-toggle="modal" href="<{link app=logisticstrack ctl=admin_tracker act=pull}>&p[0]=<{$item.delivery_id}>" class="btn btn-xs btn-default"><i class="fa fa-map-marker"></i>
+                            物流跟踪</a>
+                    </td>
+                    <td>
+                        <{$item.cost_freight|cur}>
+                        <{if $item.cost_protect>0}>
+                        <small>+<{$item.cost_protect}>(保价费)</small>
+                        <{/if}>
+                    </td>
+                    <td>
+                        <ul class="list-group">
+                            <{foreach from=$item.items item=i}>
+                            <li class="list-group-item">
+                                [<{$i.bn}>]
+                                <{$i.name}>
+                                <small class="text-muted"><{$i.spac_info}></small>
+                                <span class="badge badge-default"><{$i.sendnum}></span>
+                            </li>
+                            <{/foreach}>
+                        </ul>
+                    </td>
+
+                </tr>
+            <{/foreach}>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+<h3 class="page-title"><{if $brandInfo.brand_id }>编辑品牌<{else}>新品牌<{/if}></h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?app=b2c&ctl=admin_brand&act=index">品牌列表</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;"><{if $brandInfo.brand_id}>品牌编辑<{else}>新增品牌<{/if}></a>
+        </li>
+    </ul>
+</div>
+<form action="index.php?app=b2c&ctl=admin_brand&act=save" method="post" id='brand_form' class="form" >
+    <{if $brandInfo.brand_id }><input type="hidden" name="brand_id" value="<{$brandInfo.brand_id}>"><{/if}>
+    <div class="form form-horizontal">
+        <div class="form-body">
+             <div class="form-group">
+                 <label class="col-md-2 control-label">品牌名<span class="required" aria-required="true">*</span></label>
+                 <div class="col-md-5">
+                     <input type="text" name="brand_name" value="<{$brandInfo.brand_name}>" required=true class="form-control" placeholder="请输入唯一的品牌名称">
+                     <span class="help-block">
+                     品牌名全系统唯一，不能有重复 </span>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">品牌LOGO</label>
+                 <div class="col-md-5">
+                     <{input type="image" width=180 height=90 tag="品牌LOGO" name="brand_logo" value=$brandInfo.brand_logo}>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">品牌排名</label>
+                 <div class="col-md-1">
+                     <{input type="number" name="ordernum"  value=$brandInfo.ordernum|default:30 class="form-control"}>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">品牌介绍</label>
+                 <div class="col-md-10">
+                     <{input type="html" name="brand_desc" value=$brandInfo.brand_desc}>
+                 </div>
+             </div>
+        <hr>
+        <h4>模板相关</h4>
+
+             <div class="form-group">
+                 <label class="col-md-2 control-label">PC模板</label>
+                 <div class="col-md-5">
+                     <{template_filter class="form-control" type="brandlist" selected=$brandInfo.brand_setting.site_template name="brand_setting[brand_template][site_template]"}>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">HTML5模板</label>
+                 <div class="col-md-5">
+                     <{template_filter_m class="form-control" type="brandlist" selected=$brandInfo.brand_setting.mobile_template name="brand_setting[brand_template][mobile_template]"}>
+                 </div>
+             </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">标题<span class="badge badge-default">Title</span></label>
+            <div class="col-md-5">
+                <input type="text" name="seo_title" class="form-control"  value="<{$brandInfo.seo_info.seo_title}>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">关键词<span class="badge badge-default">Keywords</span></label>
+            <div class="col-md-5">
+                <input type="text" name="seo_keywords" class="form-control" value="<{$brandInfo.seo_info.seo_keywords}>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">描述<span class="badge badge-default">Description</span></label>
+            <div class="col-md-5">
+                <textarea name="seo_description" rows=2  class="form-control" /><{$brandInfo.seo_info.seo_description}></textarea>
+            </div>
+        </div>
+    </div>
+        <div class="form-actions">
+            <div class="row">
+                    <div class="col-md-offset-2 col-md-9">
+                        <button type="submit" class="btn blue">保存</button>
+                    </div>
+            </div>
+        </div>
+
+    <div>
+</form>

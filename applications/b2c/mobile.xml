@@ -1,0 +1,47 @@
+<site>
+    <module controller='mobile_list' id='b2c'>
+        <name>list</name>
+        <title>全部商品</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_product' id='b2c'>
+        <name>item</name>
+        <title>商品详细页</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_member' id='b2c'>
+        <name>my</name>
+        <title>会员中心</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_brand' id='b2c'>
+        <name>brand</name>
+        <title>品牌区</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_comment' id='b2c'>
+        <name>comment</name>
+        <title>评价咨询</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_passport' id='b2c'>
+        <name>passport</name>
+        <title>会员登录</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_cart' id='b2c'>
+        <name>cart</name>
+        <title>购物车</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_checkout' id='b2c'>
+        <name>checkout</name>
+        <title>订单确认</title>
+        <disable>false</disable>
+    </module>
+    <module controller='mobile_order' id='b2c'>
+        <name>order</name>
+        <title>订单</title>
+        <disable>false</disable>
+    </module>
+</site>

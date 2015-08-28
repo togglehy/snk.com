@@ -1,0 +1,9 @@
+<services>
+	<service id="b2c_change_orderloglist">
+        <class>logisticstrack_orderlog</class>
+    </service>
+
+	<service id="desktop_finder.logisticstrack_mdl_logistic_log">
+        <class>logisticstrack_finder_log</class>
+    </service>
+</services>

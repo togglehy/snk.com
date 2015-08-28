@@ -1,0 +1,299 @@
+<div class="form-body">
+    <div class="form-group">
+        <label class="col-md-2 control-label">商品编号</label>
+        <div class="col-md-4">
+            <input type="text" name="goods[gid]" placeholder="不填写则系统自动生成"  class="form-control input-sm" value="<{$goods.gid}>">
+        </div>
+        <!-- <div class="col-md-4">
+            <span class="help-block">此编号用于系统内部管理用</span>
+        </div> -->
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">商品名称 <span class="required" aria-required="true">*</span></label>
+        <div class="col-md-10">
+            <input type="text" name="goods[name]" required="true" class="form-control" value="<{$goods.name}>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">文字简述 </label>
+        <div class="col-md-10">
+            <textarea class="form-control" name="goods[brief]" placeholder="简单描述" rows="1" ><{$goods.brief}></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">关键词</label>
+        <div class="col-md-10">
+            <{foreach from=$goods.keywords item=keywords}>
+            <{assign var='keyword' value="{$keyword},{$keywords.keyword}"}>
+            <{/foreach}>
+            <input type="text" id="goods_keywords_input" name="keywords" value="<{$keyword|trim:'|'}>" class="form-control" />
+            <span class="help-block hide">多个关键词用","分隔</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">相册
+
+        <input type="hidden" name="image_default" value="<{$goods.image_default_id}>">
+        </label>
+        <div class="col-md-10">
+            <div class="tiles goods-images-pane">
+                <{foreach from=$goods.images item=gimage}>
+                    <div class="tile image bg-grey <{if $goods.image_default_id==$gimage.image_id}>selected<{/if}>">
+                        <input type="hidden" name="goods[images][]" value="<{$gimage.image_id}>">
+                        <div class="tile-body">
+                            <img src="<{$gimage.image_id|storager:'s'}>" />
+                        </div>
+                        <div class="tile-object">
+                            <div class="number">
+                                <i class="fa fa-trash-o text-danger delete-image" data-image-id="<{$gimage.image_id}>"></i>
+                            </div>
+                        </div>
+                        <{if $goods.image_default_id==$gimage.image_id}>
+                        <span class="badge badge-roundless badge-danger" style="position:absolute;top:0px;left:0px;">默认图</span>
+                        <{/if}>
+                    </div>
+                <{/foreach}>
+                <div class="tile bg-grey goods-images-upload-pane fileinput-button">
+                    <div class="tile-body">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </div>
+                    <input id="goods_images_fileupload" type="file"  multiple data-url="index.php?app=image&ctl=admin_manage&act=gimages_upload" accept="image/*">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2  control-label">分类</label>
+        <div class="col-md-3">
+            <select name="goods[category][cat_id]" class="form-control cat-tree">
+                    <option value="0">未分类</option>
+                    <{foreach from=$cats item=cat}>
+                        <option data-step='<{$cat.step}>' value="<{$cat.cat_id}>" <{if $goods.category.cat_id == $cat.cat_id}>selected<{/if}>>
+                            <{$cat.cat_name}>
+                        </option>
+                    <{/foreach}>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <a href="index.php?app=b2c&ctl=admin_goods_cat&act=addnew&callback_func=newcat_callback_func" class="btn btn-default" data-toggle="modal" data-target="#cat_edit"><i class="fa fa-plus"></i> 添加新分类</a>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2  control-label">扩展分类</label>
+        <div class="col-md-3">
+            <select multiple name="goods[extended_cat][]" class="form-control cat-tree">
+                    <{foreach from=$cats item=cat}>
+                        <option data-step='<{$cat.step}>' value="<{$cat.cat_id}>" <{if $cat.cat_id|in_array:$goods.extended_cat}>selected<{/if}>>
+                            <{$cat.cat_name}>
+                        </option>
+                    <{/foreach}>
+            </select>
+        </div>
+
+    </div>
+    <!-- <div class="form-group">
+        <label class="col-md-2 control-label">计量单位 </label>
+        <div class="col-md-1">
+            <input type="text" name="goods[unit]"  class="form-control" value="<{$goods.unit|default:'件'}>">
+        </div>
+    </div> -->
+    <{permission perm_id='editmarketable'}>
+    <div class="form-group">
+        <label class="col-md-2 control-label">是否上架销售 </label>
+        <div class="col-md-4">
+                <label class="radio-inline"><input  type="radio" name="goods[marketable]" value="true" <{if $goods.status != "false"}>checked<{/if}>>是</label>
+                <label class="radio-inline"><input   type="radio" name="goods[marketable]"<{if $goods.marketable == "false"}> checked<{/if}> value="false" >否</label>
+                <span class="help-block">商品下架操作将同时影响货品.</span>
+        </div>
+    </div>
+    <{/permission}>
+
+
+    <{permission perm_id='nostore_sell'}>
+    <div class="form-group">
+        <label class="col-md-2 control-label">是否忽略库存 </label>
+        <div class="col-md-4">
+                <label class="radio-inline">
+                    <input type="radio"  name="goods[nostore_sell]"<{if $goods.nostore_sell eq 1 }> checked="checked"<{/if}> value="1" >是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio"  name="goods[nostore_sell]"<{if $goods.nostore_sell eq 0}> checked="checked"<{/if}> value="0" >否
+                </label>
+                <span class="help-block">无库存也可以下单.</span>
+        </div>
+    </div>
+    <{/permission}>
+
+    <{if $env.conf.b2c.site.get_policy.method ==3}>
+    <div class="form-group">
+        <label class="col-md-2 control-label">购买后可得积分 </label>
+        <input type='hidden' name='goods[score_setting]' value='number'/>
+        <div class="col-md-3">
+            <input type="text" name="goods[gain_score]"   class="form-control" value="<{$goods.gain_score}>">
+        </div>
+    </div>
+    <{/if}>
+
+    <{assign var=gspec_count value=count($goods.spec_desc)}>
+    <{if $goods.spec_desc && $gspec_count>0}>
+        <{include file='admin/goods/detail/products-hasspec.html'}>
+    <{else}>
+        <{include file='admin/goods/detail/products-nospec.html'}>
+    <{/if}>
+</div>
+<textarea class="hide gimage-box-process-tpl">
+    <div class="tile bg-grey-gallery">
+        <div class="tile-body">
+            <i class="fa fa-cloud-upload">
+            </i>
+        </div>
+        <div class="tile-object">
+            <div class="name">
+                <img src="<{$env.STATICS_HOST_URL}>/desktop/admin/layout/img/ajax-modal-loading.gif"/>
+            </div>
+            <div class="number">
+            </div>
+        </div>
+    </div>
+</textarea>
+<textarea class="hide gimage-box-done-tpl">
+    <div class="tile image bg-grey">
+        <input type="hidden" name="goods[images][]" value="{image_id}">
+        <div class="tile-body">
+            <img src="{url}" />
+        </div>
+        <div class="tile-object">
+            <div class="number">
+                <i class="fa fa-trash-o delete-image" data-image-id="{image_id}"></i>
+            </div>
+        </div>
+    </div>
+</textarea>
+
+<!-- 临时添加新分类 -->
+<div class="modal fade" id="cat_edit" role="basic" aria-hidden="true">
+              <div class="modal-dialog">
+                      <div class="modal-content">
+
+                      </div>
+              </div>
+</div>
+
+
+
+<script charset="utf-8">
+//临时添加分类回调
+$('#cat_edit').insertAfter($('#cat_edit').closest('form'));
+var newcat_callback_func = function(cat_data){
+    var pid = cat_data.parent_id,cid = cat_data.cat_id,name=cat_data.cat_name,path=cat_data.cat_path;
+    $('select[name="goods[category][cat_id]"] :selected').removeProp('selected');
+    var new_cat = $('<option value="'+cid+'" selected>'+(function(p){
+        $s = '';
+        for(i=1;i<p.split(',').length-1;i++){
+            $s+='&nbsp;&nbsp;&nbsp;&nbsp;'
+        }
+        return $s;
+    })(path)+name+'</option>');
+    new_cat.insertAfter($('select[name="goods[category][cat_id]"] option[value="'+pid+'"]'));
+    new_cat.clone().insertAfter($('select[name^="goods[extended_cat]"] option[value="'+pid+'"]'));
+}
+//关键词输入
+$('#goods_keywords_input').tagsInput({
+    width: 'auto',
+    'defaultText':'输入新词',
+});
+
+
+!function(){
+    /*商品相册上传选择逻辑*/
+    var substitute = function(str,obj){
+           return str.replace(/\\?\{([^{}]+)\}/g, function(match, name){
+               if (match.charAt(0) == '\\') return match.slice(1);
+               return (obj[name] != undefined) ? obj[name] : '';
+           });
+   }
+   /*相册拖动排序*/
+   $('.goods-images-pane').sortable({
+       cursor: "move",
+       items:'> .image'
+   });
+
+    var set_default = function(el_box){
+        $('.goods-images-pane .selected').removeClass('selected');
+        $(el_box).addClass('selected');
+        if($('.goods-images-pane .badge-danger').length){
+            $(el_box).append($('.goods-images-pane .badge-danger'));
+        }else{
+            $(el_box).append('<span class="badge badge-roundless badge-danger" style="position:absolute;top:0px;left:0px;">默认图</span>');
+        }
+        $('input[name="image_default"]').val($(el_box).find('input[name="goods[images][]"]').val());
+    }
+    //var tmp_doc_title = document.title,timer = 0;
+    $('#goods_images_fileupload').fileupload({
+        add:function(e,data){
+            var file_obj = data.files[0];
+            if(!file_obj['type'].match(/^image/)){
+                return toastr.warning(data.files[0]['name']+'不是允许的图片类型','类型错误');
+            }
+            data.context = $($('.gimage-box-process-tpl').val());
+            data.context.find('.number')
+            .html("<small>"+Math.round(parseFloat(file_obj.size/1024/1024)*100)/100+'MB</small>');
+            data.context.insertBefore($('.goods-images-upload-pane'));
+            data.submit();
+        },
+        progress:function(e){
+            // (function(){
+            //     document.title = (document.title=='正在上传......')?'正在上传...':'正在上传......';
+            //     timer = setTimeout(arguments.callee,500);
+            // })();
+        },
+        progressall:function(e){
+
+        },
+        done:function(e,data){
+            // clearTimeout(timer);
+            // document.title = tmp_doc_title;
+            try{
+                var re = $.parseJSON(data.result);
+                data.context.replaceWith(substitute($('.gimage-box-done-tpl').val(),re));
+                if(!$('.goods-images-pane .selected').length){
+                    set_default($('.goods-images-pane .image:first'));
+                }
+            }catch(e){
+                $(data.context).fadeOut(function(){
+                    $(this).remove();
+                });
+            }
+
+        }
+    });
+
+    $('.goods-images-pane').on('click','.image',function(e){
+            set_default(this);
+            return;
+    });
+    $('.goods-images-pane').on('click','.delete-image',function(e){
+        e.stopPropagation();
+        if(!confirm('确认移除？'))return;
+        $(this).closest('.image').remove();
+        if(!$('.goods-images-pane .selected').length){
+            if($('.goods-images-pane .image:first')){
+                    set_default($('.goods-images-pane .image:first'));
+            }else{
+                    $('input[name="image_default"]').val('');
+            }
+        }
+
+    });
+
+    /*分类树逻辑*/
+    $.each($('.cat-tree option'),function(i,n){
+        var step = $(n).attr('data-step');
+        while(step>1){
+            $(n).html('&nbsp&nbsp&nbsp&nbsp'+$(n).html());
+            step--;
+        }
+    });
+}();
+
+</script>

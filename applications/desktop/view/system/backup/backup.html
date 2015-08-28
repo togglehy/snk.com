@@ -1,0 +1,28 @@
+<meta charset="utf-8">
+<div class="tableform">
+<p class="notice">说明：您可以在此处备份商店的整站数据库结构和数据，一旦商店数据意外损坏，您可以通过数据库恢复功能恢复所备份的数据。<br />
+<span class="loud">备份分卷大小：1024 K</span><br><span class="loud">备份过程中请勿进行其他页面操作。</span><br/>
+<span class="loud">上次备份时间：<{if !$time}>从未备份<{else}><{$time}><{/if}></span>
+
+</p>
+
+<div id="BackupProgess" align='center'></div>
+
+
+    
+    
+       <div id="backupbtn" class="table-action">
+	<{button type='button' label=$___desktop='开始备份'|t:'desktop' onclick='runbackup(0)'}>
+</div>
+    
+</div>
+<script>
+function runbackup(url){
+  if(!url) {
+    $('BackupProgess').innerHTML = '正在备份，请勿进行其他页面操作。';
+    $('backupbtn').innerHTML = '';
+  }
+  if(!url) url = 'index.php?app=desktop&ctl=backup&act=backup_sdf';
+  new Request({url:url,update:'BackupProgess',data:'a=a',evalScripts:true}).send();
+}
+</script>

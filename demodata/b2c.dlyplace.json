@@ -1,0 +1,19 @@
+{
+	"data":
+	[
+		{
+			"dp_id": 1,
+			"dp_type": "warehouse",
+			"dp_title": "上海中集洋山仓储中心",
+			"consignor_name": "",
+			"consignor_area": "mainland:上海/上海市/浦东新区:35",
+			"consignor_addr": "上海市浦东新区飞舟路59号",
+			"consignor_zip": "",
+			"consignor_tel": "",
+			"consignor_mobile": "",
+			"consignor_email": "",
+			"memo": "",
+			"disabled": "false"
+		}
+	]
+}

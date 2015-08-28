@@ -1,0 +1,250 @@
+<h3 class="page-title"><{if $dt_info.dt_id }>编辑配送方式<{else}>添加配送方式<{/if}></h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?app=b2c&ctl=admin_dlytype&act=index">配送方式列表</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;"><{if $dt_info.dt_id }>编辑配送方式<{else}>添加配送方式<{/if}></a>
+        </li>
+    </ul>
+</div>
+<form action="index.php?app=b2c&ctl=admin_dlytype&act=save" method="post" id='dlytype_form' class="form" >
+
+    <{if $dt_info.dt_id }><input type="hidden" name="dt_id" value="<{$dt_info.dt_id}>"><{/if}>
+    <div class="form form-horizontal">
+        <div class="form-body">
+             <div class="form-group">
+                 <label class="col-md-2 control-label">配送方式名称
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-5">
+                     <input type="text"  name="dt_name"  required="true" value="<{$dt_info.dt_name}>" class="form-control" autocomplete="off">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">配送方式简介
+                 </label>
+                 <div class="col-md-5">
+                     <{input type=textarea rows=1 name=detail value=$dt_info.detail}>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">默认发货物流公司
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-3">
+                     <select name="corp_id" class="form-control">
+                     <{foreach from=$clist item=corp}>
+                       <option value='<{$corp.corp_id}>' <{if $dt_info.corp_id == $corp.corp_id}>selected<{/if}>><{$corp.name}></option>
+                     <{/foreach}>
+                     </select>
+
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">货到付款/COD
+                     <span class="required" aria-required="true">*</span>
+                     <!-- <span class="help-block">物流公司代收货款</span> -->
+                 </label>
+                 <div class="col-md-1">
+
+                     <select class="form-control" name="has_cod">
+                         <option value="0">否</option>
+                         <option value="1" <{if $dt_info.has_cod=='true'}>selected<{/if}>>是</option>
+                     </select>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">默认运费
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-1">
+                     <input type="text"  name="firstprice"  required="true" value="<{$dt_info.firstprice|cur}>" class="form-control">
+                     <input type="hidden" name="continueprice" value="0">
+                     <input type="hidden" name="firstunit" value="2500">
+                     <input type="hidden" name="continueunit" value="1500">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">是否物流保价
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-1">
+                     <select class="form-control" name="protect">
+                         <option value="0">否</option>
+                         <option value="1" <{if $dt_info.has_cod=='1'}>selected<{/if}>>是</option>
+                     </select>
+                 </div>
+             </div>
+             <div class="form-group extend-protect hide">
+                 <label class="col-md-2 control-label">保价费率
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-2">
+                     <div class="input-icon right">
+                         <i>%</i>
+                         <input type="text"   name="protect_rate"   value="<{$dt_info.protect_rate}>" class="form-control">
+                     </div>
+                 </div>
+             </div>
+             <div class="form-group extend-protect hide">
+                 <label class="col-md-2 control-label">最低保价费
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-2">
+                     <input type="text"   name="minprice"  value="<{$dt_info.minprice}>" class="form-control">
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">
+                     适用地区
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-2">
+                     <select class="form-control" name="setting">
+                         <option value="1">所有地区适用</option>
+                         <option value="0" <{if $dt_info.setting=='0'}>selected<{/if}>>指定配送地区</option>
+                     </select>
+                 </div>
+                 <div class="col-md-10 margin-top-10 col-md-offset-2 extend-setting hide">
+                     <div class="row">
+                         <{if $dt_info.area_fee_conf}>
+                                <{foreach from=$dt_info.area_fee_conf key=key item=conf name=afc}>
+                                    <div class="col-md-2 col-xs-6 area-group margin-top-10">
+                                        <label class="label label-default handle-multiple">展开</label>&nbsp;
+                                        <label class="label label-default remove-multiple <{if $env.foreach.afc.first}>hide<{/if}>">移除</label>
+                                        <select  class="form-control input-small" multiple name="area_fee_conf[<{$key}>][area][]">
+                                            <{foreach from=$areas item=area}>
+                                            <option value="<{$area.region_id}>" <{if $area.region_id|in_array:$conf.area}>selected<{/if}>>
+                                                <{$area.local_name}>
+                                            </option>
+                                            <{/foreach}>
+                                        </select>
+                                        <div class="input-group input-small">
+                                           <span class="input-group-addon">运费：</span>
+                                           <input type="text"  name="area_fee_conf[<{$key}>][firstprice]" class="form-control" value="<{$conf.firstprice}>">
+                                           <input type="hidden" name="area_fee_conf[<{$key}>][continueprice]" value=0 class="form-control">
+                                        </div>
+                                    </div>
+                                <{/foreach}>
+                         <{else}>
+                         <div class="col-md-2 col-xs-6 area-group margin-top-10">
+                             <label class="label label-default handle-multiple">展开</label>&nbsp;
+                             <label class="label label-default remove-multiple hide">移除</label>
+                             <select  class="form-control input-small" multiple name="area_fee_conf[new0][area][]">
+                                 <{foreach from=$areas item=area}>
+                                 <option value="<{$area.region_id}>"><{$area.local_name}></option>
+                                 <{/foreach}>
+                             </select>
+                             <div class="input-group input-small">
+                                <span class="input-group-addon">运费：</span>
+                                <input type="text"  name="area_fee_conf[new0][firstprice]" class="form-control">
+                                <input type="hidden" name="area_fee_conf[new0][continueprice]" value=0 class="form-control">
+                             </div>
+                         </div>
+                         <{/if}>
+                         <div class="col-md-1 col-xs-2">
+                            <button type="button" class="btn btn-link new-area-group"><i class="fa fa-plus"></i> 另一组</button>
+                         </div>
+                     </div>
+                     <span class="help-block visible-lg-block"><kbd>ctrl</kbd> + 鼠标多选地区</span>
+                 </div>
+                 <div class="col-md-4 margin-top-10 col-md-offset-2 extend-setting hide">
+                     <select class="form-control" name="def_area_fee">
+                         <option value="true">指定配送地区之外,采用默认运费</option>
+                         <option value="false" <{if $dt_info.def_area_fee=='false'}>selected<{/if}>>指定配送地区之外,不能使用此配送方式</option>
+                     </select>
+                 </div>
+             </div>
+             <hr>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">
+                     是否启用
+                     <span class="required" aria-required="true">*</span>
+                 </label>
+                 <div class="col-md-1">
+                     <select class="form-control" name="dt_status">
+                         <option value="1">是</option>
+                         <option value="0" <{if $dt_info.dt_status=='0'}>selected<{/if}>>否</option>
+                     </select>
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label class="col-md-2 control-label">
+                     排序
+                 </label>
+                 <div class="col-md-1">
+                     <input type="number"  name="ordernum"  value="<{$dt_info.ordernum}>" class="form-control">
+                 </div>
+             </div>
+
+    </div>
+        <div class="form-actions">
+            <div class="row">
+                    <div class="col-md-offset-2 col-md-9">
+                        <button type="submit" class="btn blue">保存</button>
+                    </div>
+            </div>
+        </div>
+
+    <div>
+</form>
+
+<textarea style="display:none;" id="area_group_tpl">
+    <div class="col-md-2 col-xs-6 area-group margin-top-10">
+        <label class="label label-default handle-multiple">展开</label>&nbsp;
+        <label class="label label-default remove-multiple">移除</label>
+        <select  class="form-control input-small" multiple name="area_fee_conf[new{idx}][area][]">
+            <{foreach from=$areas item=area}>
+            <option value="<{$area.region_id}>"><{$area.local_name}></option>
+            <{/foreach}>
+        </select>
+        <div class="input-group input-small">
+           <span class="input-group-addon">运费：</span>
+           <input type="text"  name="area_fee_conf[new{idx}][firstprice]" class="form-control">
+           <input type="hidden" name="area_fee_conf[new{idx}][continueprice]" value=0 class="form-control">
+        </div>
+    </div>
+</textarea>
+
+
+<script charset="utf-8">
+!function(){
+    $('#dlytype_form .extend-setting').on('click','.handle-multiple',function(){
+        var txt = $(this).text();
+        if(txt == '展开'){
+            $(this).text('收起');
+            $(this).parent().find('select').css('height',600);
+        }else{
+            $(this).text('展开');
+            $(this).parent().find('select').css('height','auto');
+        }
+    });
+
+    $('#dlytype_form .extend-setting').on('click','.remove-multiple',function(){
+        $(this).parent().remove();
+    });
+
+    $('#dlytype_form .new-area-group').on('click',function(){
+        var nag = $(substitute($('#area_group_tpl').val(),{idx:$('.area-group').length}));
+        nag.insertBefore($(this).parent());
+        nag.find('input,select').val('');
+        nag.find('.remove-multiple').removeClass('hide');
+    });
+
+    $('#dlytype_form select[name=protect],#dlytype_form select[name=setting]').on('change',function(){
+        var flag = $(this).prop('name')+$(this).val();
+        var extend = $('.extend-'+$(this).prop('name'));
+        //protect0 不报价，setting1 统一运费，全国可送
+        if(flag == 'protect0'||flag == 'setting1'){
+            extend.addClass('hide');
+        }else{
+            extend.removeClass('hide');
+        }
+    }).trigger('change');
+
+}();
+
+</script>

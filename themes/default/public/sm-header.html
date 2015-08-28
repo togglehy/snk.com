@@ -1,0 +1,42 @@
+<nav class="navbar navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="<{link app=site ctl=index act=index}>">
+              LOGO
+              <!-- <img src="LOGO_URL" alt="" /> -->
+              <!-- class text-hide for hidden text -->
+          </a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="<{link app=site ctl=index act=index}>">首页</a></li>
+          <li><a href="<{link app=b2c ctl=site_list act=index}>">商品列表</a></li>
+          <!-- <li><a href="<{link app=b2c ctl=site_promotion act=index}>">活动列表</a></li> -->
+          <li><a href="<{link app=b2c ctl=site_brand act=index}>">品牌专区</a></li>
+          <li><a href="<{link app=b2c ctl=site_member act=index}>">会员中心</a></li>
+        </ul>
+        <ul class="nav navbar-nav top-tools navbar-right">
+            <li class="is-login dropdown hide">
+                <a id="member_menu" href="<{link app=b2c ctl=site_member act=index}>" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" role="button">欢迎你，<strong class="uname"></strong><span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="member_menu">
+              <li><a href="<{link app=b2c ctl=site_member}>">会员中心</a></li>
+                <li class="divider"></li>
+              <li><a href="<{link app=b2c ctl=site_member}>">我的订单</a></li>
+              <li><a href="<{link app=b2c ctl=site_member}>">我的咨询</a></li>
+              <li><a href="<{link app=b2c ctl=site_member}>">我的账户</a></li>
+              <li><a href="<{link app=b2c ctl=site_cart}>">我的购物车</a></li>
+              <li class="divider"></li>
+              <li><a href="<{link app=b2c ctl=site_passport act=logout}>">退出登录</a></li>
+            </ul>
+            </li>
+            <li class="is-unlogin"><a href="<{link app=b2c ctl=site_passport act=login}>">登录</a></li>
+        </ul>
+      </div>
+</nav>
+
+<script charset="utf-8">
+    if($.cookie('UNAME') && $.cookie('MEMBER_IDENT')){
+        $('.top-tools .is-unlogin').addClass('hide');
+        $('.top-tools .is-login').removeClass('hide');
+        $('.top-tools .is-login .uname').text($.cookie('UNAME'));
+    }
+</script>

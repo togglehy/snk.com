@@ -1,0 +1,33 @@
+<div  class="my-main">
+  <div class="row">
+      <div class="col-xs-2">
+          <dl class="my-menu">
+              <{foreach from=$menu item=i key=k}>
+                    <dt <{if $i.link}>class="mm-root"<{/if}>>
+                        <{if $i.link}>
+                        <a href="<{link app=$i.link.app ctl=$i.link.ctl act=$i.link.act}>">
+                        <{$i.label}>
+                        </a>
+                        <{else}>
+                        <{$i.label}>
+                        <{/if}>
+                    </dt>
+                    <dd>
+                        <ul class="mm-list list-unstyled">
+                            <{foreach from=$i.items item=m key=j}>
+                               <li data-myaction="<{$m.link.act}>" class="mm-<{$m.link.ctl}>-<{$m.link.act}> <{if $current_action!='index' && $m.link.act == $current_action}> active<{/if}>">
+                                   <a <{if $m.link.ctl!='site_member'}>target="_blank"<{/if}> href="<{link app=$m.link.app ctl=$m.link.ctl act=$m.link.act}>">
+                                       <span><{$m.label}></span>
+                                   </a>
+                               </li>
+                            <{/foreach}>
+                        </ul>
+                    </dd>
+              <{/foreach}>
+          </dl>
+      </div>
+      <div class="col-xs-10 my-page">
+          <{include file=$_PAGE_ app=$app_id}>
+      </div>
+  </div>
+</div>

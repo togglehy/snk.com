@@ -1,0 +1,136 @@
+<h3 class="page-title">订单 #
+	<{$order.order_id}>
+		<span class="small">&nbsp;
+			<{$order_status_label}>
+		</span>
+		<div class="btn-group pull-right">
+			<a href="index.php?app=b2c&ctl=admin_order&act=detail&p[0]=<{$border.0.order_id}>" class="btn btn-default <{if !$border.0.order_id}>disabled<{/if}>"><i class="fa fa-chevron-left"></i> 上一张订单</a>
+			<a href="index.php?app=b2c&ctl=admin_order&act=detail&p[0]=<{$border.1.order_id}>" class="btn btn-default">下一张订单 <i class="fa fa-chevron-right"></i></a>
+		</div>
+</h3>
+<div class="portlet margin-top-10">
+	<div class="order-actions">
+		<{foreach from=$order_actions item=action key=key}>
+			<button class="margin-bottom-10 btn <{if $action.disabled=='false'}> green<{else}> default disabled<{/if}>" type="button" data-btn-target="<{$action.target}>" data-confirm="<{$action.confirm}>" data-app="<{$action.app}>" data-type="<{$key}>" data-act="<{$action.act}>"><i class="<{$action.icon}>"></i>
+				<{$action.label}>
+			</button>
+			<{/foreach}>
+	</div>
+	<div class="tabbable">
+		<ul class="nav nav-tabs nav-tabs-lg">
+			<li class="active">
+				<a href="#tab_1" data-toggle="tab">
+					订单详情 </a>
+			</li>
+
+				<{if $order_payments}>
+					<li>
+						<a href="#tab_2" data-toggle="tab">
+					收款单
+					 <!-- <span class="badge badge-info"><{$payments_count}></span> -->
+					</a>
+					</li>
+					<{/if}>
+				    <{if $order_delivery}>
+								<li>
+									<a href="#tab_3" data-toggle="tab">
+					发货单
+					<!-- <span class="badge badge-info"><{$delivery_count}></span> -->
+					</a>
+								</li>
+					<{/if}>
+					<{if $order_reship}>
+											<li>
+												<a href="#tab_4" data-toggle="tab">
+					退货单
+					<!-- <span class="badge badge-info"><{$reship_count}></span> -->
+					</a>
+											</li>
+					<{/if}>
+					<{if $order_refunds}>
+						<li>
+							<a href="#tab_5" data-toggle="tab">
+						退款单
+						<!-- <span class="badge badge-info"><{$refunds_count}></span> -->
+						</a>
+						</li>
+				  <{/if}>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab_1">
+				<{include file="admin/order/detail_basic.html" }>
+			</div>
+			<!-- tab_1 end -->
+
+			<div class="tab-pane" id="tab_2">
+				<{include file="admin/order/detail_payment.html" }>
+			</div>
+			<!-- tab_2 end -->
+
+			<div class="tab-pane" id="tab_3">
+				<{include file="admin/order/detail_delivery.html" }>
+			</div>
+			<!-- tab_3 end -->
+
+			<div class="tab-pane" id="tab_4">
+				<{include file="admin/order/detail_reship.html" }>
+			</div>
+			<!-- tab_4 end -->
+
+			<div class="tab-pane" id="tab_5">
+				<{include file="admin/order/detail_refund.html" }>
+			</div>
+			<!-- tab_5 end -->
+
+		</div>
+
+	</div>
+	<!-- tabbable -->
+</div>
+<div class="modal fade bs-modal-lg " id="order_edit" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="logisticstracker" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+		</div>
+	</div>
+</div>
+
+<script charset="utf-8">
+	$('.order-actions button:not(button.disabled)').on('click', function(e) {
+		var button = $(this);
+		var action_url = ('index.php?ctl=admin_order&p[0]=<{$order.order_id}>&act=' + button.attr('data-act') + '&app=' + button.attr('data-app'));
+		var confirm_str = button.attr('data-confirm');
+		if (confirm_str && confirm_str != '' && !confirm(confirm_str)) {
+			return false;
+		}
+		if (button.attr('data-btn-target') == '_command') {
+			return $.getJSON(action_url, function(obj) {
+				if ('success' in obj) {
+					Messagebox.success(obj.success, '成功');
+					if (obj.redirect) {
+						load_page(obj.redirect);
+					}
+				} else if ('error' in obj) {
+					Messagebox.error(obj.error, '失败');
+				} else {
+					Messagebox.error('操作失败!', '失败');
+				}
+			});
+		}
+
+		$('#order_edit').modal({
+			remote: action_url
+		});
+
+
+	});
+</script>

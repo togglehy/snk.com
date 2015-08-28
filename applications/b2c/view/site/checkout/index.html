@@ -1,0 +1,695 @@
+<div class="container">
+    <ol class="breadcrumb">
+      <li><a href="<{link app=site ctl=index}>">首页</a></li>
+      <li><a href="<{link app=b2c ctl=site_cart}>">购物车</a></li>
+      <li class="active">订单确认</li>
+    </ol>
+</div>
+<div class="page-header">
+    <div class="container">
+        <h1 class="clearfix">订单确认 <small>Checkout <{if $is_fastbuy=='true'}>Fast<{/if}></small></h1>
+    </div>
+</div>
+<form action="<{link app=b2c ctl=site_order act=create args0=$is_fastbuy}>" class="container checkout-container">
+<input type="hidden" name="cart_md5" value="<{$cart_md5}>">
+    <!-- checkout-container begin -->
+<div data-flowindex=0 class="panel <{if !$member_addrs}>panel-warning<{else}>panel-default<{/if}> checkout-maddr ">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">收货人信息</h3>
+        <button data-toggle="modal" data-target="#member_addr_edit_modal" type="button"  class="btn btn-default btn-xs pull-right btn-new-maddr">新增收货地址</button>
+    </div>
+    <{if $member_addrs}>
+    <ul class="list-group">
+        <{foreach from=$member_addrs key=k item=addr name=maddr}>
+            <li class="list-group-item clearfix <{if $addr.selected}>active<{/if}> <{if $env.foreach.maddr.iteration>3}>hide list-group-item-more<{/if}>">
+                <address class="pull-left">
+                  <input type="radio" <{if $addr.selected}>checked<{/if}> name="addr_id" value="<{$addr.addr_id}>">
+                  <big data-bind="name"><{$addr.name}></big>&nbsp;
+                  <small>
+                      <span data-bind="area"><{$addr.area|region}></span>
+                      <span data-bind="addr"><{$addr.addr}></span>
+                      <{if $addr.zip}>,邮编:<span data-bind="zip"><{$addr.zip}></span><{/if}>
+                      &nbsp;手机号:<span data-bind="mobile"><{$addr.mobile}></span>
+                  </small>
+                  <{if $addr.is_default=='true'}>
+                  <span class="label label-default">默认地址</span>
+                  <{/if}>
+                </address>
+                <div class="btn-group btn-list-edit btn-group-xs pull-right" role="group" aria-label="收货人信息操作">
+                  <button data-addrid="<{$addr.addr_id}>" type="button" class="btn btn-default-maddr btn-default <{if $addr.is_default=='true'}>disabled<{/if}>">默认</button>
+                  <button data-addrid="<{$addr.addr_id}>" type="button" class="btn btn-default btn-edit-maddr">编辑收货地址</button>
+                  <button data-addrid="<{$addr.addr_id}>" type="button" class="btn btn-default btn-delete-maddr">删除</button>
+                  <{if $env.foreach.maddr.iteration == 3}>
+                      <button type="button" class="pull-right btn-list-more btn btn-default btn-xs">
+                          更多&nbsp;<span class="caret"></span>
+                      </button>
+                  <{/if}>
+                </div>
+            </li>
+        <{/foreach}>
+    </ul>
+    <{else}>
+    <div class="panel-body">
+        <button data-toggle="modal" data-target="#member_addr_edit_modal" type="button" class="btn btn-warning btn-block">立即新增收货人信息</button>
+    </div>
+    <{/if}>
+</div>
+<div class="row">
+    <div class="col-xs-5">
+        <div data-flowindex=1 class="panel panel-default checkout-dlytype">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">配送方式</h3>
+            </div>
+            <ul class="list-group">
+                <{foreach from=$dlytypes key=k item=dlytype}>
+                    <li class="list-group-item <{if $dlytype.selected}>active<{/if}> clearfix">
+                        <input type="radio" <{if $dlytype.selected}>checked<{/if}> name="dlytype_id" value="<{$dlytype.dt_id}>"><span class="dlytype-name"><{$dlytype.dt_name}></span>
+                        <{if $dlytype.detail}>
+                        <i  data-toggle="popover" class="glyphicon glyphicon-question-sign"></i>
+                        <p class="hide">
+                            <{$dlytype.detail}>
+                        </p>
+                        <{/if}>
+                    </li>
+                <{/foreach}>
+            </ul>
+        </div>
+        <div data-flowindex=2 class="panel panel-default checkout-payment">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">支付方式</h3>
+            </div>
+            <ul class="list-group">
+                <{foreach from=$paymentapps key=k item=papp}>
+                    <li  class="list-group-item <{if $papp.selected}>active<{/if}> clearfix">
+                        <input type="radio" <{if $papp.selected}>checked<{/if}> name="payapp_id" value="<{$papp.app_id}>">
+                        <span class="payapp-name"><{$papp.display_name|default:$papp.name}></span>
+                        <{if $papp.description}>
+                        <i  data-toggle="popover" class="glyphicon glyphicon-question-sign"></i>
+                        <p class="hide">
+                            <{$papp.description}>
+                        </p>
+                        <{/if}>
+                    </li>
+                <{/foreach}>
+            </ul>
+        </div>
+        <div  class="panel panel-default checkout-invoice">
+            <div class="panel-body">
+                <label>
+                    <input type="checkbox" value="true" id="need_invoice" name="need_invoice"> 需要发票
+                </label>
+                <div class="form-group" style="display:none;" data-showextends="#need_invoice|change|checked">
+                    <label for="invoice_title">发票抬头</label>
+                    <{if $my_invoce_history}><div class="input-group"><{/if}>
+                        <input type="text" name="invoice_title" id="invoice_title" placeholder="请输入<{if $my_invoce_history}>或选择<{/if}>公司全称\个人" class="form-control input-sm">
+                        <{if $my_invoce_history}>
+                        <div class="input-group-btn">
+                            <{assign var=my_invoce_history_count value=count($my_invoce_history)}>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <i class="glyphicon glyphicon-triangle-bottom"></i>
+                            <span class="badge"><{$my_invoce_history_count}></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <{foreach from=$my_invoce_history item=mih name=mih}>
+                                <li>
+                                    <a href="javascript:;">
+                                        <{$mih.invoce_title}>
+                                    </a>
+                                </li>
+                                <{if !$env.foreach.mih.last}>
+                                <li role="presentation" class="divider"></li>
+                                <{/if}>
+                                <{/foreach}>
+                            </ul>
+                        </div>
+                        <{/if}>
+                <{if $my_invoce_history}></div><{/if}>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-7">
+        <div class="panel panel-default checkout-cart">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left">送货清单</h3>
+                <{if $is_fastbuy}>
+                <a href="<{link app=b2c ctl=site_product args0=$cart_result.objects.goods.0.item.product.product_id}>" class="btn btn-default btn-xs pull-right">返回商品详情</a>
+                <{else}>
+                <a href="<{link app=b2c ctl=site_cart}>" class="btn btn-default btn-xs pull-right">返回购物车修改</a>
+                <{/if}>
+
+            </div>
+          <ul class="list-group">
+              <{foreach from=$cart_result.objects.goods item=object}>
+              <{if $object.disabled=='true'}><{continue;}><{/if}>
+              <li class="list-group-item <{if $object.obj_ident==$last_add}>list-group-item-info<{/if}>">
+                <div class="row">
+                      <div class="col-xs-2">
+                        <a href="<{link app=b2c ctl=site_product act=index args0=$object.item.product.product_id}>">
+                            <img class="img-thumbnail"  src="<{$object.item.product.image_id|storager:'s'}>" alt="<{$object.item.product.name}>-<{$object.item.product.spec_info}>" />
+                        </a>
+                      </div>
+                      <div class="col-xs-10">
+                        <a class="text-muted" href="<{link app=b2c ctl=site_product act=index args0=$object.item.product.product_id}>"><{$object.item.product.name}>
+                        <small>
+                            <{$object.item.product.spec_info}>
+                        </small>
+                        </a>
+                        <br>
+                        <strong class="text-danger"><{$object.item.product.buy_price|cur}></strong>
+                        <span class="text-muted">x <{$object.quantity}></span>
+                        <{if $cart_result.promotions.goods}>
+                        <!-- 已触发促销 -->
+                        <ul class="list-unstyled promotion-list">
+                            <{foreach from=$cart_result.promotions.goods key=key item=pitem}>
+                                 <{if $object.obj_ident!=$key}><{continue;}><{/if}>
+                                 <{foreach from=$pitem item=item}>
+                                <li>
+                                    <span class="label label-danger"><{$item.tag}></span>
+                                    <{$item.solution}><{if $item.save>0}>,<em>已省 <{$item.save|cur}></em><{/if}>
+                                    <i data-placement="top" data-toggle="tooltip" title="<{$item.desc}>" class="glyphicon glyphicon-info-sign"></i>
+                                </li>
+                                <{/foreach}>
+                            <{/foreach}>
+                        </ul>
+                        <{/if}>
+                      </div>
+                </div>
+               </li>
+              <{/foreach}>
+          </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="checkout-total clearfix bg-info">
+        <div class="row">
+            <div class="col-xs-7">
+                <!-- 已触发订单促销规则 -->
+                <{if $cart_result.promotions.order}>
+                    <ul class="list-unstyled promotion-list">
+                        <{foreach from=$cart_result.promotions.order key=key item=item}>
+                            <{if $item.rule_type != 'normal'}><{continue;}><{/if}>
+                            <li>
+                                <span class="label label-danger"><{$item.tag}></span>
+                                <{$item.solution}><{if $item.save>0}>,<em>已省 <{$item.save|cur}></em><{/if}>
+                                <i data-placement="right"  data-toggle="tooltip" title="<{$item.desc}>" class="glyphicon glyphicon-info-sign"></i>
+                            </li>
+                        <{/foreach}>
+                    </ul>
+                <{/if}>
+                <!-- 已使用优惠券 -->
+                <ul class="list-unstyled promotion-list my-coupon-used">
+                    <{foreach from=$cart_result.promotions.order key=key item=item}>
+                        <{if $item.rule_type != 'coupon'}><{continue;}><{/if}>
+                        <li>
+                        <span class="btn-group bg-label">
+                            <span class="btn btn-xs btn-danger"><{$item.tag}></span>
+                            <span class="btn btn-xs btn-danger">券</span>
+                            <span class="btn btn-xs btn-default btn-rm-coupon" data-couponident="<{$item.coupon_obj_ident}>" data-coupon="<{$item.coupon_code}>">取消</span>
+                        </span>
+                        <{$item.solution}><{if $item.save>0}>,<em>已省 <{$item.save|cur}></em><{/if}>
+                        <i data-placement="right"  data-toggle="tooltip" title="<{$item.desc}>" class="glyphicon glyphicon-info-sign"></i>
+                        </li>
+                    <{/foreach }>
+                </ul>
+                <dl class="my-coupon">
+                    <dt><small>使用优惠券</small></dt>
+                    <dd>
+                        <div class="input-group">
+							<input type="text" id="coupon_input" placeholder="请输入<{if $my_av_coupons}>或选择<{/if}>优惠券" data-placeholder="请输入<{if $my_av_coupons}>或选择<{/if}>优惠券" class="form-control input-sm">
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default btn-sm coupon-submit" tabindex="-1">确定使用</button>
+                                <{if $my_av_coupons}>
+                                <{assign var=mac_count value=count($my_av_coupons)}>
+								<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+								<i class="glyphicon glyphicon-triangle-bottom"></i>
+                                <span class="badge"><{$mac_count}></span>
+								</button>
+								<ul class="dropdown-menu pull-right" role="menu">
+									<{foreach from=$my_av_coupons item=mycoupon name=fmc}>
+                                    <li data-coupon="<{$mycoupon.memc_code}>" <{if $mycoupon.in_cart}>class="disabled"<{/if}>>
+                                        <a href="javascript:;">
+                                            <small><{$mycoupon.memc_code}></small><br>
+                                            <{$mycoupon.name}><br>
+                                            <small>有效期至:<{$mycoupon.to_time|cdate}></small>
+                                        </a>
+                                    </li>
+                                    <{if !$env.foreach.fmc.last}>
+                                    <li role="presentation" class="divider"></li>
+                                    <{/if}>
+                                    <{/foreach}>
+								</ul>
+                                <{/if}>
+							</div>
+						</div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-xs-5">
+                <dl class="dl-horizontal pull-right">
+                    <dt>可得积分：</dt>
+                    <dd><span data-bind="total/gain_score"><{$total.gain_score}></span>分</dd>
+                    <dt><{$cart_result.goods_count}>件商品，总商品金额：</dt>
+                    <dd>￥<span data-bind="total/cart_amount"><{$cart_result.cart_amount|cur}></span></dd>
+                <{if $cart_result.member_discount_amount}>
+
+                    <dt>会员身份优惠：</dt>
+                    <dd>-￥<span data-bind="total/member_discount_amount"><{$cart_result.member_discount_amount|cur}></span></dd>
+
+                <{/if}>
+                <{if $cart_result.member_discount_amount}>
+
+                    <dt>促销活动优惠：</dt>
+                    <dd>-￥<span data-bind="total/promotion_discount_amount"><{$cart_result.promotion_discount_amount|cur}></span></dd>
+
+                <{/if}>
+
+                    <dt>运费：</dt>
+                    <dd>￥<span data-bind="total/cost_freight"><{$total.cost_freight|cur}></span></dd>
+
+                    <dt>应付总额：</dt>
+                    <dd>￥<strong data-bind="total/order_total"><{$total.order_total|cur}></strong></dd>
+
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="checkout-footer panel panel-default">
+        <div class="row">
+            <div class="col-xs-7">
+                <textarea name="memo" rows="2" class="form-control" placeholder="订单备注"></textarea>
+            </div>
+            <div class="col-xs-5 text-right">
+                <!-- 订单创建form -->
+                    <span class="order-total">应付总额：
+                        <span class="text-danger"><small>￥</small><strong data-bind="total/order_total"><{$total.order_total|cur}></strong></span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" class="btn btn-danger btn-lg">提交订单</button>
+
+            </div>
+        </div>
+    </div>
+<!-- checkout-container end -->
+</form>
+
+
+<form class="modal" id="member_addr_edit_modal" action="<{link app=b2c ctl=site_member act=quick_maddr args0=save}>">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">收货人信息<span>新增</span></h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-horizontal">
+              <div class="form-group">
+                <label for="maddr_name" class="col-sm-2 control-label">姓名<em class="text-danger">*</em></label>
+                <div class="col-sm-5">
+                  <input type="text" required="true" name="maddr[name]" class="form-control" id="maddr_name" placeholder="收货人姓名">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_mobile" class="col-sm-2 control-label">手机<em class="text-danger">*</em></label>
+                <div class="col-sm-5">
+                  <input type="text" required="true" name="maddr[mobile]" class="form-control" id="maddr_mobile" placeholder="手机号码">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_area"  class="col-sm-2 control-label">收货地区<em class="text-danger">*</em></label>
+                <div class="col-sm-10">
+                  <{input type=region name="maddr[area]" id="maddr_region"}>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_addr" class="col-sm-2 control-label">收货地址<em class="text-danger">*</em></label>
+                <div class="col-sm-10">
+                    <input type="text" required="true" name="maddr[addr]" class="form-control" id="maddr_addr" placeholder="街道\门牌号码">
+                </div>
+              </div>
+              <hr>
+              <div class="form-group">
+                <label for="maddr_zip" class="col-sm-2 control-label">邮编</label>
+                <div class="col-sm-3">
+                    <input type="text" name="maddr[zip]" class="form-control input-sm" id="maddr_zip" placeholder="邮政编码">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_tel" class="col-sm-2 control-label">固话</label>
+                <div class="col-sm-5">
+                    <input type="text" name="maddr[tel]" class="form-control input-sm" id="maddr_tel" placeholder="固定电话">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="maddr_tel" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-5">
+                    <input type="email" name="maddr[email]" class="form-control input-sm" id="maddr_tel" placeholder="填写此项可接收订单状态通知" >
+                </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <div class="form-group">
+              <div class="col-sm-5 col-sm-offset-2 text-left">
+                  <label class="control-label"><input type="checkbox" name="maddr[is_default]" value="true"> 默认收货地址</label>
+              </div>
+              <div class="col-sm-5">
+                  <button type="reset" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="submit" class="btn btn-primary">保存</button>
+              </div>
+          </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</form><!-- /.modal -->
+
+
+
+
+<script charset="utf-8">
+/**
+ * 订单确认页操作JS闭包
+ * 以下脚本用于订单确认页,收货地址、配送、及支付方式的确认操作
+ * @author vmcshop.com
+ * @version 1.150601
+ */
+$(function () {
+    var _popover_options = {
+        container:'body',
+        html:true,
+        placement:'right',
+        trigger:'hover',
+        delay:300,
+        content:function(){
+            return $(this).next().html()
+        }
+    };
+    $('[data-toggle="tooltip"]').tooltip({delay:300});
+    $('[data-toggle="popover"]').popover(_popover_options);
+
+
+    //在备注框做提交前提示
+    var _memo_tip = (function(){
+        var label_map = ['配送至:','配送方式:','支付方式:'],
+        txt_el_map = ['address','.dlytype-name','.payapp-name'],
+        tip=new Array(),
+        memo = $('textarea[name=memo]');
+        //if($.trim(memo.val()))return;
+        $.each($('[data-flowindex]'),function(i,panel){
+            var txt_el= $(panel).find('.active '+txt_el_map[i]);
+            if(txt_el.length)
+            tip.push(label_map[i]+txt_el.text().replace(/\s/ig,''));
+        });tip = tip.join('、');
+        tip="【订单备注】"+tip;
+        memo.prop('placeholder',tip);//利用备注框placeholder 做友情提示.
+        return arguments.callee;
+    })();
+
+    //显示依赖
+    $.each($('[data-showextends]'),function(i,el){
+        var extend = $(el).attr('data-showextends'),extend = extend.split('|');
+        $(extend[0]).on(extend[1],function(e){
+            $(el)[$(extend[0]).is(':'+extend[2])?'show':'hide']();
+        });
+    });
+    $('input[name=invoce_title]').on('keydown',function(e){
+        return e.keyCode!=13;
+    });
+
+
+    //收货地址编辑窗体设置
+    $('#member_addr_edit_modal').on('show.bs.modal',function(){
+        /**
+         * @see javascripts/region_sel.js
+         */
+        region_sel.tryselected($('#maddr_region'));
+
+    });
+    $('#member_addr_edit_modal').on('hide.bs.modal',function(){
+        //重置
+        this.reset();
+        $(this).find('input.tmp-hidden').remove();
+        $(this).find('.modal-title span').text('新增');
+        $(this).removeData('list-item');
+        /**
+         * @see javascripts/region_sel.js
+         */
+         region_sel.unselected($('#maddr_region'),'0');
+    });
+    //收货地址编辑提交
+    $('#member_addr_edit_modal').on('submit',function(e){
+        e.stopPropagation();
+        var list_item = $(this).data('list-item');
+        $.post($(this).prop('action'),$(this).serialize(),function(re){
+                if(re.data){
+                    if(list_item){ //编辑保存
+                        if(re.data['is_default'] == 'true'){
+                            return location.reload();//编辑\保存一个默认地址后刷新页面
+                        }
+                        $.each(list_item.find('[data-bind]'),function(i,el){
+                            el = $(el);
+                            el.text(re.data[el.attr('data-bind')]);
+                        });
+                    }else{ //新增
+                        return location.reload();//新增地址成功后刷新页面
+                    }
+                }
+                $('#member_addr_edit_modal').modal('hide');
+        },'json');
+
+        return false;
+    });
+
+
+    //设置默认收货地址
+    $('.checkout-maddr').on('click','.btn-default-maddr',function(e){
+        e.stopPropagation();
+        var this_btn = $(this),
+        addr_id = this_btn.attr('data-addrid'),
+        el_address = this_btn.closest('.list-group-item').find('address'),
+        label_default = this_btn.closest('.list-group').find('.label-default');
+        if(this_btn.hasClass('disabled'))return;
+        this_btn.closest('.list-group').find('.btn-default-maddr.disabled').removeClass('disabled');
+        if(!label_default.length){
+           label_default = $('<span class="label label-default">默认地址</span>');
+        }
+        $.getJSON('<{link app=b2c ctl=site_member act=quick_maddr args0=set_default args1="__addr_id__}"}>'.replace('__addr_id__',addr_id),function(re){
+            el_address.append(label_default);
+            this_btn.addClass('disabled');
+        });
+        return false;
+    });
+    //删除收货地址
+    $('.checkout-maddr').on('click','.btn-delete-maddr',function(e){
+        e.stopPropagation();
+        if(!confirm('确认删除？'))return false;
+        var this_btn = $(this),
+        addr_id = this_btn.attr('data-addrid'),
+        el_group_item = this_btn.closest('.list-group-item');
+        $.getJSON('<{link app=b2c ctl=site_member act=quick_maddr args0=delete args1="__addr_id__}"}>'.replace('__addr_id__',addr_id),function(re){
+            el_group_item.fadeOut(200,function(){
+                $(this).remove();
+                if(!$('.checkout-maddr .list-group-item').length){
+                    location.reload();//删除了所有地址后，刷新页
+                }
+            });
+        });
+        return false;
+    });
+    //编辑收货地址
+    $('.checkout-maddr').on('click','.btn-edit-maddr',function(e){
+        e.stopPropagation();
+        var this_btn = $(this),
+        addr_id = this_btn.attr('data-addrid'),
+        el_group_item = this_btn.closest('.list-group-item');
+        $('#member_addr_edit_modal').find('.modal-title span').text('编辑');
+        $.getJSON('<{link app=b2c ctl=site_member act=quick_maddr args0=edit args1="__addr_id__}"}>'.replace('__addr_id__',addr_id),function(re){
+            if(!re||!re.data){
+                return alert('编辑失败!请到会员中心编辑!');
+            }
+            $.each(re.data,function(k,v){
+                var look_ipt = $('#member_addr_edit_modal input[name="maddr['+k+']"]');
+                if(look_ipt.length){
+                    if(look_ipt.is(':checkbox')){
+                        look_ipt.prop('checked',v == look_ipt.val());
+                    }else{
+                        look_ipt.val(v);
+                    }
+                }else{
+                    $('#member_addr_edit_modal').append($('<input type="hidden" class="tmp-hidden remove-on-modal-close" name="maddr['+k+']" value="'+v+'">'));
+                }
+                $('#member_addr_edit_modal').data('list-item',el_group_item);
+                $('#member_addr_edit_modal').modal('show');
+            });
+        });
+        return false;
+    });
+
+    //最新价格填充
+    var _fill_price = function(scope,obj){
+            $.each($(scope).find('[data-bind]'),function(i,el){
+                var path = $(el).attr('data-bind'),v=eval('obj["'+path.replace(/\//g,'"]["')+'"]');
+                $(el).text(v);
+            });
+    }
+
+    //订单确认流程对应面板
+    var flow_path = ['.checkout-maddr','.checkout-dlytype','.checkout-payment'];
+    var _check = function(flowindex){
+        $.post("<{link app=b2c ctl=site_checkout act=check args0=$is_fastbuy}>",$('form.checkout-container').serialize(),function(re){
+            _memo_tip();
+            if(!re||!re.data)return;
+            _fill_price($('.checkout-total,.checkout-footer'),re.data);
+            if(!flowindex)return;//仅总价价格更新操作
+            var update_panels = $(flow_path.slice(parseInt(flowindex)+1).join(','));
+            $.each(update_panels,function(idx,panel){
+                panel = $(panel);
+                var list_group = panel.find('.list-group');
+                if(panel.hasClass('checkout-dlytype')){
+                    list_group.empty();
+                    $.each(re.data.dlytypes,function(i,d){
+                        console.info(d);
+                        var item = '<li class="list-group-item clearfix">';
+                            item+= '<input type="radio" name="dlytype_id" value="'+d.dt_id+'">'+d.dt_name+'</li>';
+                            item = $(item);
+                        list_group.append(item);
+                        if(d.detail){
+                            item.append('<i data-toggle="popover" class="glyphicon glyphicon-question-sign" ></i>');
+                            item.append('<p class="hide">'+d.detail+'</p>');
+                            item.find('[data-toggle="popover"]').popover(_popover_options);
+                        }
+                        if(d.selected == 'true'){
+                            item.find('input:radio').prop('checked',true);
+                            item.addClass('active');
+                        }
+                    });
+                }
+                if(panel.hasClass('checkout-payment')){
+                    list_group.empty();
+                    $.each(re.data.paymentapps,function(i,d){
+                        var item = '<li class="list-group-item clearfix">';
+                            item+= '<input type="radio" name="payapp_id" value="'+d.app_id+'">'+d.display_name+'</li>';
+                            item = $(item);
+                        list_group.append(item);
+                        if(d.description){
+                            item.append('<i data-toggle="popover" class="glyphicon glyphicon-question-sign" ></i>');
+                            item.append('<p class="hide">'+d.description+'</p>');
+                            item.find('[data-toggle="popover"]').popover(_popover_options);
+                        }
+                        if(d.selected == 'true'){
+                            item.find('input:radio').prop('checked',true);
+                            item.addClass('active');
+                        }
+                    });
+                }
+            });
+        },'json');
+    }
+
+    $('.btn-list-more').on('click',function(e){
+        e.stopPropagation();
+        $(this).hide();
+        $('.checkout-maddr .list-group-item-more').removeClass('hide');
+    });
+
+    $(flow_path.join(',')).on('click','.list-group-item',function(e){
+        $(this).find('input:radio').prop('checked',true);
+        var current_flow = $(this).closest('.panel')
+        current_flow.find('.list-group-item').removeClass('active');
+        $(this).addClass('active');
+        _check(current_flow.attr('data-flowindex'));
+    });
+
+
+    //使用优惠券
+    $('.my-coupon .coupon-submit').on('click',function(e){
+
+        var coupon_input =$('#coupon_input'),
+            coupon_code = $.trim(coupon_input.val()),
+            btn = $(this);
+        if(!!!coupon_code)return;
+        btn.prop('disabled',true);
+        $.post("<{link app=b2c ctl=site_cart act=use_coupon args0=$is_fastbuy}>",{'coupon':coupon_code},function(re){
+            btn.prop('disabled',false);
+            if(!re){ //没有成功返回最新购物车md5,统统���失败的优惠券使用
+                re = {error:'优惠券使用失败'};
+            }
+            if(re.error){
+                coupon_input.closest('.input-group')
+                .addClass('has-error');
+                coupon_input.prop('placeholder',re.error).val('').on('focus',function(e){
+                    $(this).prop('placeholder',$(this).attr('data-placeholder')).closest('.input-group').removeClass('has-error');
+                    $(this).off('focus',arguments.callee);
+                });
+                return;
+            }
+            $('.checkout-container input[name="cart_md5"]').val(re.data.new_cart_md5);//重新赋值购物车认证串
+
+            $('.my-coupon-used').empty();
+            var plist_order = re.data['promotions']&&re.data['promotions']['order']?re.data['promotions']['order']:false,lis = '';
+            if(plist_order){
+                $.each(plist_order,function(i,p){
+                    if(p.rule_type!='coupon')return;
+                    //优惠券触发提示
+                    lis+='<li data-ruleid="'+p.rule_id+'"><span class="btn-group bg-label"><span class="btn btn-xs btn-danger">'+p.tag+'</span><span class="btn btn-danger btn-xs">券</span><span class="btn btn-xs btn-default btn-rm-coupon" data-couponident="'+p.coupon_obj_ident+'" data-coupon="'+p.coupon_code+'">取消</span></span>&nbsp;'+p.solution+(p.save>0?("<em>,已省 "+p.save+"</em>"):"")+
+                    '&nbsp;<i data-placement="right" data-toggle="tooltip" class="glyphicon glyphicon-info-sign" data-original-title="'+p.desc+'"></i></li>';
+
+                    $('.my-coupon li[data-coupon="'+p.coupon_code+'"]').addClass('disabled');//如果可选优惠券存在，则进行禁用
+                });
+                $('.my-coupon-used').append(lis);
+                $('.my-coupon-used [data-toggle="tooltip"]').tooltip({delay:300});//TIP INIT
+                _check();//重新check订单,仅影响价格
+            }
+
+        },'json')
+    });
+    $('#coupon_input').on('keydown',function(e){
+        if(e.keyCode == 13){
+            $('.my-coupon .coupon-submit').trigger('click');
+            return false;
+        }
+    });
+    //选择优惠券
+    $('.my-coupon li[data-coupon]').on('click',function(e){
+        if($(this).hasClass('disabled'))return;
+        $('#coupon_input').val($(this).attr('data-coupon'));
+        $('.my-coupon .coupon-submit').trigger('click',[e]);
+    });
+    //删除优惠券
+    $('.my-coupon-used').on('click','.btn-rm-coupon',function(e){
+        var obj_ident = $(this).attr('data-couponident'),coupon_code = $(this).attr('data-coupon'),li = $(this).closest('li');
+        if(!obj_ident)return;
+        $.post("<{link app=b2c ctl=site_cart act=remove_coupon args0=$is_fastbuy}>",{'obj_ident':obj_ident},function(re){
+            if(!re||!re.data||!re.data.new_cart_md5)return;
+            $('.checkout-container input[name="cart_md5"]').val(re.data.new_cart_md5);//重新赋值购物车认证串
+            _check();//重新check订单,仅影响价格
+            li.fadeOut('fast',function(){
+                $(this).remove();
+            });//从界面删除优惠券
+            $('.my-coupon li[data-coupon="'+coupon_code+'"]').removeClass('disabled');//如果可选优惠券存在，则解除禁用
+
+        },'json');
+    });
+    //提交订单动作
+    $('form.checkout-container').on('submit',function(e){
+        e.stopPropagation();
+        var form = $(this);
+        $.post(form.prop('action'),form.serialize(),function(re){
+            if(re.error){
+                alert(re.error);
+            }
+            if(re.success){
+                if(re.redirect){
+                    location = re.redirect;
+                }else{
+                    alert(re.success);
+                }
+            }
+        },'json');
+        return false;
+    });
+
+});
+</script>

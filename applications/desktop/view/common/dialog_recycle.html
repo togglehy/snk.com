@@ -1,0 +1,21 @@
+  <div class="notice" style="line-height:30px">
+  <button style="float:right;padding:3px 10px" onclick="$('recycle_from').fireEvent('submit',new Event(event))" >确定删除</button>
+  <button style="float:right;padding:3px 10px" class="btn-close frt" isCloseDialogBtn="true" >取消删除</button>
+对选择的<b><{$count}></b>个条目进行删除操作
+  </div>
+<form action="<{$url}>&action=dorecycle" method="post" id="recycle_from">
+	<input type="hidden" name="_PKEY_" value="<{$selected_item}>" class="pkey"/>
+</form>
+	<hr style="clear:both" />
+<script>
+   $('recycle_from').store('target',{
+        
+        onComplete:function(){
+                  finderDialog.close();
+
+             
+        }
+   
+   });
+
+</script>

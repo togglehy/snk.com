@@ -1,0 +1,69 @@
+<h3 class="page-title">应用中心</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.php?ctl=adminpanel">控制面板</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="javascript:;">应用中心</a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="row" id="applications_list">
+    <div class="col-md-6 col-lg-4">
+    </div>
+    <div class="col-md-6 col-lg-4">
+    </div>
+    <div class="col-md-6 col-lg-4">
+    </div>
+</div>
+
+<div id="tmp_items">
+            <{foreach from=$apps item=app}>
+                <div class="portlet light bg-inverse">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <{$app.app_name}>
+                        </div>
+
+                    </div>
+                    <div class="portlet-body">
+                        <p>
+                            <{$app.description}>
+                        </p>
+                        <div class="clearfix">
+
+                                <!-- <{if $app.status == 'active'}>
+                                    <button type="button" class="btn green-stripe btn-default"><i class="fa fa-pause"></i> 暂停运行</button>
+                                    <button type="button" class="btn btn-default"><i class="fa fa-refresh"></i> 检查更新</button>
+                                <{else}>
+
+                                <button type="button" class="btn red-stripe btn-default"><i class="fa fa-play"></i> 立即启用</button>
+
+
+                                <{/if}> -->
+
+                                <small class="text-muted pull-right"><{$app.app_id}>-<{$app.local_ver}></small>
+
+                        </div>
+
+                    </div>
+                </div>
+                <{/foreach}>
+</div>
+
+
+<script charset="utf-8">
+    ! function() {
+        var adminpanel_cols = $('#applications_list > [class^="col-md"]');
+        var loop_arr = [0, 1, 2];
+        $.each($('#tmp_items > .portlet'), function(i, n) {
+            var loop = loop_arr.shift();
+            $(adminpanel_cols[loop]).append(n);
+            loop_arr.push(loop);
+        });
+    }();
+</script>

@@ -1,0 +1,232 @@
+<div class="container order-detail-container">
+<{assign var=paystatus_map value=array('0','3','4','5')}>
+<ol class="breadcrumb">
+  <li><a href="<{link app=mobile ctl=index}>">首页</a></li>
+  <li><a href="<{link app=b2c ctl=mobile_member}>">会员中心</a></li>
+  <li class="active">订单详情 #<{$order.order_id}></li>
+</ol>
+<!-- 订单进度 -->
+<{if $order.status == 'dead'}>
+<div class="alert alert-warning">
+    <h4>订单已作废</h4>
+    <p>
+        订单已作废,若您需要购买该订单商品,请重新下单!<br>
+        作废时间：<{$order.last_modify|cdate}>
+    </p>
+</div>
+<{else}>
+<div class="row order-process-bar">
+    <{if $order.is_cod=='Y'}>
+    <div class="col-md-4 <{if $order.process.create>0}>active<{/if}>">
+        <div class="well well-sm">订单提交成功</div>
+        <p><{$order.process.create|cdate}></p>
+    </div>
+    <div class="col-md-4 <{if $order.process.shipment>0}>active<{/if}>">
+        <div class="well well-sm">送货上门并收款</div>
+        <p><{$order.process.shipment|cdate}></p>
+    </div>
+    <div class="col-md-4 <{if $order.process.finish>0}>active<{/if}>">
+        <div class="well well-sm">订单完成</div>
+        <p><{$order.process.finish|cdate}></p>
+    </div>
+    <{else}>
+    <div class="col-md-3 <{if $order.process.create>0}>active<{/if}>">
+        <div class="well well-sm">订单提交成功</div>
+        <p><{$order.process.create|cdate}></p>
+    </div>
+    <div class="col-md-3 <{if $order.process.payment>0}>active<{/if}>">
+        <div class="well well-sm">订单付款</div>
+        <p><{$order.process.payment|cdate}></p>
+    </div>
+    <div class="col-md-3 <{if $order.process.shipment>0}>active<{/if}>">
+        <div class="well well-sm">订单发货</div>
+        <p><{$order.process.shipment|cdate}></p>
+    </div>
+    <div class="col-md-3 <{if $order.process.finish>0}>active<{/if}>">
+        <div class="well well-sm">订单完成</div>
+        <p><{$order.process.finish|cdate}></p>
+    </div>
+    <{/if}>
+</div>
+<{/if}>
+<!-- END 订单进度 -->
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title">订单详情</h3>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>收货人信息:</dt>
+            <dd><{$order.consignee.name}>,<{$order.consignee.mobile}>,
+                <{$order.consignee.area|region}><{$order.consignee.addr}><{if $order.consignee.zip}>&nbsp;(&nbsp;<{$order.consignee.zip}>&nbsp;)&nbsp;<{/if}></dd>
+            <{if $order.memo}>
+            <dt>订单备注:</dt>
+            <dd><{$order.memo}></dd>
+            <{/if}>
+            <dt>支付方式:</dt>
+            <dd><{$payapp.display_name}></dd>
+            <dt>付款状态:</dt>
+            <dd><{$order.pay_status|order_pay_status}>
+                <{if $order.is_cod!='Y' && $order.pay_status|in_array:$paystatus_map}>&nbsp;&nbsp;
+                <a href="<{link app=b2c ctl=mobile_checkout act=payment args0=$order.order_id}>" class="btn btn-xs btn-danger">立即付款</a>
+                <{/if}>
+            </dd>
+            <dt>配送方式:</dt>
+            <dd><{$order.dlytype.dt_name}></dd>
+            <{if $order.need_shipping == 'Y'}>
+            <dt>发货状态:</dt>
+            <dd><{$order.ship_status|order_ship_status}></dd>
+            <{if $delivery_id}>
+            <dt>物流状态:</dt>
+            <dd data-deliveryid="<{$delivery_id|implode:'|'}>"><span class="ld">正在加载...</span></dd>
+            <{/if}>
+            <{/if}>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>订单编号:</dt>
+            <dd><{$order.order_id}></dd>
+            <dt>下单时间:</dt>
+            <dd><{$order.createtime|cdate}></dd>
+        </dl>
+        <{if $order.need_invoice}>
+        <dl class="dl-horizontal">
+            <dt>发票抬头:</dt>
+            <dd><{$order.invoice_title}></dd>
+        </dl>
+        <{/if}>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item disabled">
+            购物清单
+            <span class="badge">共<{$order.quantity}>件</span>
+        </li>
+        <{foreach from=$order.items item=item}>
+        <li class="list-group-item">
+          <div class="row">
+                <div class="col-md-1">
+                  <a href="<{link app=b2c ctl=mobile_product args0=$item.product_id}>">
+                      <img class="img-thumbnail"  src="<{$item.image_id|storager:'s'}>" alt="<{$item.name}>-<{$item.spec_info}>" />
+                  </a>
+                </div>
+                <div class="col-md-7">
+                  <a href="<{link app=b2c ctl=mobile_product args0=$item.product_id}>">
+                      <strong><{$item.name}></strong>
+                      <small>
+                          <{$item.spec_info}>
+                      </small>
+                  </a>
+                  <br>
+                  <strong><{$item.buy_price|cur}></strong>
+                  <span class="text-muted">x <{$item.nums}></span>
+                  <{if $goods_pmt.{$item.product_id}}>
+                  <ul class="list-unstyled promotion-list">
+                      <{foreach from=$goods_pmt.{$item.product_id} item=pitem}>
+                          <li>
+                              <span class="label label-danger"><{$pitem.pmt_tag}></span>
+                              <{$pitem.pmt_description}>
+                              <{if $pitem.pmt_save>0}>,<em>已省 <{$pitem.pmt_save|cur}></em><{/if}>
+                          </li>
+                      <{/foreach}>
+                  </ul>
+                  <{/if}>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt></dt>
+                        <dd>
+                            <small>￥</small>
+                            <strong><{$item.buy_price*$item.nums|cur}></strong>
+                        </dd>
+                    <dl>
+                    <!-- <br>
+                    <{assign var=item_save value=($item.price-$item.buy_price)*$item.nums}>
+                    <{if $item_save>0}>
+                    节省：<small>￥</small><{$item_save|cur}>
+                    <{/if}> -->
+                </div>
+          </div>
+         </li>
+        <{/foreach}>
+        <li class="list-group-item clearfix">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-1">
+                    <{if $order_pmt}>
+                        <ul class="list-unstyled promotion-list">
+                            <{foreach from=$order_pmt item=opitem}>
+                                <li>
+                                    <span class="label label-danger"><{$opitem.pmt_tag}></span>
+                                    <{$opitem.pmt_description}>
+                                    <{if $opitem.pmt_save>0}>,<em>已省 <{$opitem.pmt_save|cur}></em><{/if}>
+                                </li>
+                            <{/foreach}>
+                        </ul>
+                    <{/if}>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt><{$order.quantity}>件商品，成交金额：</dt>
+                        <dd>￥<span><{$order.finally_cart_amount|cur}></span></dd>
+                        <dt>运费：</dt>
+                        <dd>￥<span><{$order.cost_freight|cur}></span></dd>
+                        <dt>订单应付总金额：</dt>
+                        <dd class="text-danger">
+                            ￥<strong><{$order.order_total|cur}></strong>
+                        </dd>
+                        <!-- <{if $order.memberlv_discount>0}>
+                            <dt>会员身份节省了：</dt>
+                            <dd>￥<span><{$order.memberlv_discount|cur}></span></dd>
+                        <{/if}>
+                        <{if $cart_result.pmt_goods||$order.pmt_order}>
+                            <dt>促销活动优惠节省了：</dt>
+                            <dd>￥<span><{$order.pmt_goods+$order.pmt_order|cur}></span></dd>
+                        <{/if}> -->
+                    </dl>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+
+    <div class="panel-footer text-right">
+
+        <{if $order.is_cod!='Y' && $order.pay_status|in_array:$paystatus_map}>
+        <a href="<{link app=b2c ctl=mobile_checkout act=payment args0=$order.order_id}>" class="btn btn-sm  btn-danger">订单付款</a>
+        <{/if}>
+        <{if $order.status=='finish'}>
+        <a href="<{link app=b2c ctl=mobile_order act=detail args0=$order.order_id args1=logistics_tracker}>" class="btn btn-sm btn-default">商品评价</a>
+        <{/if}>
+        <!-- <a href="<{link app=b2c ctl=mobile_cart act=mergeorder args0=$order.order_id}>" class="btn btn-sm btn-default">再次购买</a> -->
+    </div>
+</div>
+</div>
+<{if $order.need_shipping == 'Y' && $delivery_id}>
+<script charset="utf-8">
+/*
+*物流状态展示
+*
+*/
+    $(function(){
+        var el = $('[data-deliveryid]');
+        var delivery_id = el.attr('data-deliveryid');
+        delivery_id = delivery_id.split('|');
+        //组织物流追踪记录列表
+        var each_li = function(obj_arr){
+            var _return = "<ul class='list-unstyled'>";
+            $.each(obj_arr,function(i,v){
+                _return+="<li>["+v.time+"]&nbsp;"+v.context+"</li>";
+            });
+            return _return+="</ul>";
+        };
+        (function(id){
+            if(!id)return el.find('.ld').remove();
+            var _fn = arguments.callee;
+            $.getJSON('<{link app=b2c ctl=mobile_order act=logistics_tracker args0="__tracker_id__"}>'.replace('__tracker_id__',id),function(re){
+                if(re.data){
+                    el.append("<div class='well well-sm'><strong>物流单号："+re.data.logi_no+"</strong>"+each_li(re.data.logi_log)+"</div>");
+                }
+                _fn(delivery_id.shift());//递归
+            });
+        })(delivery_id.shift());//可能有多个单据
+    });
+</script>
+<{/if}>

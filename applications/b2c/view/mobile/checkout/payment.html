@@ -1,0 +1,139 @@
+<div class="container">
+    <ol class="breadcrumb">
+      <li><a href="<{link app=mobile ctl=index}>">首页</a></li>
+      <li><a href="<{link app=b2c ctl=mobile_member}>">会员中心</a></li>
+      <li class="active">收银台</li>
+    </ol>
+</div>
+<{if $flow_success=='1'}>
+<div class="container">
+    <div class="alert alert-success order-create-success">
+            <h1 class="text-success">订单已成功提交！</h1>
+    </div>
+</div>
+<{/if}>
+
+<div class="container checkout-container">
+    <div class="row">
+        <div class="col-md-7">
+            <div  class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">订单概要</h3>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        订单号：<strong><{$order.order_id}></strong>
+                    </li>
+                    <li class="list-group-item">
+                        创建时间：<strong><{$order.createtime|cdate}></strong>
+                    </li>
+                    <li class="list-group-item">
+                        订单包含商品数：<strong><{$order.quantity}></strong>
+                    </li>
+                    <li class="list-group-item">
+                        收货人：<strong><{$order.consignee.name}></strong>
+                    </li>
+                    <li class="list-group-item">
+                        收货人地区：<strong><{$order.consignee.area|region}></strong>
+                    </li>
+                    <li class="list-group-item">
+                        收货人地址：<strong><{$order.consignee.addr}></strong>
+                    </li>
+                    <{if $order.consignee.tel}>
+                    <li class="list-group-item">
+                        收货人固话：<strong><{$order.consignee.tel}></strong>
+                    </li>
+                    <{/if}>
+                    <li class="list-group-item">
+                        收货人手机：<strong><{$order.consignee.mobile}></strong>
+                    </li>
+                    <{if $order.consignee.email}>
+                    <li class="list-group-item">
+                        收货人邮箱：<strong><{$order.consignee.email}></strong>
+                    </li>
+                    <{/if}>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left"><{if $order.is_cod!='Y'}>在线<{/if}>支付方式</h3>
+                    <{if $order.is_cod!='Y'}>
+                    <button data-toggle="modal" data-target="#pappchange_modal" type="button"  class="btn btn-default btn-xs pull-right btn-new-maddr">更换支付方式</button>
+                    <{/if}>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <h4><{$selected_payapp.display_name}></h4>
+                        <p class="list-group-item-text">
+                            <{$selected_payapp.description}>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="checkout-footer panel panel-default">
+        <div class="row">
+            <div class="col-md-7">
+                <{if $order.payed>0}>
+                <dl>
+                        <dt>订单已支付：</dt>
+                        <dd><{$order.payed|cur}></dd>
+                </dl>
+                <{/if}>
+            </div>
+            <div class="col-md-5 text-right">
+                    <span class="order-total">订单应付总额：
+                        <span class="text-danger"><small>￥</small><strong data-bind="total/order_total"><{$order.order_total-$order.payed|cur}></strong></span>
+                    <span>
+                    <{if $order.is_cod!='Y'}>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a target="_blank" href="<{link app=b2c ctl=mobile_checkout act=dopayment args0=$order.order_id}>" class="btn btn-danger btn-lg">付款</a>
+                    <{else}>
+                    <a target="_blank" href="<{link app=b2c ctl=mobile_order act=detail args0=$order.order_id}>" class="btn btn-success btn-lg">查看订单详情</a>
+                    <{/if}>
+            </div>
+        </div>
+    </div>
+<!-- checkout-container end -->
+</div>
+
+
+<div class="modal" id="pappchange_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">更多支付方式</h4>
+      </div>
+      <div class="modal-body">
+          <{foreach from=$payapps key=k item=papp}>
+             <{if $selected_payapp.app_id == $papp.app_id}><{continue;}><{/if}>
+              <a href="javascript:;"  class="list-group-item">
+                  <h3><{$papp.display_name|default:$papp.name}></h3>
+                  <p>
+                      <{$papp.description}>
+                  </p>
+              </a>
+          <{/foreach}>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+<script charset="utf-8">
+$(function () {
+
+
+});
+</script>

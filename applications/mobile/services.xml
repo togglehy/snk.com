@@ -1,0 +1,22 @@
+<services>
+    <service id="app_content_detector">
+        <class>mobile_application_module</class>
+    </service>
+
+    <service id="view_compile_helper">
+        <class>mobile_view_compiler</class>
+    </service>
+
+    <service id="view_helper">
+        <class>mobile_view_helper</class>
+    </service>
+
+    <service id="html_input">
+        <class>mobile_view_input</class>
+    </service>
+    
+    <service id="site_view_helper">
+        <class orderby="1">site_service_view_helper</class>
+    </service>
+
+</services>

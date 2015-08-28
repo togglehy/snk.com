@@ -1,0 +1,24 @@
+{
+	"data":
+	[
+		{
+			"type_id": 2,
+			"name": "智能手机",
+			"floatstore": "0",
+			"alias": null,
+			"is_physical": "1",
+			"schema_id": "custom",
+			"setting": "a:5:{s:9:\"use_brand\";s:1:\"0\";s:9:\"use_minfo\";s:1:\"0\";s:7:\"use_tab\";s:1:\"0\";s:9:\"use_props\";s:1:\"1\";s:10:\"use_params\";s:1:\"1\";}",
+			"price": "a:0:{}",
+			"minfo": "a:0:{}",
+			"params": "a:0:{}",
+			"tab": "a:0:{}",
+			"dly_func": "0",
+			"ret_func": "0",
+			"reship": "normal",
+			"disabled": "false",
+			"is_def": "false",
+			"lastmodify": null
+		}
+	]
+}

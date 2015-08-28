@@ -1,0 +1,210 @@
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <h3 class="modal-title">订单编辑 # <{$order.order_id}></h3>
+</div>
+<form method="post" action="index.php?app=b2c&ctl=admin_order&act=save" id='order_edit_form' class="form">
+<input type="hidden" name="order_id" value="<{$order.order_id}>">
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="well">
+                <h4>物流方式</h4>
+                <div class="row static-info">
+					<div class="col-md-3 name">
+						名称:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.dlytype.dt_name}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						运费:
+					</div>
+					<div class="col-md-9 value">
+						<small>￥</small><{$order.cost_freight|cur}>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						状态:
+					</div>
+					<div class="col-md-9 value">
+						<{$order.ship_status|order_ship_status}>
+					</div>
+				</div>
+                <hr>
+                <h4>支付方式</h4>
+                <div class="row static-info">
+                    <div class="col-md-3 name">
+                        名称:
+                    </div>
+                    <div class="col-md-9 value">
+                        <{$payapp.display_name}>
+                        <br><small><{$payapp.name}><{$payapp.version}></small>
+                    </div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-md-3 name">
+                        状态:
+                    </div>
+                    <div class="col-md-9 value">
+                        <{$order.pay_status|order_pay_status}>
+                    </div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-md-3 name">
+                        应付:
+                    </div>
+                    <div class="col-md-9 value">
+                        <small>￥</small><{$order.order_total-$order.payed|cur}>
+                    </div>
+                </div>
+                <hr>
+                <h4>订单合计</h4>
+    				<div class="row static-info align-reverse">
+    					<div class="col-md-6 name">
+    						商品总金额:
+    					</div>
+    					<div class="col-md-6 value">
+    								<small>￥</small><{$order.finally_cart_amount+$order.memberlv_discount+$order.pmt_goods+$order.pmt_order|cur}>
+    					</div>
+    				</div>
+    				<{if $order.pmt_order>0}>
+    				<div class="row static-info align-reverse">
+    					<div class="col-md-6 name">
+    						订单促销优惠:
+    					</div>
+    					<div class="col-md-6 value">
+    						-<small>￥</small><{$order.pmt_order|cur}>
+    					</div>
+    				</div>
+    				<{/if}>
+    				<{if $order.pmt_goods > 0}>
+    				<div class="row static-info align-reverse">
+    					<div class="col-md-6 name">
+    						商品促销优惠:
+    					</div>
+    					<div class="col-md-6 value">
+    						-<small>￥</small><{$order.pmt_goods|cur}>
+    					</div>
+    				</div>
+    				<{/if}>
+    				<{if $order.cost_tax>0}>
+    				<div class="row static-info align-reverse">
+    					<div class="col-md-6 name">
+    						税金:
+    					</div>
+    					<div class="col-md-6 value">
+    						<small>￥</small><{$order.cost_tax|cur}>
+    					</div>
+    				</div>
+    				<{/if}>
+    				<div class="row static-info align-reverse">
+    					<div class="col-md-6 name">
+    						运费:
+    					</div>
+    					<div class="col-md-6 value">
+    						<small>￥</small><{$order.cost_freight|cur}>
+    					</div>
+    				</div>
+    				<div class="row static-info align-reverse">
+    					<div class="col-md-6 name">
+    						订单应付金额:
+    					</div>
+    					<div class="col-md-6 value">
+    						<small>￥</small><big><{$order.order_total|cur}></big>
+    					</div>
+    				</div>
+    			</div>
+        </div>
+        <div class="col-md-8">
+            <div class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">收货人
+                       </label>
+                        <div class="col-md-8">
+                            <{input class="input-sm" type="text" required=true name="consignee[name]" value=$order.consignee.name}>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">收货地区
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{input class="input-sm"  type="region" required=true name="consignee[area]" value=$order.consignee.area}>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">收货地址
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-5">
+                            <{input class="input-sm" type="textarea" required=true name="consignee[addr]" value=$order.consignee.addr}>
+                        </div>
+                        <div class="col-md-3">
+                            <{input class="input-sm"  type="text" name="consignee[zip]" value=$order.consignee.zip}>
+                            <span class="help-block">邮编(选填)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">收货人手机
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            <{input class="input-sm" type="text" required=true name="consignee[mobile]" value=$order.consignee.mobile}>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">收货人固话
+                       </label>
+                        <div class="col-md-8">
+                            <{input class="input-sm" type="text"  name="consignee[mobile]" value=$order.consignee.mobile}>
+                        </div>
+                    </div>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">收货人邮箱
+                       </label>
+                        <div class="col-md-8">
+                            <{input class="input-sm" type="email"  name="consignee[email]" value=$order.consignee.email}>
+                        </div>
+                    </div>
+                    <!-- <hr>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">物流方式
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            loading...
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group pay-online">
+                        <label class="col-md-4 control-label">支付方式
+                            <span class="required" aria-required="true">*</span>
+                       </label>
+                        <div class="col-md-8">
+                            loading...
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">发票抬头
+                       </label>
+                        <div class="col-md-8">
+                            <{input type='text' class="input-sm" name='invoice_title' value=$order.invoice_title }>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn blue">保存</button>
+</div>
+</form>

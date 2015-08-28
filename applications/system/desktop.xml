@@ -1,0 +1,9 @@
+<desktop>
+    <permissions>
+        <permission display='true' id="queue" parent='0' workground='queue'>计划任务管理、系统队列管理</permission>
+    </permissions>
+    <adminpanel action="index" controller="admin_crontab" display='true'
+        group="desktop_system" permission="queue">计划任务</adminpanel>
+    <adminpanel action="index" controller="admin_queue" display='true'
+        group="desktop_system" permission="queue">执行队列</adminpanel>
+</desktop>

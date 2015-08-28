@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="col-md-2">
+        <div class="thumbnail">
+            <img src="<{$goods.image_default_id|storager:'s'}>">
+            <div class="caption">
+                <h4><{$comment.goodname}></h4>
+                <p>
+                    共被评价<i><{$goods.comments_count}></i>次
+                </p>
+                <p>
+                    <a href="#" class="btn btn-sm btn-default">
+                                        查看商品 </a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-10">
+            <ul class="list-inline">
+                <li>发表者：<{$comment.author}></li>
+                <li>联系方式：<{$comment.author}></li>
+                <li>IP地址：<{$comment.ip}></li>
+                <{if $comment.gask_type}><li>咨询类型：<{$comment.gask_type}></li><{/if}>
+                <li>咨询时间： <{$comment.time|cdate:SDATE_STIME}></li>
+            </ul>
+
+            <ul class="media-list">
+                <li class="media">
+                    <div class="pull-left">
+                        <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" alt="" width=64 />
+                    </div>
+                    <div class="media-body">
+                        <p>
+                            <{$comment.comment}>
+                        </p>
+                            <a href="index.php?app=b2c&ctl=admin_member_gask&act=to_display&p[0]=<{$comment.comment_id}>&p[1]=<{$comment.display}>" class="btn btn-xs btn-default">
+                                <{if $comment.display=='true'}><i class="fa fa-eye-slash"></i> 前台不可见<{else}><i class="fa fa-eye"></i> 前台可见<{/if}>
+                            </a>
+                            <a href="index.php?app=b2c&ctl=admin_member_gask&act=delete_message&p[0]=<{$comment.comment_id}>"  class="btn btn-xs btn-default"><i class="fa fa-remove"></i> 删除</a>
+
+
+                        <{foreach from=$reply item=items}>
+                        <div class="media">
+                            <div class="pull-left">
+                                <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" alt="" width=64 />
+                            </div>
+                            <div class="media-body">
+                                <{if $object_type=='message'}>
+                                 <h4><{$items.title|nl2br}></h4>
+                                <{/if}>
+                                <p>
+                                    <{$items.comment}>
+                                    <br>
+                                    <{$items.author}>回复于<{$items.time|cdate:SDATE_STIME}>
+                                </p>
+                                <a href="index.php?app=b2c&ctl=admin_member_gask&act=to_display&p[0]=<{$items.comment_id}>&p[1]=<{$items.display}>" target="_command" class="btn btn-xs btn-default"><{if $items.display=='true'}><i class="fa fa-eye-slash"></i> 前台不可见<{else}><i class="fa fa-eye"></i> 前台可见<{/if}></a>
+                                <a href="index.php?app=b2c&ctl=admin_member_gask&act=delete_reply&p[0]=<{$items.comment_id}>" class="btn btn-xs btn-default" target="_command"><i class="fa fa-remove"></i>删除</a>
+                            </div>
+                        </div>
+                        <{/foreach}>
+                        <div class="media">
+                              <div class="pull-left">
+                                  <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" alt="" width=64 />
+                              </div>
+                              <div class="media-body">
+                                  <form  action="index.php?app=b2c&ctl=admin_member_gask&act=to_reply&p[0]=<{$comment.comment_id}>" method="post">
+                                      <{if $object_type=='message'}>
+                                        <input type="hidden" value="回复::<{$comment.title|escape:'html'}>" name="title"/>
+                                       <{/if}>
+                                       <input type="hidden" value="<{$comment.comment_id}>" name="comment_id"/>
+                                       <{input type="textarea" placeholder="请输入回复内容"  required=true class="form-control" name="reply_content"  rows=1}>
+                                       <button type="submit" class="margin-top-10 btn btn-xs btn-default"><i class="fa fa-reply"></i> 回复</button>
+                                  </form>
+                              </div>
+                        </div>
+
+                    </div> <!--end media body-->
+
+
+                </li>
+            </ul>
+
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<desktop>
+  <permissions>
+    <permission id="importexport" display='true' parent='0' workground='importexport'>导入导出任务</permission>
+  </permissions>
+  <panelgroup id="iesys" icon="icon-cloud-upload" order="60">导入导出</panelgroup>
+<adminpanel group="importexport_iesys" permission="importexport" controller="admin_system" action="setting" display='true'>导入导出配置</adminpanel>
+<adminpanel group="importexport_iesys" permission="importexport" controller="admin_export" action="queue_export" display='true'>导出任务队列</adminpanel>
+<adminpanel group="importexport_iesys" permission="importexport" controller="admin_import" action="queue_import" display='true'>导入任务队列</adminpanel>
+
+
+</desktop>

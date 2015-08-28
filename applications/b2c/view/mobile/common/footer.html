@@ -1,0 +1,52 @@
+<script charset="utf-8">
+/*购物数量 事件拦截开始*/
+
+$(function(){
+    var change_event_timer = 0;
+    var _change_quantity = function(ipt,num){
+        ipt = $(ipt),last_val = parseInt(ipt.val());
+        var set_v = last_val+num;
+        ipt.val(set_v);
+        if(isNaN(ipt.val()) || ipt.val()<1){
+            ipt.val('1');
+        }
+        if(ipt.attr('data-max') && set_v>parseInt(ipt.attr('data-max'))){
+            ipt.val(ipt.attr('data-max'));
+        }
+        ipt.trigger('_change',[ipt.val(),num]);
+    }
+
+    $('.product-quantity .spinner-buttons').on('click',function(e){
+        var btn = $(this);
+        btn.find('button').eq(0).blur();
+        if(btn.data('animating'))return;
+        if(btn.next('.spinner-input').length){
+            _change_quantity(btn.next('.spinner-input'),-1);
+        }
+        if(btn.prev('.spinner-input').length){
+            _change_quantity(btn.prev('.spinner-input'),+1);
+        }
+        btn.data('animating',true);
+        btn.css('opacity',.2);
+        btn.animate({opacity:1},'slow',function(){
+            $(this).removeData('animating');
+        });
+
+
+    });
+    $('.product-quantity .spinner-input').on('keyup',function(e){
+        switch (e.keyCode) {
+            case 38:
+                _change_quantity(this,+1);
+                break;
+            case 40:
+                _change_quantity(this,-1);
+                break;
+            default:
+                _change_quantity(this,0);
+        }
+    });
+});
+
+/*购物数量 事件拦截结束*/
+</script>

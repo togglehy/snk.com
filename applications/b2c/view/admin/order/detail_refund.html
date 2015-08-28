@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>
+                    退款单号
+                </th>
+                <th>
+                    退款金额
+                </th>
+                <th>
+                    交易类型
+                </th>
+                <th>
+                    收款银行\平台
+                </th>
+                <th>
+                    收款账号
+                </th>
+                <th>
+                    付款银行\平台
+                </th>
+                <th>
+                    付款账号
+                </th>
+                <th>
+                    最后更新时间
+                </th>
+                <th>
+                    状态
+                </th>
+            </thead>
+            <tbody>
+            <{foreach from=$order_refunds item=p}>
+                <tr>
+                    <td>
+                        <{$p.bill_id}>
+                    </td>
+                    <td>
+                        <{$p.money|cur}>
+                    </td>
+                    <td>
+                        <{if $p.pay_mode=='online'}>在线<{else}>线下<{/if}>
+                    </td>
+                    <td>
+                        <{$p.payee_bank}>
+                    </td>
+                    <td>
+                        <{$p.payee_account}>
+                    </td>
+                    <td>
+                        <{$p.payer_bank}>
+                    </td>
+                    <td>
+                        <{$p.payer_account}>
+                    </td>
+                    <td>
+                        <{$p.last_modify|cdate}>
+                    </td>
+                    <td>
+                        <{$p.pay_status}>
+                    </td>
+                </tr>
+            <{/foreach}>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>

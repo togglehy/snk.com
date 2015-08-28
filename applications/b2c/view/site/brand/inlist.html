@@ -1,0 +1,18 @@
+
+<ol class="breadcrumb">
+  <li><a href="<{link app=site ctl=index}>">首页</a></li>
+  <li><a href="<{link app=b2c ctl=site_brand}>">品牌专区</a></li>
+  <li class="active"><{$brand.brand_name}></li>
+</ol>
+
+<div class="brand-inlist-container">
+    <h1><{$brand.brand_name}></h1>
+    <div class="row">
+        <div class="col-xs-3">
+            <img src="<{$brand.brand_logo|storager:'s'}>" alt="<{$brand.brand_name}>" height=90/>
+        </div>
+        <div class="col-xs-9">
+            <{$brand.brand_desc}>
+        </div>
+    </div>
+</div>

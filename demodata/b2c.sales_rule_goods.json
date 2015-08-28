@@ -1,0 +1,41 @@
+{
+	"data":
+	[
+		{
+			"rule_id": 7,
+			"name": "数码智能类目产品2件95折放价",
+			"description": "数码智能类目产品95折,苹果产品除外",
+			"create_time": 1433242872,
+			"from_time": 1433193900,
+			"to_time": 1562812200,
+			"member_lv_ids": "1,2,3,4,5",
+			"status": "true",
+			"conditions": "a:4:{s:4:\"type\";s:34:\"b2c_sales_goods_aggregator_combine\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";s:1:\"1\";s:10:\"conditions\";a:2:{i:1;a:4:{s:4:\"type\";s:26:\"b2c_sales_goods_item_goods\";s:9:\"attribute\";s:12:\"goods_cat_id\";s:8:\"operator\";s:2:\"()\";s:5:\"value\";a:4:{i:0;s:1:\"2\";i:1;s:1:\"6\";i:2;s:2:\"18\";i:3;s:2:\"19\";}}i:0;a:4:{s:4:\"type\";s:26:\"b2c_sales_goods_item_goods\";s:9:\"attribute\";s:14:\"goods_brand_id\";s:8:\"operator\";s:3:\"!()\";s:5:\"value\";a:1:{i:0;s:1:\"1\";}}}}",
+			"stop_rules_processing": "false",
+			"sort_order": 50,
+			"action_solution": "a:1:{s:33:\"b2c_promotion_solutions_topercent\";a:2:{s:8:\"quantity\";s:1:\"2\";s:7:\"percent\";s:2:\"95\";}}",
+			"free_shipping": 0,
+			"c_template": "ruleplus_promotion_conditions_goods_userdefined",
+			"s_template": "b2c_promotion_solutions_topercent",
+			"apply_time": 1433242872
+		},
+		{
+			"rule_id": 16,
+			"name": "婴幼儿玩具全场6.1折庆儿童节",
+			"description": "6.1至7.1日，因幼儿玩具6.1折",
+			"create_time": 1433242954,
+			"from_time": 1433103600,
+			"to_time": 1435748100,
+			"member_lv_ids": "1,2,3,4,5",
+			"status": "true",
+			"conditions": "a:4:{s:4:\"type\";s:34:\"b2c_sales_goods_aggregator_combine\";s:10:\"aggregator\";s:3:\"all\";s:5:\"value\";s:1:\"1\";s:10:\"conditions\";a:1:{i:0;a:4:{s:4:\"type\";s:26:\"b2c_sales_goods_item_goods\";s:9:\"attribute\";s:12:\"goods_cat_id\";s:8:\"operator\";s:2:\"()\";s:5:\"value\";a:1:{i:0;s:2:\"13\";}}}}",
+			"stop_rules_processing": "false",
+			"sort_order": 49,
+			"action_solution": "a:1:{s:33:\"b2c_promotion_solutions_topercent\";a:2:{s:8:\"quantity\";s:1:\"1\";s:7:\"percent\";s:2:\"61\";}}",
+			"free_shipping": 0,
+			"c_template": "ruleplus_promotion_conditions_goods_userdefined",
+			"s_template": "b2c_promotion_solutions_topercent",
+			"apply_time": 1433242954
+		}
+	]
+}

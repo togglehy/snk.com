@@ -1,0 +1,140 @@
+<h3 class="page-title">
+		会员扩展字段 <small>扩展会员注册项</small>
+</h3>
+<div class="table-toolbar">
+    <div class="btn-group">
+        <a class="btn green" data-target="#member_attr_edit" data-toggle="modal" label="添加新项" icon="fa-plus" href="index.php?app=b2c&ctl=admin_member_attr&act=add_page">
+                添加新项&nbsp;<i class="fa fa-plus"></i>
+        </a>
+    </div>
+</div>
+<form action="index.php?app=b2c&ctl=admin_member_attr&act=save_order" id="member_attr_form" method="post" >
+    <div class="table-scrollable">
+        <table class="table table-hover">
+            <thead>
+                <th width="10%">
+                    启用
+                </th>
+                <th width="50%">
+                    名称类型
+                </th>
+                <th>
+                    操作
+                </th>
+				<th>
+					排序
+				</th>
+            </thead>
+            <tbody>
+                <{foreach from=$tree item=item name="item" key='row'}>
+                <tr>
+                    <td>
+                        <{if $item.attr_show == "false"}>
+                          <a class="text-default" href="index.php?app=b2c&ctl=admin_member_attr&act=show_switch&p[0]=<{$item.attr_id}>" target="_command"><i class="fa fa-square-o"></i> 已禁用</a>
+                        <{else}>
+                          <a class="text-success" href="index.php?app=b2c&ctl=admin_member_attr&act=hidden_switch&p[0]=<{$item.attr_id}>" target="_command"><i class="fa fa-check-square"></i> 已启用</a>
+                        <{/if}>
+                    </td>
+                    <td>
+                        <input type='hidden' name='attr_order[]' value='<{$item.attr_id}>'>
+                        <div class="input-group">
+                        <span class="input-group-addon">
+                            <{if $item.attr_required eq 'true'}><em>*</em><{/if}><{$item.attr_name}>
+						</span>
+                        <{if $item.attr_type =='date'}>
+                        <input value='日期选择器' class="form-control" type='text' />
+                        <{/if}>
+                        <{if $item.attr_type =='text'}>
+                        <{input class="inputstyle" name=$item.attr_id }>
+                        <{/if}>
+                         <{if $item.attr_type =='region'}>
+                         <select class="form-control"><option>地区选择项</option></select>
+                         <{/if}>
+
+                         <{if $item.attr_type ==gender}>
+                         <label class="control-label"><input type="radio" name='<{$item.attr_id}>' value='男' />男</label>
+                         <label class="control-label"><input type="radio" name='<{$item.attr_id}>' value='女' />女</label>
+                         <{/if}>
+
+                         <{if $item.attr_type =='select'}>
+                           <select class="form-control" name='$item.attr_id'>
+                           <{foreach from=$item.attr_option item=option name="option"  }>
+                           <option value='<{$option}>'><{$option}></option>
+                           <{/foreach}>
+                           </select>
+                         <{/if}>
+                        <{if $item.attr_type =='cal'}>
+                        <{input class="cal" type='date' name=$item.attr_id }><{if $item.attr_required eq 'true'}><em>*</em><{/if}>
+                        <{/if}>
+                        <{if $item.attr_type =='checkbox'}>
+                           <{foreach from=$item.attr_option item=checkbox name="checkbox" }>
+
+                           <input type='checkbox' name="<{$checkbox.attr_id}>[]"><label><{$checkbox}></label>
+
+                           <{/foreach}>
+
+                         <{/if}>
+                     </div>
+                    </td>
+                    <td>
+                        <a href="index.php?app=b2c&ctl=admin_member_attr&act=edit_page&p[0]=<{$item.attr_id}>" class="btn btn-default btn-sm" data-target="#member_attr_edit" data-toggle="modal"><i class="fa fa-edit"></i> 编辑</a>
+
+                        <button type="button" data-action="index.php?app=b2c&ctl=admin_member_attr&act=remove&p[0]=<{$item.attr_id}>" class="btn btn-default btn-sm delete" <{if $item.attr_tyname =='系统默认'}>style="visibility:hidden"<{/if}>><i class="fa fa-trash"></i> 删除</button>
+                    </td>
+					<td>
+						<button type="button" class="btn default btn-sm go-prev"><i class="fa fa-caret-up"></i></button>
+						<button type="button" class="btn default btn-sm go-next"><i class="fa fa-caret-down"></i></button>
+					</td>
+                </tr>
+                <{/foreach}>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+
+<div class="modal fade" id="member_attr_edit" role="basic" aria-hidden="true">
+			<div class="modal-dialog">
+					<div class="modal-content">
+
+					</div>
+			</div>
+</div>
+
+
+<script charset="utf-8">
+!function(){
+	var update_order_timer = 0;
+	//排序
+	$('#member_attr_form').on('click','button.go-prev,button.go-next',function(){
+		var tr = $(this).closest('tr');
+		var gonext = $(this).hasClass('go-next');
+		if(gonext){
+			tr.insertAfter(tr.next('tr'));
+		}else{
+			tr.insertBefore(tr.prev('tr'));
+		}
+		update_order_timer = setTimeout(function(){
+			clearTimeout(update_order_timer);
+			tr.closest('form').trigger('submit');
+		},1000);
+
+	});
+	//删除
+	$('#member_attr_form').on('click','button.delete',function(e){
+		e.stopPropagation();
+		if(!confirm('确认？'))return;
+		var tr = $(this).closest('tr');
+		var action = $(this).attr('data-action');
+		$.getJSON(action,function(re){
+			jsonCommond(re);
+			tr.fadeOut('fast',function(){
+				tr.remove();
+			});
+		});
+	});
+
+}();
+
+
+</script>

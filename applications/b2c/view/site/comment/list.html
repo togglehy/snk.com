@@ -1,0 +1,54 @@
+<{foreach from=$comment_list item=comment name=fec_cl}>
+    <div class="row">
+        <div class="col-md-1 col-xs-3">
+            <img src="<{$comment.member_id|avatar:'xs'}>" alt="<{$comment.author_name}>" class="img-thumbnail img-circle" />
+        </div>
+        <div class="col-md-11 col-xs-9">
+            <h5>
+                <{$comment.author_name}> <small><{$comment.createtime|cdate}></small>
+            </h5>
+            <p>
+                满意度：<span class="text-warning"><{$comment.mark.mark_star|star}></span>
+            </p>
+            <p><{$comment.content}></p>
+            <div class="row">
+            <{foreach from=$comment.images item=image}>
+                <div class="col-md-2">
+                    <a href="<{$image.image_id|storager}>" target='_blank' class="thumbnail">
+                        <img src="<{$image.image_id|storager:'s'}>"/>
+                    </a>
+                </div>
+            <{/foreach}>
+            </div>
+            <{foreach from=$comment.reply item=reply}>
+                <{if $reply.member_id!=$comment.member_id}>
+                    <{continue;}>
+                <{/if}>
+                <div class="highlight">
+                    <h5><small><{$reply.createtime|cdate}></small></h5>
+                    <p>
+                        <{$reply.content}>
+                    </p>
+                </div>
+            <{/foreach}>
+            <{foreach from=$comment.reply item=reply}>
+                <{if $reply.member_id ==$comment.member_id}>
+                    <{continue;}>
+                <{/if}>
+                <div class="row">
+                    <div class="col-md-1 col-xs-3">
+                        <img width='100%' src="<{$reply.member_id|avatar:'xs'}>" alt="<{$reply.author_name}>" class="img-thumbnail img-circle" />
+                    </div>
+                    <div class="col-md-11 col-xs-9">
+                        <h5><{$reply.author_name}> <small><{$reply.createtime|cdate}></small></h5>
+                        <p><{$reply.content}></p>
+                    </div>
+                </div>
+            <{/foreach}>
+        </div>
+    </div>
+    <{if !$env.foreach.fec_cl.last}>
+    <hr>
+    <{/if}>
+<{/foreach}>
+<{pagers data=$pager}>

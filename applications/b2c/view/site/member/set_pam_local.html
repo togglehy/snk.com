@@ -1,0 +1,32 @@
+<div class="container my-pam-local">
+    <ol class="breadcrumb">
+      <li><a href="<{link app=site ctl=index}>">首页</a></li>
+      <li><a href="<{link app=b2c ctl=site_member}>">会员中心</a></li>
+      <li class="active">设置昵称登录名</li>
+    </ol>
+</div>
+<form class="form-horizontal" action="<{link app=b2c ctl=site_member act=set_pam_uname args0=save}>" method="post" id="receiver_form">
+    <{foreach from=$pam_data key=key item=item}>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label">
+            <{$pam_type.{$key}}>
+        </label>
+        <div class="col-xs-4">
+            <input type="text" class="form-control" readonly=true value="<{$item.login_account}>">
+            <span class="help-block">设置完后，依然可以用<{$pam_type.{$key}}>登录</span>
+        </div>
+    </div>
+    <{/foreach}>
+    <div class="form-group">
+        <label  class="col-xs-2 control-label">昵称\用户名</label>
+        <div class="col-xs-4">
+            <input type="text" required="true" class="form-control" name="local_uname" placeholder="大于4个字符的英文数字组合" value="">
+            <span class="help-block">设置完后，可使用 用户名 登录</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-7 col-xs-offset-2">
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+    </div>
+</form>

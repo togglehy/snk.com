@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PRINTER</title>
+    <link href="/public/app/desktop/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"type="text/css" />
+</head>
+<style>
+body{
+    font-size:9pt;
+    font-family:'SimHei';
+
+}
+
+</style>
+
+<body>
+    <div class="print-container">
+        <{if $printContent.cart}>
+        <{$content_cart}>
+        <{/if}>
+        <{if $printContent.sheet}>
+            <{$content_sheet}>
+        <{/if}>
+        <{if $printContent.express}>
+        <{include file="admin/order/print_dly.html"}>
+        <{/if}>
+    </div>
+    <div class="navbar-fixed-bottom well hidden-print">
+        <button type="button" class="btn btn-success btn-block" onclick="print();">立即打印</button>
+    </div>
+    <script charset="utf-8">
+        <{if $env.get.direct_printing}>
+            self.focus();
+            self.print();
+        <{/if}>
+    </script>
+</body>
+
+</html>

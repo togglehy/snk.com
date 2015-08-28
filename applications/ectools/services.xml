@@ -1,0 +1,48 @@
+<services>
+
+
+    <service id="ectools_payment.applications" optname="支付插件列表">
+        <class>ectools_payment_applications_cod</class>
+        <class>ectools_payment_applications_offline</class>
+        <class>ectools_payment_applications_alipay</class>
+        <class>ectools_payment_applications_malipay</class>
+        <class>ectools_payment_applications_chinapay</class>
+    </service>
+
+    <service id="view_compile_helper">
+        <class>ectools_view_compiler</class>
+    </service>
+
+    <service id="view_helper">
+        <class>ectools_view_helper</class>
+    </service>
+
+    <service id="desktop_finder.ectools_mdl_payments">
+        <class>ectools_finder_payments</class>
+    </service>
+
+    <service id="desktop_finder.ectools_mdl_refunds">
+        <class>ectools_finder_refunds</class>
+    </service>
+
+    <service id="desktop_finder.ectools_mdl_currency">
+        <class>ectools_finder_currency</class>
+    </service>
+
+    <service id="ectools_regions.ectools_mdl_regions" optname="地区包" opttype="select">
+        <class>ectools_regions_mainland</class>
+    </service>
+
+    <service id="html_input">
+        <class>ectools_view_input</class>
+    </service>
+
+    <service id="openapi.ectools_payment">
+        <class>ectools_payment_api</class>
+    </service>
+
+    <service id="ectools_regions_apps">
+        <class>ectools_regions_operation</class>
+    </service>
+
+</services>
