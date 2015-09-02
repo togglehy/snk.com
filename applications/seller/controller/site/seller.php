@@ -16,18 +16,14 @@ class seller_ctl_site_seller extends seller_frontpage
 
     public function __construct(&$app)
     {
-        parent::__construct($app);        
-        $this->action = $this->_request->get_act_name();		
-        $this->seller = $this->get_current_seller();
-        $this->set_tmpl('seller');
-		$this->_menus = $this->get_menu();
+        parent::__construct($app);
+        $this->set_tmpl('seller');		
     }
 	
 	// 商家首页
 	public function index()
 	{
-		//$menu = $this->app->getConf('avatar_max_size');
-		//echo $this->app->app_dir;
+		
 	}
 	
 	// 审核进度

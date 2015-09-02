@@ -10,24 +10,29 @@
 // | Author: Shanghai ChenShang Software Technology Co., Ltd.
 // +----------------------------------------------------------------------
 
-class seller_ctl_site_brand extends seller_frontpage
+class seller_ctl_site_store extends seller_frontpage
 {
-    public $title = '商家名牌';
+    public $title = '商家店铺';
 
     public function __construct(&$app)
     {
         parent::__construct($app);
-    }
+    }	
 	
-	// 已有品牌
+	// 店铺状态
 	public function index()
 	{
 		
 	}
-
-	// 品牌申请
-	public function apply()
+	// 店铺设置
+	public function setting()
 	{
 		
 	}
+	// 店铺分类
+	public function type()
+	{
+	
+	}
+	
 }

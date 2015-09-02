@@ -19,6 +19,9 @@ class seller_frontpage extends site_controller {
         $this->_response->set_header('Cache-Control', 'no-store');		
         vmc::singleton('base_session')->start();		
 		//$this->verify();
+		$this->action = $this->_request->get_act_name();		
+        $this->seller = $this->get_current_seller();
+		$this->_menus = $this->get_menu();
         $this->user_obj = vmc::singleton('seller_user_object');		
         $this->passport_obj = vmc::singleton('seller_user_passport');		
     }

@@ -104,8 +104,8 @@ class seller_ctl_site_passport extends seller_frontpage
         $this->splash('success', $forward, '登录成功');
     } //end function
 
-    //注册页面
-    public function signup($forward)
+    // 注册页面
+    public function joinin($forward)
     {
         $this->title = '注册成为商家用户';        
         $this->check_login();
@@ -135,15 +135,16 @@ class seller_ctl_site_passport extends seller_frontpage
         $forward = $params['forward'];
         if (!$forward) {
             $forward = $this->gen_url(array(
-                'app' => 'site',
-                'ctl' => 'index',
-            )); //PC首页
+                'app' => 'seller',
+                'ctl' => 'seller',
+            )); 
+			// 商家中心首页
         }
         unset($_POST['forward']);
         $signup_url = $this->gen_url(array(
             'app' => 'seller',
             'ctl' => 'site_passport',
-            'act' => 'signup',
+            'act' => 'joinin',
             'args' => array(
                 $forward,
             ),
@@ -208,10 +209,6 @@ class seller_ctl_site_passport extends seller_frontpage
             if(!$this->passport_obj->reset_password($seller_id,$params['new_password'])){
                 $this->splash('error',$redirect_here,'密码重置失败!');
             }
-
-            /**
-             * 直接登录操作
-             */
             $this->unset_seller();
             //设置session
             $this->user_obj->set_seller_session($seller_id);
