@@ -39,7 +39,7 @@ class seller_user_object{
      * 设置会员登录session seller_id
      */
     public function set_seller_session($seller_id){
-        unset($_SESSION['error_count']['b2c']);
+        unset($_SESSION['error_count']['seller']);
         $_SESSION['account']['seller'] = $seller_id;
     }
 
@@ -78,18 +78,18 @@ class seller_user_object{
         $sellerFilter = array(
             'account' => 'seller_id,login_account,login_type',
             'sellers'=> 'seller_id,avatar,email,mobile,name,phone',
-			'company'=> 'company_id,name',
+            'company'=> 'company_id,name',
         );
         $sellerData = $this->get_sellers_data($sellerFilter,$seller_id);
         $seller_sdf = $sellerData['sellers'];
 
         if( !empty($seller_sdf) ) {
             $login_name = $this->get_seller_name();
-            $this->seller_info['seller_id'] = $seller_sdf['seller_id'];           
+            $this->seller_info['seller_id'] = $seller_sdf['seller_id'];
             $this->seller_info['local_uname'] =  $sellerData['account']['local'];
             $this->seller_info['login_account'] =  $sellerData['account']['login_account'];
             $this->seller_info['name'] = $seller_sdf['name'];
-            $this->seller_info['avatar'] = $seller_sdf['avatar'];            
+            $this->seller_info['avatar'] = $seller_sdf['avatar'];
             $this->seller_info['email'] =  $seller_sdf['email'];
             $this->seller_info['mobile'] =  $seller_sdf['mobile'];
         }
@@ -113,7 +113,7 @@ class seller_user_object{
         }
 
         if($columns['sellers']){
-            $data['sellers'] = $this->_get_b2c_sellers_data($columns['sellers'],$seller_id);
+            $data['sellers'] = $this->_get_seller_sellers_data($columns['sellers'],$seller_id);
         }
 
         return $data;
@@ -126,11 +126,11 @@ class seller_user_object{
         if(!$seller_id){
             $seller_id = $this->seller_id;
         }
-        $b2c_sellers_model = app::get('seller')->model('sellers');
+        $seller_sellers_model = app::get('seller')->model('sellers');
         if(is_array($columns) ){
             $columns = implode(',',$columns);
         }
-        $sellersData = $b2c_sellers_model->getList($columns,array('seller_id'=>$seller_id));
+        $sellersData = $seller_sellers_model->getList($columns,array('seller_id'=>$seller_id));
         return $sellersData[0];
     }
 

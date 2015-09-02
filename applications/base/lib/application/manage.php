@@ -199,8 +199,7 @@ class base_application_manage
             $this->check_depends_install($depend_app_id['value'], $queue);
         }
 
-        if (app::get($app_id)->status() == 'uninstalled') {
-            //echo $app_id.'   uninstalled'."\n";
+        if (app::get($app_id)->status() == 'uninstalled') {            
             $queue[$app_id] = app::get($app_id)->define();
         }
     }

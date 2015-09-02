@@ -6,5 +6,5 @@
     <module controller='vcode'>
         <name>vcode</name>
         <title>验证码</title>
-    </module>
+    </module>	
 </site>

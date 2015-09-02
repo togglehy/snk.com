@@ -1,0 +1,30 @@
+<menus>	
+        <menugroup name="账户">
+            <menu controller='site_seller' action='index' display='true' order="60">商家信息</menu>
+			<menu controller='site_store' action='index' display='true' order="60">账户管理</menu>
+        </menugroup>
+		
+		<menugroup name="店铺">
+            <menu controller='site_store' action='index' display='true' order="60">店铺设置</menu>
+			<menu controller='site_store' action='view' display='true' order="60">查看店铺</menu>
+			<menu controller='site_store' action='type' display='true' order="60">店铺分类</menu>			
+        </menugroup>		
+		<menugroup name="商品">
+            <menu controller='site_goods' action='index' display='true' order="60">在售商品</menu>
+			<menu controller='site_goods' action='add' display='true' order="60">添加商品</menu>
+			<menu controller='site_goods' action='storage' display='true' order="60">仓库中的商品</menu>
+			<menu controller='site_stock' action='index' display='true' order="60">库存管理</menu>
+			<menu controller='site_brand' action='index' display='true' order="60">品牌管理</menu>
+        </menugroup>
+		
+		<menugroup name="交易">
+            <menu controller='site_order' action='index' display='true' order="60">我的订单</menu>
+			<menu controller='site_logistics' action='index' display='false' order="60">查看物流</menu>
+			<menu controller='site_store' action='index' display='true' order="60">店铺管理</menu>
+        </menugroup>
+
+		<menugroup name="售后">
+            <menu controller='site_order' action='index' display='false' order="60">退货查看</menu>
+			<menu controller='site_store' action='index' display='false' order="60">店铺管理</menu>
+        </menugroup>	
+</menus>

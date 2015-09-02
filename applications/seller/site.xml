@@ -1,12 +1,32 @@
 <site>
-	<module controller='site_seller' >
-		<name>s</name>
+	<module controller='site_seller' id="seller">
+		<name>seller</name>
 		<title>商家中心</title>
-		<disable>false</disable>
+		<disable>true</disable>
 	</module>
-	<module controller='site_order' >
-		<name>o</name>
+	<module controller='site_order' id="seller">
+		<name>sorder</name>
 		<title>商家订单</title>
+		<disable>true</disable>
+	</module>
+	<module controller='site_goods' id="seller">
+		<name>seller_goods</name>
+		<title>商家商品</title>
+		<disable>true</disable>
+	</module>
+	<module controller='site_passport' id="seller">
+		<name>seller_passport</name>
+		<title>商家用户</title>
 		<disable>false</disable>
 	</module>
-</site> 
+	<module controller='site_passport' id="seller">
+		<name>seller_login</name>
+		<title>商家登录</title>
+		<disable>false</disable>
+	</module>
+	<module controller='site_join' id="seller">
+		<name>seller_login</name>
+		<title>商家入驻</title>
+		<disable>false</disable>
+	</module>
+</site>

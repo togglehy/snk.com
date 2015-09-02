@@ -1,0 +1,163 @@
+<div class="alert alert-warning">
+    <div class="m-baseinfo row">
+        <div class="col-xs-1">
+            <a href="<{link app=b2c ctl=site_member act=avatar}>">
+                <img  class="img-thumbnail img-circle" src="<{$member.avatar|storager:'avatar'}>" alt="<{$member.uname}>头像" />
+            </a>
+        </div>
+        <div class="col-xs-6">
+            <h4>
+                <a href="<{link app=b2c ctl=site_member act=setting}>"><{$member.uname}></a>
+                <span class="btn-group">
+                    <{if !$pam_data.local}>
+                    <a class="btn btn-xs btn-default" href="<{link app=b2c ctl=site_member act=set_pam_uname}>">设置昵称</a>
+                    <{/if}>
+                    <{if $pam_data.email && $pam_data.email.disabled=='true'}>
+                    <a class="btn btn-xs btn-default" href="<{link app=b2c ctl=site_member act=active_pam_email}>">验证邮箱  <{$pam_data.email.login_account}></a>
+                    <{/if}>
+                </span>
+            </h4>
+            <ul class="list-inline">
+                <li><span class="label label-warning"><{$member.levelname}>
+                    <{if $member.lv_discount<1}>(<{$member.lv_discount*10}>折)<{/if}></span></li>
+                <li><a href="<{link app=b2c ctl=site_member act=integral}>">积分：<{$member.integral|number_format}></a></li>
+                <li>经验值：<{$member.experience|default:0}>
+                </li>
+            </ul>
+        </div>
+        <{if $member.experience>0}>
+        <div class="col-xs-5">
+            <div class="next-level pull-right">
+                <{if $member.next_levelname}>
+                <small class="text-muted">
+                    差<{$member.next_experience - $member.experience}>经验升级为<span class='text-danger'><{$member.next_levelname}></span>，享
+                    <{if $member.next_lv_discount<1}><{$member.next_lv_discount*10}>折优惠<{/if}>
+                </small>
+                <div class="progress">
+                    <{if $member.experience/$member.next_experience<0.8}>
+                    <small class="text-center">
+                        <{$member.experience/$member.next_experience*100|number_format:'0'}>%
+                    </small>
+                    <{/if}>
+                    <div class="progress-bar progress-bar-danger" role="progressbar" >
+                        <{$member.next_levelname}>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $('.progress-bar-danger').css('width','<{$member.experience/$member.next_experience*100}>%');
+                </script>
+                <{/if}>
+            </div>
+        </div>
+        <{/if}>
+    </div>
+</div>
+<div class="row m-os-count">
+    <div class="col-xs-4 col-1">
+        <a href="<{link app=b2c ctl=site_member act=orders}>" class="btn  btn-block btn-link">全部订单</a>
+    </div>
+    <div class="col-xs-2 col-2">
+        <a href="<{link app=b2c ctl=site_member act=orders args0=s1}>" class="btn  btn-block btn-link">
+            待付款
+            <{if $order_count_arr.s1}>
+            &nbsp;
+            <span class="label label-default"><{$order_count_arr.s1}></span>
+            <{/if}>
+        </a>
+    </div>
+    <div class="col-xs-2 col-3">
+        <a href="<{link app=b2c ctl=site_member act=orders args0=s2}>" class="btn  btn-block btn-link">待发货
+            <{if $order_count_arr.s2}>
+            &nbsp;
+            <span class="label label-default"><{$order_count_arr.s2}></span>
+            <{/if}>
+        </a>
+    </div>
+    <div class="col-xs-2 col-4">
+        <a href="<{link app=b2c ctl=site_member act=orders args0=s3}>" class="btn  btn-block btn-link">待收货
+            <{if $order_count_arr.s3}>
+            &nbsp;
+            <span class="label label-default"><{$order_count_arr.s3}></span>
+            <{/if}>
+        </a>
+    </div>
+    <div class="col-xs-2 col-5">
+        <a href="<{link app=b2c ctl=site_member act=orders args0=s4}>" class="btn btn-large btn-block btn-link">待评价
+            <{if $order_count_arr.s4}>
+            &nbsp;
+            <span class="label label-default"><{$order_count_arr.s4}></span>
+            <{/if}>
+        </a>
+    </div>
+</div>
+<!--
+<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+      <h3 class="panel-title pull-left">猜你喜欢</h3>
+  <button  type="button"  class="btn btn-default btn-xs pull-right"><i class="glyphicon glyphicon-refresh"></i> 换一组</button>
+  </div>
+  <div class="panel-body">
+    //TODO
+  </div>
+</div> -->
+
+<div class="panel panel-default gv-history hide">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">近期浏览</h3>
+    </div>
+  <div class="panel-body">
+      <div class="glist-container">
+          <div class="row goods-list gl-default">
+          </div>
+      </div>
+  </div>
+</div>
+<textarea id="gv_history_tpl" class="hide">
+    <div class="col-xs-3 fav-item">
+        <div class="thumbnail goods-item">
+            <div class="gi-image-wrapper">
+                <a href="{item_url}">
+                    <img src="{image_default_url}" alt="{name}">
+                </a>
+            </div>
+            <div class="caption">
+                <h3 class="g-name"><a href="{item_url}">{name}</a></h3>
+                <ul class="list-inline">
+                    <li class="price-1 text-danger"><small>￥</small>{price}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</textarea>
+
+<script type="text/javascript">
+$(function(){
+    /**
+     * 模板填充工具
+     */
+    var substitute = function(str, obj) {
+        return str.replace(/\\?\{([^{}]+)\}/g, function(match, name) {
+            if (match.charAt(0) == '\\') return match.slice(1);
+            return (obj[name] != undefined) ? obj[name] : '';
+        });
+    };
+    /**
+     * 近期浏览
+     */
+    $.getJSON('<{$base_url}>/openapi/goods/history/',function(re){
+        if(!re || !('data' in re) || !re.data ||!re.data.length){
+            return;
+        }
+        var gv_history_panel = $('.gv-history');
+        gv_history_panel.removeClass('hide').show();
+        var gv_history_tpl = $('#gv_history_tpl').val();
+
+        var _html = '';
+        $.each(re.data,function(i,obj){
+            _html+=substitute(gv_history_tpl,obj);
+        });
+        gv_history_panel.find('.goods-list').append(_html);
+    });
+});
+
+</script>

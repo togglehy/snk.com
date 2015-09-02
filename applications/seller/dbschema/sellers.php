@@ -9,7 +9,7 @@
 // | Author: Shanghai ChenShang Software Technology Co., Ltd.
 // +----------------------------------------------------------------------
 
-$db['seller'] = array(
+$db['sellers'] = array(
     'columns' => array(
         'seller_id' => array(
             'type' => 'number',
@@ -18,18 +18,18 @@ $db['seller'] = array(
             'pkey' => true,
             'extra' => 'auto_increment',
             'in_list' => true,
-        ),    
+        ),
 		'company_id' => array(
-            'type' => 'table:company',
+            'type' => 'number',
             'required' => false,
-			'default' => '',
+			'default' => 0,
             'label' => '公司',            
 			'searchtype' => 'has',
             'in_list' => true,
             'default_in_list' => true,
             'order' => '1',
 			'comment' => '公司',
-        ),
+        ),		
 		'name' => array(
             'type' => 'varchar(50)',
             'required' => false,
@@ -69,38 +69,35 @@ $db['seller'] = array(
             'order' => '1',
 			'comment' => 'Email',
         ),
-		'phone' => array(
+		'tel' => array(
             'type' => 'varchar(50)',
-            'required' => false,
-			'default' => '',
-            'label' => '电话',            
-			'searchtype' => 'has',          
+            'label' => ('固定电话') ,
+            'sdfpath' => 'contact/phone/telephone',
+            'searchtype' => 'head',
+            'editable' => true,
+            'filtertype' => 'normal',
+            'filterdefault' => 'true',
             'in_list' => true,
             'default_in_list' => false,
-            'order' => '1',
-			'comment' => '商家ID',
-        ),
+        ) ,
         'addr' => array(
-            'type' => 'varchar(50)',
-            'required' => false,
-            'label' => '商家地址',
+            'type' => 'varchar(255)',
+            'label' => ('地址') ,
+            'sdfpath' => 'contact/addr',
+            'editable' => true,
+            'filtertype' => 'normal',
             'in_list' => true,
-			'comment' => '商家ID',
-        ),
-		'status' => array(
-            'type' => array(
-                0 => ('待审'),
-                1 => ('已审'),
-				-1 => ('冻结'),
-            ),
-            'default' => 'false',
-            'required' => false,
-            'label' => '状态' ,
+            'default_in_list' => false,
+        ) ,
+        'area' => array(
+            'label' => ('地区') ,
+            'type' => 'region',
+            'sdfpath' => 'contact/area',
+            'filtertype' => 'yes',
+            'filterdefault' => 'true',
             'in_list' => true,
-			'default_in_list' => true,
-			'filtertype' => 'normal',
-			'comment' => '状态',
-        ),
+            'default_in_list' => false,
+        ),		
 		'type'=>array(
             'type' => array(
 				0 => ('商家'),
@@ -111,27 +108,64 @@ $db['seller'] = array(
             ),
 			'label' => '商家类型' ,
 			'filtertype' => 'normal',
-			'default' => 1,
+			'default' => '1',
 			'comment'=>'商家类型',
-        ),
-		'create_time' => array (
-            'type' => 'time',
-            'label' => ('注册时间'),            
+        ),        
+         'reg_ip' => array(
+            'type' => 'varchar(16)',
+            'label' => ('注册IP') ,
             'in_list' => true,
-            'default_in_list' => false,
-			'filtertype' => 'time',
-            'filterdefault'=>true,
-        ),
-		'updatetime'=>array(
-            'type'=>'last_modify',
-            'comment'=>'最后编辑时间'
-        ),
+            'comment' => ('注册时IP地址') ,
+        ) ,
+		 'regtime' => array(
+            'label' => ('注册时间') ,
+            'type' => 'time',
+            'filtertype' => 'time',            
+            'in_list' => true,
+            'default_in_list' => true,
+            'comment' => ('注册时间') ,
+        ) ,
+		'disabled' => array(
+            'type' => 'bool',
+            'default' => 'false',
+        ) ,
+        'login_count' => array(
+            'type' => 'int(11)',
+            'default' => 0,
+            'required' => true,
+        ) ,
+        'experience' => array(
+            'label' => ('经验值') ,
+            'type' => 'int(10)',
+            'in_list' => true,
+        ) ,
+        'checkin' => array(
+            'label' => ('审核') ,
+            'type' => array(
+                0 => ('待核'),
+                1 => ('正常'),
+				-1 => ('未通过'),
+            ),
+            'default' => '0',
+            'in_list' => true,
+            'default_in_list' => true,
+        ) ,
     ),
     'index' => array(
-        'ind_status' => array(
+        'ind_email' => array(
             'columns' => array(
-                0 => 'status',
-            ) ,            
+                0 => 'email',
+            ) ,
+        ) ,
+        'ind_regtime' => array(
+            'columns' => array(
+                0 => 'regtime',
+            ) ,
+        ) ,
+        'ind_disabled' => array(
+            'columns' => array(
+                0 => 'disabled',
+            ) ,
         ) ,
     ) ,
     'version' => '$Rev$',

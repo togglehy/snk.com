@@ -1,0 +1,35 @@
+Application seller removed
+Creating table vmc_seller_brand
+ERROR_INFO:42000::1067::Invalid default value for 'status'
+
+CREATE TABLE `vmc_seller_brand` (
+	`id` mediumint(8) unsigned not null auto_increment comment 'id',
+	`seller_id` mediumint(8) unsigned default 0 comment '商家',
+	`status` enum('0','1','2') default 0 comment '状态',
+	`create_time` int(10) unsigned comment '注册时间',
+	primary key (`id`),
+	 INDEX ind_status(`status`)
+)ENGINE = InnoDB DEFAULT CHARACTER SET utf8;
+Creating table vmc_seller_company
+Creating table vmc_seller_sellers
+Installing Cache_Expires DB:SELLER_BRAND
+Installing Cache_Expires DB:SELLER_COMPANY
+Installing Cache_Expires DB:SELLER_SELLERS
+Installing permission seller
+Installing permission sellercheck
+Application seller installed... ok.
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed
+Application seller removed

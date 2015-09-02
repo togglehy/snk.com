@@ -1,6 +1,6 @@
 <?php
 
-class b2c_seller_object{
+class seller_user_object{
 
     public function __construct(&$app){
         $this->app = $app;
@@ -113,7 +113,7 @@ class b2c_seller_object{
         }
 
         if($columns['sellers']){
-            $data['sellers'] = $this->_get_b2c_sellers_data($columns['sellers'],$seller_id);
+            $data['sellers'] = $this->_get_seller_sellers_data($columns['sellers'],$seller_id);
         }
 
         return $data;

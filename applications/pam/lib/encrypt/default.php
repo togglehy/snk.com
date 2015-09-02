@@ -24,6 +24,14 @@ class pam_encrypt_default{
                     'login_account'=>$userdata['login_name'],
                 );
                 $rows = $pam_members_model->getList('*',$pam_filter,0,1);
+
+			// 商家 2015/8/31
+			}else if( $account_type  == 'seller' ){
+				$pam_model = app::get('pam')->model('seller');
+                $pam_filter = array(
+                    'login_account'=>$userdata['login_name'],
+                );
+                $rows = $pam_model->getList('*',$pam_filter,0,1);
             }else{
                 $pam_account_model = app::get('pam')->model('account');
                 $pam_filter = array(

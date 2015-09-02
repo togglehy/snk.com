@@ -253,6 +253,13 @@ $db['members'] = array(
             'filterdefault' => false,
             'filtertype' => 'normal',
         ) ,
+        'checkin' => array(
+            'label' => ('审核') ,
+            'type' => 'bool',
+            'default' => 'false',
+            'in_list' => true,
+            'default_in_list' => true,
+        ) ,
     ) ,
     'index' => array(
         'ind_email' => array(
@@ -268,6 +275,11 @@ $db['members'] = array(
         'ind_disabled' => array(
             'columns' => array(
                 0 => 'disabled',
+            ) ,
+        ) ,
+        'ind_checkin' => array(
+            'columns' => array(
+                0 => 'checkin',
             ) ,
         ) ,
     ) ,

@@ -130,8 +130,8 @@ class base_shell_buildin extends base_shell_prototype
         $options = $this->get_options();
         if(count($args)<1){
             $args[0] = 'vmcshop';
-        }
-        $install_queue = vmc::singleton('base_application_manage')->install_queue($args, $options['reset']);
+        }		
+        $install_queue = vmc::singleton('base_application_manage')->install_queue($args, $options['reset']);		
         $this->install_app_by_install_queue($install_queue, $options);
     }
 
@@ -406,5 +406,47 @@ class base_shell_buildin extends base_shell_prototype
         return vmc::singleton('base_demo')->init();
     }
 
-
+	/*
+	 * 新增
+	*/
+	public $command_db_export = '数据结构';
+	public function command_db_export()
+    {		
+		$rows = app::get('base')->model('apps')->getlist('*');		
+        foreach ($rows as $k => $v) {
+			$result = "VMC dbSchema";
+			$result.= "\r\n=====================================================================\r\n";
+			$dbdir = APP_DIR . "/" . $v['app_id'] . "/dbschema";
+			//array_walk($dbdir, function($k, $v){});
+			$result.= "{$v['app_name']}({$v['app_id']})\r\n";
+			$dbs = scandir($dbdir);
+			foreach($dbs as $item)
+			{
+				if($item == '.' || $item == '..') continue;
+				$key = str_replace(".php", "", $item);
+				require($dbdir . "/" . $item);
+				$label = isset($db[$key]['comment']) ? $db[$key]['comment'] : $db[$key]['label'];
+				$result.= "----{$key}{$label}";
+				$result.= isset($db[$key]['engine']) ? $db[$key]['engine'] : "MyIsam";
+				$result.= "\r\n";			
+				foreach($db[$key]['columns'] as $k => $col)
+				{
+					$result.= "\t{$k}\t{$col['label']}\t";
+					$type = '';
+					if(is_array($col['type']))
+					{						
+						foreach($col['type'] as $t => $p)
+						{
+							$type = "{$k}：{$p}|";
+						}
+					}else{
+						$type = $col['type'];	
+					}
+					$result.= $type . "\r\n";
+				}				
+			}	
+			file_put_contents(APP_DIR . "{$v['app_id']}.txt", $result);
+        }
+		//echo $result;	
+    }
 }

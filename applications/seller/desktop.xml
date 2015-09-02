@@ -1,5 +1,4 @@
 <desktop>
-
     <permissions>
         <permission id="seller" display='true' workground='seller.wrokground'>商家管理</permission>
 		<permission id="sellercheck" display='true' workground='seller.wrokground'>商家审核</permission>		
@@ -10,5 +9,4 @@
 			<menu controller='admin_seller' action='index' permission='cms_content' display='true' order="60">商家审核</menu>
         </menugroup>
     </workground>
-
 </desktop>
