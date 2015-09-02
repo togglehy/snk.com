@@ -10,4 +10,5 @@ config/config.php
 config/install.lock.php
 tmp/
 logs/
+data/.*
 mobile_test_case
