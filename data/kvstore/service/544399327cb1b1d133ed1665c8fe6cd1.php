@@ -1,1 +1,1 @@
-<?php exit(); ?>a:3:{s:5:"value";a:1:{s:4:"list";a:4:{s:17:"wechat_toauth_pam";s:17:"wechat_toauth_pam";s:17:"toauth_pam_taobao";s:17:"toauth_pam_taobao";s:15:"toauth_pam_sina";s:15:"toauth_pam_sina";s:13:"toauth_pam_qq";s:13:"toauth_pam_qq";}}s:3:"ttl";i:0;s:8:"dateline";i:1441007404;}
+<?php exit(); ?>a:3:{s:5:"value";a:1:{s:4:"list";a:4:{s:17:"wechat_toauth_pam";s:17:"wechat_toauth_pam";s:17:"toauth_pam_taobao";s:17:"toauth_pam_taobao";s:15:"toauth_pam_sina";s:15:"toauth_pam_sina";s:13:"toauth_pam_qq";s:13:"toauth_pam_qq";}}s:3:"ttl";i:0;s:8:"dateline";i:1441510193;}

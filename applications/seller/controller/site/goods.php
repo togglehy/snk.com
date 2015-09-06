@@ -24,7 +24,7 @@ class seller_ctl_site_goods extends seller_frontpage
 	// 在售商品 审核|待审
 	public function index($status)
 	{
-		
+		echo 'seller_goods_index';
 	}
 	// 商品添加
 	public function add()
@@ -36,6 +36,7 @@ class seller_ctl_site_goods extends seller_frontpage
 	{
 	
 	}
+	
 	// 商品保存
 	public function save()
 	{
@@ -55,5 +56,5 @@ class seller_ctl_site_goods extends seller_frontpage
 	public function price()
 	{
 	
-	}
+	}	
 }

@@ -5,28 +5,30 @@
 		<disable>true</disable>
 	</module>
 	<module controller='site_order' id="seller">
-		<name>sorder</name>
+		<name>sellerorder</name>
 		<title>商家订单</title>
 		<disable>true</disable>
 	</module>
 	<module controller='site_goods' id="seller">
-		<name>seller_goods</name>
+		<name>sellergoods</name>
 		<title>商家商品</title>
 		<disable>true</disable>
 	</module>
+	<module controller='site_brand' id="seller">
+		<name>sellerbrand</name>
+		<title>商家订单</title>
+		<disable>true</disable>
+	</module>	
+	
 	<module controller='site_passport' id="seller">
-		<name>seller_passport</name>
+		<name>sellerpassport</name>
 		<title>商家用户</title>
-		<disable>false</disable>
-	</module>
-	<module controller='site_passport' id="seller">
-		<name>seller_login</name>
-		<title>商家登录</title>
-		<disable>false</disable>
-	</module>
-	<module controller='site_join' id="seller">
-		<name>seller_login</name>
-		<title>商家入驻</title>
-		<disable>false</disable>
+		<disable>true</disable>
+	</module>	
+	
+	<module controller='site_store' id="seller">
+		<name>sellerstore</name>
+		<title>商家店铺</title>
+		<disable>true</disable>
 	</module>
 </site>

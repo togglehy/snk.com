@@ -22,6 +22,6 @@ class seller_ctl_site_order extends seller_frontpage
 	// 订单
 	public function index()
 	{
-		// 订单列表
+		echo 'seller_order_index';
 	}
 }

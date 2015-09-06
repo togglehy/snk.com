@@ -12,22 +12,21 @@
 
 class seller_ctl_site_brand extends seller_frontpage
 {
-    public $title = '商家名牌';
+    public $title = '商家订单';
 
     public function __construct(&$app)
     {
         parent::__construct($app);
     }
 	
-	// 已有品牌
+	// 订单
 	public function index()
 	{
-		
+		echo 'seller_brand_index';
 	}
 
-	// 品牌申请
 	public function apply()
 	{
-		
+		echo 'seller_brand_apply';
 	}
 }

@@ -23,12 +23,24 @@ class seller_ctl_site_seller extends seller_frontpage
 	// 商家首页
 	public function index()
 	{
-		
+		echo $this->title;
 	}
 	
 	// 审核进度
 	public function process()
 	{
-		
+		echo $this->title . "process";
+	}
+
+	// 入驻
+	public function register()
+	{
+		echo $this->title . "register";
+	}
+
+	// login
+	public function login()
+	{
+		echo $this->title . "login";
 	}
 }

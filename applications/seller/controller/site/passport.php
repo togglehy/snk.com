@@ -21,29 +21,12 @@ class seller_ctl_site_passport extends seller_frontpage
 
     
     public function index()
-    {        
+    {		
         $this->check_login();
         $this->login();
     }
-	
-	/**
-     * 检测用户是否登陆
-     *
-     */
-	public function check_login()
-    {
-        if ($this->user_obj->is_login()) {
-            $redirect = $this->gen_url(array(
-                'app' => 'seller',
-                'ctl' => 'site_seller',
-                'act' => 'index',
-            ));
-            $this->splash('success', $redirect, '已经是登陆状态！');
-        }
-        return false;
-    }
-    
-    public function login($forward)
+
+	public function login($forward)
     {
         $this->title = '商家登录';        
         $this->check_login();
@@ -54,9 +37,10 @@ class seller_ctl_site_passport extends seller_frontpage
         $this->page('site/passport/login.html');
     }
 
-    /*
+	/*
      * 登录验证
-     * */
+     * 
+	 */
     public function post_login()
     {
         $login_url = $this->gen_url(array(
@@ -104,6 +88,22 @@ class seller_ctl_site_passport extends seller_frontpage
         $this->splash('success', $forward, '登录成功');
     } //end function
 
+	
+	// 用户状态检测
+	public function check_login()
+    {
+        if ($this->user_obj->is_login()) {
+            $redirect = $this->gen_url(array(
+                'app' => 'seller',
+                'ctl' => 'site_seller',
+                'act' => 'index',
+            ));
+            $this->splash('success', $redirect, '已经是登陆状态！');
+        }
+        return false;
+    }  
+
+    
     // 注册页面
     public function joinin($forward)
     {
@@ -225,7 +225,7 @@ class seller_ctl_site_passport extends seller_frontpage
     }
 
     //发送身份识别验证码
-    public function seller_vcode(){
+    public function vcode(){
         $account = $_POST['account'];
         $login_type = $this->passport_obj->get_login_account_type($account);
         if($login_type != 'mobile' && $login_type!='email'){

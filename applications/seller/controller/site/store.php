@@ -12,27 +12,28 @@
 
 class seller_ctl_site_store extends seller_frontpage
 {
-    public $title = '商家店铺';
+    public $title = '商家订单';
 
     public function __construct(&$app)
     {
-        parent::__construct($app);
+        parent::__construct($app);		
     }	
 	
-	// 店铺状态
+	// 已开店 店铺状态
 	public function index()
 	{
-		
+		echo 'seller_store_index';
 	}
-	// 店铺设置
-	public function setting()
+
+	// 未开店到申请页面
+	public function apply()
 	{
-		
-	}
-	// 店铺分类
-	public function type()
-	{
-	
+		echo 'seller_store_apply';
 	}
 	
+	// 申请进度
+	public function process()
+	{
+		echo 'seller_store_apply';
+	}
 }

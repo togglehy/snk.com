@@ -20,7 +20,7 @@ class site_router implements base_interface_router
      * @var array $_sitemap
      * @accessvar private
     */
-    private $_sitemap = array();
+    protected $_sitemap = array();
     /*
      * sitemap对应表
      *
@@ -29,36 +29,36 @@ class site_router implements base_interface_router
      * @var array $_urlmap
      * @access private
     */
-    private $_urlmap = array();
+    protected $_urlmap = array();
     /*
      * @var array $_query_info
      * @access private
     */
-    private $_query_info = null;
+    protected $_query_info = null;
     /*
      * @var object $_request
      * @access private
     */
-    private $_request = null;
+    protected $_request = null;
     /*
      * @var object $_response
      * @access private
     */
-    private $_response = null;
+    protected $_response = null;
     /*
      * 保存当前进程的gen_url, 避免重复生成
      *
      * @var object $_response
      * @access private
     */
-    private $__gen_url_array = array();
+    protected $__gen_url_array = array();
     /*
      * uri扩展名
      *
      * @var object $_response
      * @access private
     */
-    private $__uri_expended_name = null;
+    protected $__uri_expended_name = null;
     /*
      * 构造
      * @var object $app
@@ -108,7 +108,7 @@ class site_router implements base_interface_router
 
         return $this->_sitemap[$key];
     } //End Function
-    private function get_current_sitemap($key = null)
+    protected function get_current_sitemap($key = null)
     {
         if ($key === null) {
             return $this->_sitemap[$this->get_query_info('module') ];
@@ -443,7 +443,7 @@ class site_router implements base_interface_router
 
         return;
     }
-    private function check_expanded_name()
+    protected function check_expanded_name()
     {
         if (!array_key_exists($this->get_query_info('module'), $this->get_sitemap())) {
             $this->http_status(404); //404页面
@@ -603,7 +603,7 @@ class site_router implements base_interface_router
      * @access private
      * @return void
     */
-    private function set_vary_cookie()
+    protected function set_vary_cookie()
     {
         $cookie_vary = $_COOKIE['vary'];
         $vary = cachemgr::get_cache_check_version().md5(serialize(cachemgr::get_cache_global_varys()));
@@ -611,7 +611,7 @@ class site_router implements base_interface_router
             setCookie('vary', $vary, time() + 86400 * 30 * 12 * 10, '/');
         }
     } //End Function
-    private function init_request_info()
+    protected function init_request_info()
     {
         $query_args = explode($this->get_query_info('separator'), $this->get_query_info('query'));
         $part = array_shift($query_args);

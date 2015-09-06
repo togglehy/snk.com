@@ -9,7 +9,6 @@
 // | Author: Shanghai ChenShang Software Technology Co., Ltd.
 // +----------------------------------------------------------------------
 
-header('Content-Type:application/json; charset=utf-8');
 class seller_frontpage extends site_controller {
 
     protected $seller = array();
@@ -88,6 +87,7 @@ class seller_frontpage extends site_controller {
         }
         return $redirect ? true : false;
     } //End Function
+
     public function bind_seller($seller_id) {
         $columns = array(
             'account' => 'seller_id,login_account,login_password,checkin',
@@ -115,7 +115,9 @@ class seller_frontpage extends site_controller {
         setcookie($name, $value, $expire, $this->cookie_path);
         $_COOKIE[$name] = $value;
     }
-    function check_login() {
+	
+	// 检查登录
+    protected function check_login() {
         vmc::singleton('base_session')->start();
         if ($_SESSION['account'][pam_account::get_account_type($this->app->app_id) ]) {
             return true;
