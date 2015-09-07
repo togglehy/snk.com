@@ -2,10 +2,10 @@
     <div class="panel panel-default login-panel">
       <div class="panel-heading clearfix">
           商家登录
-          <a class="btn btn-warning btn-xs pull-right" href="<{link app=b2c ctl=site_passport act=signup args0=$forward}>">立即注册&raquo;</a>
+          <a class="btn btn-warning btn-xs pull-right" href="<{link app=seller ctl=site_passport act=signup args0=$forward}>">立即注册&raquo;</a>
       </div>
       <div class="panel-body">
-          <form id="member_login_form" class="form-horizontal" action="<{link app=b2c ctl=site_passport act=post_login}>" method="post">
+          <form id="member_login_form" class="form-horizontal" action="<{link app=seller ctl=site_passport act=post_login}>" method="post">
               <!-- 登陆后跳转地址 -->
               <input type="hidden" name="forward" value="<{$forward}>">
               <div class="form-group">
@@ -29,8 +29,8 @@
                     <input type="text" required="true" name="vcode" class="form-control" id="input_password" placeholder="验证码">
                   </div>
                   <div class="col-xs-5">
-                      <img src="<{link app=site ctl=vcode act=index args0='passport'}>" alt="验证码" />
-                      <button type="button" class="btn btn-link btn-sm" onclick="$(this).prev().prop('src',$(this).attr('data-src')+'?'+new Date().getTime())" data-src="<{link app=site ctl=vcode act=index args0='passport'}>" >更换验证码</button>
+                      <img id="codeimage" class="codechange" src="<{link app=site ctl=vcode act=index args0='passport'}>" style="width:51px;height:20px;" alt="验证码" />
+                      <button type="button" class="btn btn-link btn-sm codechange" >更换验证码</button>
                   </div>
               </div>
               <div class="form-group">
@@ -52,6 +52,7 @@
               </div>
           </form>
       </div>
+	  <!--
       <{if $toauth}>
       <div class="panel-footer">
             <ul class="list-inline oauth-login-list">
@@ -61,18 +62,21 @@
             </ul>
       </div>
       <{/if}>
+	  -->
     </div>
 
 </div>
-
-
-
-
 <script>
-    /*
-    * 会员登录脚本
-    */
-
+	$(function(){
+		$(".codechange").bind('click', vcode_change);
+	});
+	function vcode_change()
+	{
+		var codeLink = "<{link app=site ctl=vcode act=index args0='passport'}>";		
+		codeLink += '?' + new Date().getTime();		
+		$("#codeimage").prop('src', codeLink);
+	}
+	
     void function(login_form){
         var alert_timer = 0;
         //本地账户自动登录
@@ -97,6 +101,8 @@
                             $(this).remove();
                         });
                     },3000);
+
+					vcode_change(); // 失败更新验证码 2015/9/6
                 }
                 if(re.success){
                     location = re.redirect;

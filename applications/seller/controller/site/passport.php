@@ -35,12 +35,7 @@ class seller_ctl_site_passport extends seller_frontpage
         $this->pagedata['toauth'] = $mdl_toauth_pam;
         $this->set_tmpl('passport');		
         $this->page('site/passport/login.html');
-    }
-
-	/*
-     * 登录验证
-     * 
-	 */
+    }	
     public function post_login()
     {
         $login_url = $this->gen_url(array(
@@ -103,6 +98,27 @@ class seller_ctl_site_passport extends seller_frontpage
         return false;
     }  
 
+	//注册页面
+    public function apply($forward, $step=0)
+    {	
+		$query_str = utils::_filter_input($_GET);		
+        $this->title = '注册成为会员';        
+        $this->check_login(); //检查是否登录，如果已登录则直接跳转到会员中心
+        $this->set_forward($forward); //设置登录成功后跳转		
+        $this->set_tmpl('passport');
+		if(empty($query_str['step']))
+		{
+			$tpl = 'account.html';	// 账号注册
+		}else if($query_str['step'] == 1){
+			$tpl = 'agreement.html'; // 协议	
+		}else if($query_str['step'] == 2){
+			$tpl = 'company.html'; // 
+		}else if($query_str['step'] == 3){
+			$tpl = 'company.html';
+		}
+
+        $this->page('site/passport/apply.account.html');
+    }
     
     // 注册页面
     public function joinin($forward)

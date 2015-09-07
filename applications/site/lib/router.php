@@ -39,7 +39,7 @@ class site_router implements base_interface_router
      * @var object $_request
      * @access private
     */
-    protected $_request = null;
+    public $_request = null;
     /*
      * @var object $_response
      * @access private

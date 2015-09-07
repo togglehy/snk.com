@@ -29,8 +29,8 @@
                     <input type="text" required="true" name="vcode" class="form-control" id="input_password" placeholder="验证码">
                   </div>
                   <div class="col-xs-5">
-                      <img src="<{link app=site ctl=vcode act=index args0='passport'}>" alt="验证码" />
-                      <button type="button" class="btn btn-link btn-sm" onclick="$(this).prev().prop('src',$(this).attr('data-src')+'?'+new Date().getTime())" data-src="<{link app=site ctl=vcode act=index args0='passport'}>" >更换验证码</button>
+                      <img id="codeimage" class="codechange" src="<{link app=site ctl=vcode act=index args0='passport'}>" alt="验证码" />
+                      <button type="button" class="btn btn-link btn-sm codechange" onclick="javascript:vcode_change();">更换验证码</button>
                   </div>
               </div>
               <div class="form-group">
@@ -64,14 +64,17 @@
     </div>
 
 </div>
-
-
-
-
 <script>
-    /*
-    * 会员登录脚本
-    */
+	// 验证码
+    $(function(){
+		$(".codechange").bind('click', vcode_change);
+	});
+	function vcode_change()
+	{
+		var codeLink = "<{link app=site ctl=vcode act=index args0='passport'}>";		
+		codeLink += '?' + new Date().getTime();		
+		$("#codeimage").prop('src', codeLink);
+	}
 
     void function(login_form){
         var alert_timer = 0;
