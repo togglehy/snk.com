@@ -32,6 +32,7 @@
                   </div>
               </div>
 			  
+
               <{foreach from=$attr item=item name="item" key='row'}>
               <{if $item.attr_type == 'select'}>
               <div class="form-group">
@@ -62,13 +63,7 @@
                   </div>
               </div>
               <{/if}>
-              <{/foreach}>
-			  <div class="form-group">
-                  <label  class="col-xs-2 control-label"><{$item.attr_name}></label>
-                  <div class="col-xs-5">
-                      <input type="date" class="form-control" name="<{$item.attr_column}>" value="<{$item.attr_value|default:'YYYY-MM-DD'}>">
-                  </div>
-              </div>
+              <{/foreach}>	
 
               <div class="form-group">
                   <label for="input_vcode" class="col-xs-2 control-label">验证码<span class="text-danger">*</span></label>

@@ -1,2 +1,11 @@
 <services>	
+    <service id="view_compile_helper">
+        <class>seller_view_compiler</class>
+    </service>
+    <service id="view_helper">
+        <class>seller_view_helper</class>
+    </service>
+	 <service id="html_input">
+        <class>seller_view_input</class>
+    </service>
 </services>

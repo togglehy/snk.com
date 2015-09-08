@@ -96,7 +96,7 @@ class seller_ctl_site_passport extends seller_frontpage
             $this->splash('success', $redirect, '已经是登陆状态！');
         }
         return false;
-    }  
+    }
 
 	//注册页面
     public function signup($forward, $step=0)
@@ -119,6 +119,11 @@ class seller_ctl_site_passport extends seller_frontpage
 		}
         $this->page("site/passport/apply.{$tpl}");
     }
+
+	// 公司信息
+	// 联系人
+	// 认证资料
+	// 生产资料
 	
 	private function _signup_post($post)
 	{
@@ -148,7 +153,6 @@ class seller_ctl_site_passport extends seller_frontpage
             $this->splash('error', $signup_url, $msg);
         }		
 		$seller_sdf_data = $this->passport_obj->pre_signup_process($post);		
-		
 		if ($seller_id = $this->passport_obj->save_sellers($seller_sdf_data, $msg)) {
             $this->user_obj->set_seller_session($seller_id);			
             $this->bind_seller($seller_id);			

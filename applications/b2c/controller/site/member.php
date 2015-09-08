@@ -195,6 +195,7 @@ class b2c_ctl_site_member extends b2c_frontpage
         } else {
             $this->pagedata['_PAGE_'] = 'site/member/'.$this->action_view;
         }
+		$this->pagedata['_PAGE_'] = 'site/member/'.$this->action_view;
         $this->pagedata['app_id'] = $app_id;
         $this->pagedata['_MAIN_'] = 'site/member/main.html';
         $this->page('site/member/main.html');

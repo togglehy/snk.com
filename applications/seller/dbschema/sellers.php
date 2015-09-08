@@ -138,6 +138,19 @@ $db['sellers'] = array(
             'label' => ('经验值') ,
             'type' => 'int(10)',
             'in_list' => true,
+        ),
+		'status' => array(
+            'label' => ('用户状态') ,
+            'type' => array(
+                0 => ('新用户'),
+                1 => ('公司信息'),
+				2 => ('联系人'),
+				3 => ('基本资料'),
+				4 => ('生产资料'),
+            ),
+            'default' => '0',
+            'in_list' => false,
+            'default_in_list' => false,
         ) ,
         'checkin' => array(
             'label' => ('审核') ,

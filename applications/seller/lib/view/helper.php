@@ -21,7 +21,7 @@ class seller_view_helper
     {
         switch ($result) {
         case '0':
-            return '生鲜';
+            return ' 生鲜';
             break;
         case '1':
             return '冷冻';

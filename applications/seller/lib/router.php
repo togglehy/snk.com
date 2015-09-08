@@ -21,7 +21,14 @@ class seller_router extends site_router
 		strpos($result, 'seller') === 0 && $result = str_replace('seller', 'seller/', $result);
         return $result;
     }
-
+	
+	public function gen_url($params = array())
+    {
+		$result = parent::gen_url($params);
+		strpos($result, 'seller') === 0 && $result = str_replace('seller', 'seller/', $result);
+		echo $result;
+		return $result;
+	}
 	// 商家2015/9/6
 	protected function check_expanded_name()
     {		

@@ -135,7 +135,8 @@ class b2c_ctl_site_passport extends b2c_frontpage
         $this->set_forward($forward); //设置登录成功后跳转
         //获取会员注册项
         if (true || $this->app->getConf('member_signup_show_attr') == 'true') {
-            $this->pagedata['attr'] = $this->passport_obj->get_signup_attr();			
+            $this->pagedata['attr'] = $this->passport_obj->get_signup_attr();
+			//print_r($this->pagedata['attr']);
         }
         $this->set_tmpl('passport');
         $this->page('site/passport/signup.html');

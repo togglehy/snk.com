@@ -1,7 +1,7 @@
 <menus>	
-        <menugroup name="账户">
-            <menu controller='site_seller' action='index' display='true' order="60">商家信息</menu>
-			<menu controller='site_store' action='index' display='true' order="60">账户管理</menu>
+        <menugroup name="账户">            
+			<menu controller='site_seller' action='account' display='false' order="60">账户信息</menu>
+			<menu controller='site_seller' action='company' display='true' order="60">公司信息</menu>
         </menugroup>
 		
 		<menugroup name="店铺">

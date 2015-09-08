@@ -33,6 +33,17 @@ class modifiers{
             $rows[$i] = $gender[$v];
         }
     }
+	
+	// 产品类型
+	 static function producttype(&$rows){
+        $producttype = array(
+            '0'=>'生鲜',
+            '1'=>'冷冻'
+		);
+        foreach($rows as $i => $v){
+            $rows[$i] = $producttype[$v];
+        }
+    }
 
     static function region(&$rows){
         foreach($rows as $i=>$r){

@@ -11,7 +11,10 @@
 
 class seller_frontpage extends site_controller {
 
-    protected $seller = array();
+    protected $seller = array(
+		'seller_id' => 1,
+		'avartar' => ''
+	);
 
     function __construct(&$app) {		
         parent::__construct($app);		
@@ -21,8 +24,10 @@ class seller_frontpage extends site_controller {
 		$this->action = $this->_request->get_act_name();		
         $this->seller = $this->get_current_seller();
 		$this->_menus = $this->get_menu();
+		//$this->set_tmpl('seller');
         $this->user_obj = vmc::singleton('seller_user_object');		
-        $this->passport_obj = vmc::singleton('seller_user_passport');		
+        $this->passport_obj = vmc::singleton('seller_user_passport');	
+		$this->db = vmc::database();
     }
 
     final public function gen_url($params = array())
@@ -68,9 +73,6 @@ class seller_frontpage extends site_controller {
                 }
             }
         }
-
-		
-
         $this->splash('error', $this->gen_url(array(
             'app' => 'seller',
             'ctl' => 'site_passport',
@@ -197,14 +199,14 @@ class seller_frontpage extends site_controller {
         $this->pagedata['seller'] = $this->seller;
         $this->pagedata['menu'] = $this->get_menu();
         $this->pagedata['current_action'] = $this->action;
-        $this->action_view = 'action/'.$this->action.'.html';
+        $this->action_view = $this->action.'.html';
         if ($this->pagedata['_PAGE_']) {
-            $this->pagedata['_PAGE_'] = 'site/seller/'.$this->pagedata['_PAGE_'];
+            $this->pagedata['_PAGE_'] = 'site/'. $this->pagedata['_PAGE_'];
         } else {
-            $this->pagedata['_PAGE_'] = 'site/seller/'.$this->action_view;
+            $this->pagedata['_PAGE_'] = 'site/'.$this->action_view;
         }
         $this->pagedata['app_id'] = $app_id;
-        $this->pagedata['_MAIN_'] = 'site/seller/main.html';
-        $this->page('site/seller/main.html');
+        $this->pagedata['_MAIN_'] = 'site/main.html';		
+        $this->page('site/main.html');
     }
 }

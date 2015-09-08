@@ -23,7 +23,6 @@ class seller_user_passport
         $login_type = 'local';
         if ($login_account && strpos($login_account, '@')) {
             $login_type = 'email';
-
             return $login_type;
         }
         if (preg_match('/^1[34578]{1}[0-9]{9}$/', $login_account)) {

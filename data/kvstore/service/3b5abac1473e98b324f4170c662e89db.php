@@ -1,1 +1,1 @@
-<?php exit(); ?>a:3:{s:5:"value";a:1:{s:4:"list";a:1:{s:17:"b2c_widgets_goods";s:17:"b2c_widgets_goods";}}s:3:"ttl";i:0;s:8:"dateline";i:1441510107;}
+<?php exit(); ?>a:3:{s:5:"value";a:1:{s:4:"list";a:1:{s:17:"b2c_widgets_goods";s:17:"b2c_widgets_goods";}}s:3:"ttl";i:0;s:8:"dateline";i:1441697548;}

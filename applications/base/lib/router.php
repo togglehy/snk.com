@@ -30,7 +30,7 @@ class base_router implements base_interface_router{
             $url_array[] = $k;
             $url_array[] = $v;
         }
-
+		echo "#" . $this->app->app_id . "#\n";
         return $this->app->base_url($full).implode('/',$url_array);
     }
 
