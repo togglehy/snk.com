@@ -16,9 +16,8 @@ class seller_ctl_site_passport extends seller_frontpage
 
     public function __construct(&$app)
     {
-        parent::__construct($app);
+        parent::__construct($app);		
     }
-
     
     public function index()
     {		
@@ -35,7 +34,8 @@ class seller_ctl_site_passport extends seller_frontpage
         $this->pagedata['toauth'] = $mdl_toauth_pam;
         $this->set_tmpl('passport');		
         $this->page('site/passport/login.html');
-    }	
+    }
+	
     public function post_login()
     {
         $login_url = $this->gen_url(array(
@@ -99,8 +99,9 @@ class seller_ctl_site_passport extends seller_frontpage
     }  
 
 	//注册页面
-    public function apply($forward, $step=0)
+    public function signup($forward, $step=0)
     {	
+		if($_POST) return $this->_signup_post($_POST);
 		$query_str = utils::_filter_input($_GET);		
         $this->title = '注册成为会员';        
         $this->check_login(); //检查是否登录，如果已登录则直接跳转到会员中心
@@ -110,27 +111,60 @@ class seller_ctl_site_passport extends seller_frontpage
 		{
 			$tpl = 'account.html';	// 账号注册
 		}else if($query_str['step'] == 1){
-			$tpl = 'agreement.html'; // 协议	
+			$tpl = 'company.html'; // 协议	
 		}else if($query_str['step'] == 2){
-			$tpl = 'company.html'; // 
+			$tpl = 'contact.html'; // 
 		}else if($query_str['step'] == 3){
-			$tpl = 'company.html';
+			$tpl = 'success.html';
 		}
-
-        $this->page('site/passport/apply.account.html');
+        $this->page("site/passport/apply.{$tpl}");
     }
-    
-    // 注册页面
-    public function joinin($forward)
-    {
-        $this->title = '注册成为商家用户';        
-        $this->check_login();
-        $this->set_forward($forward); //设置登录成功后跳转        
-        $this->set_tmpl('passport');
-        $this->page('site/passport/signup.html');
-    }
+	
+	private function _signup_post($post)
+	{
+		extract($post);		
+		isset($forward) || $forward = $this->gen_url(array(
+			'app' => 'seller',
+			'ctl' => 'seller',
+		));
+		$signup_url = $this->gen_url(array(
+            'app' => 'seller',
+            'ctl' => 'site_passport',
+            'act' => 'signup',
+            'args' => array(
+                $forward,
+            ),
+        ));		
+		
+		// 仅手机注册
+		if (!base_vcode::verify('sellerpassport', $vcode)) {
+            $this->splash('error', $signup_url, '验证码不正确');
+        }		
+		if(!vmc::singleton('seller_user_vcode')->verify($smscode, $pam_account['login_name'], 'signup'))
+		{
+			 $this->splash('error', $signup_url, '手机短信验证码不正确');
+		}		
+		if (!$this->passport_obj->check_signup($post, $msg)) {
+            $this->splash('error', $signup_url, $msg);
+        }		
+		$seller_sdf_data = $this->passport_obj->pre_signup_process($post);		
+		
+		if ($seller_id = $this->passport_obj->save_sellers($seller_sdf_data, $msg)) {
+            $this->user_obj->set_seller_session($seller_id);			
+            $this->bind_seller($seller_id);			
+			/*
+            //本站会员注册完成后做某些操作!
+            foreach (vmc::servicelist('seller.create_after') as $object) {
+                $object->create_after($seller_id);
+            }
+			*/
+            $this->splash('success', $forward, '注册成功');
+        } else {
+            $this->splash('error', $signup_url, '注册失败,会员数据保存异常');
+        }		
+	}   
 
-    //注册的时，检查用户名
+	//注册的时，检查用户名
     public function check_login_name()
     {
         if ($this->passport_obj->check_signup_account(trim($_POST['pam_account']['login_name']), $msg)) {
@@ -143,51 +177,7 @@ class seller_ctl_site_passport extends seller_frontpage
         } else {
             $this->splash('error', null, $msg, true);
         }
-    }
-  
-    public function create()
-    {
-        $params = $_POST;
-        $forward = $params['forward'];
-        if (!$forward) {
-            $forward = $this->gen_url(array(
-                'app' => 'seller',
-                'ctl' => 'seller',
-            )); 
-			// 商家中心首页
-        }
-        unset($_POST['forward']);
-        $signup_url = $this->gen_url(array(
-            'app' => 'seller',
-            'ctl' => 'site_passport',
-            'act' => 'joinin',
-            'args' => array(
-                $forward,
-            ),
-        ));
-        $login_type = $this->passport_obj->get_login_account_type($params['pam_account']['login_name']);
-        if ($login_type == 'mobile' && !vmc::singleton('seller_user_vcode')->verify($params['vcode'], $params['pam_account']['login_name'], 'signup')) {
-            $this->splash('error', $signup_url, '手机短信验证码不正确');
-        } elseif ($login_type != 'mobile' && !base_vcode::verify('passport', $params['vcode'])) {
-            $this->splash('error', $signup_url, '验证码不正确');
-        }
-        if (!$this->passport_obj->check_signup($params, $msg)) {
-            $this->splash('error', $signup_url, $msg);
-        }
-        $seller_sdf_data = $this->passport_obj->pre_signup_process($params);
-
-        if ($seller_id = $this->passport_obj->save_sellers($seller_sdf_data, $msg)) {
-            $this->user_obj->set_seller_session($seller_id);
-            $this->bind_seller($seller_id);
-            /*本站会员注册完成后做某些操作!*/
-            foreach (vmc::servicelist('seller.create_after') as $object) {
-                $object->create_after($seller_id);
-            }
-            $this->splash('success', $forward, '注册成功');
-        } else {
-            $this->splash('error', $signup_url, '注册失败,会员数据保存异常');
-        }
-    }
+    }  
 
     /**
      * 重置密码操作
@@ -274,7 +264,6 @@ class seller_ctl_site_passport extends seller_frontpage
     public function send_vcode_email($type="activation")
     {
         $email = $_POST['email'];
-
         if (!$this->passport_obj->check_signup_account(trim($email), $msg)) {
             $this->splash('error', null, $msg);
         }
@@ -298,20 +287,23 @@ class seller_ctl_site_passport extends seller_frontpage
     //短信发送验证码
     public function send_vcode_sms($type = 'signup')
     {
-
         $mobile = trim($_POST['mobile']);
-
         if (!$this->passport_obj->check_signup_account($mobile, $msg)) {
             $this->splash('error', null, $msg);
         }
+		
         if($msg != 'mobile'){
             $this->splash('error', null, '错误的手机格式');
         }
+		
         $uvcode_obj = vmc::singleton('seller_user_vcode');
         $vcode = $uvcode_obj->set_vcode($mobile, $type , $msg);
+
+		$this->splash('success', $vcode, '短信已发送'); // 2015/9/7 短信直接显示
+		
         if ($vcode) {
             //发送验证码 发送短信
-            $data['vcode'] = $vcode;
+            $data['vcode'] = $vcode;			
             if (!$uvcode_obj->send_sms($type, (string) $mobile, $data)) {
                 $this->splash('error', null, '短信发送失败');
             }
@@ -332,21 +324,5 @@ class seller_ctl_site_passport extends seller_frontpage
             ));
         }
         $this->splash('success', $forward, '退出登录成功');
-    }
-
-    private function unset_seller()
-    {
-        $auth = pam_auth::instance(pam_account::get_account_type($this->app->app_id));
-        foreach (vmc::servicelist('passport') as $k => $passport) {
-            $passport->loginout($auth);
-        }
-        $this->app->seller_id = 0;
-        vmc::singleton('base_session')->set_cookie_expires(0);
-        $this->cookie_path = vmc::base_url().'/';
-        $this->set_cookie('UNAME', '', time() - 3600); //用户名
-        $this->set_cookie('SELLER_IDENT', 0, time() - 3600);//会员ID
-        foreach (vmc::servicelist('seller.logout_after') as $service) {
-            $service->logout();
-        }
     }
 }

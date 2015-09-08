@@ -1,8 +1,8 @@
 <div class="passport-signup-container">
     <div class="panel panel-default signup-panel">
       <div class="panel-heading clearfix">
-		  <a class="btn btn-danger" label="账号注册" icon="fa fa-plus" >账号注册&nbsp;<i class="fa fa fa-plus"></i></a>
-		  <a class="btn btn-default" label="入驻申请" icon="fa fa-plus" >入驻申请&nbsp;<i class="fa fa fa-plus"></i></a>
+		  <a class="btn btn-default" label="账号注册" icon="fa fa-plus" >账号注册&nbsp;<i class="fa fa fa-plus"></i></a>
+		  <a class="btn btn-danger" label="入驻申请" icon="fa fa-plus" >入驻申请&nbsp;<i class="fa fa fa-plus"></i></a>
 		  <a class="btn btn-default" label="商城签约" icon="fa fa-plus" >商城签约&nbsp;<i class="fa fa fa-plus"></i></a>
            <a class="btn btn-default" label="商家入驻" icon="fa fa-plus" >商家入驻&nbsp;<i class="fa fa fa-plus"></i></a> 
       </div>
@@ -10,49 +10,55 @@
           <form id="seller_signup_form" class="form-horizontal" action="<{link app=seller ctl=site_passport act=signup}>" method="post">            
               <input type="hidden" name="forward" value="<{$forward}>">
               <div class="form-group">
-                  <label for="input_login_name" class="col-xs-2 control-label">手机号<span class="text-danger">*</span></label>
+                  <label for="input_company_name" class="col-xs-2 control-label">公司名称<span class="text-danger">*</span></label>
                   <div class="col-xs-5">
-                    <input type="text" required="true" autocomplete='off' name="pam_account[login_name]" class="form-control" id="input_login_name" placeholder="手机号">
+                    <input type="text" required="true" autocomplete='off' name="company[name]" class="form-control" id="input_login_name" placeholder="公司名称">
+                  </div>
+              </div>             
+              <div class="form-group">
+                  <label  class="col-xs-2 control-label">所在地区</label>
+                  <div class="col-xs-5">
+                      <{input type=region name=region}>
                   </div>
               </div>
               <div class="form-group">
-                  <label for="input_login_password" class="col-xs-2 control-label">登录密码<span class="text-danger">*</span></label>
+                  <label for="input_addr" class="col-xs-2 control-label">详细地址<span class="text-danger">*</span></label>
                   <div class="col-xs-5">
-
-                    <input type="password" required="true" name="pam_account[login_password]" class="form-control" id="input_login_password" placeholder="登录密码">
-                  </div>
-              </div>
-              <div class="form-group">
-                  <label for="input_psw_confirm" class="col-xs-2 control-label">确认密码<span class="text-danger">*</span></label>
-                  <div class="col-xs-5">
-                    <input type="password" required="true" name="pam_account[psw_confirm]" class="form-control" id="input_psw_confirm" placeholder="再次输入登录密码">
+                    <input type="password" required="true" name="company[addr]" class="form-control" id="input_company_addr" placeholder="详细地址">
                   </div>
               </div>
 
-                <div class="form-group">
-                    <label for="input_vcode" class="col-xs-2 control-label">手机验证码<span class="text-danger">*</span></label>
-                    <div class="col-xs-2">
-                        <input type="text" required="true" name="smscode" value="" class="form-control" id="input_sms_vcode" placeholder="验证码">
-                    </div>
-                    <div class="col-xs-2">                       
-                        <div class="mobile-vcode">
-                            <button type="button" data-loading-text="正在发送..." class="btn btn-default">获取短信验证码</button>
-                        </div>
+            <div class="form-group">
+                <label for="input_product" class="col-xs-2 control-label">经营产品<span class="text-danger">*</span></label>
+                <div class="col-xs-2">
+                    <{input type=producttype name=product}>
+                </div>               
+            </div>
+
+            <div class="form-group">
+                <label for="input_vcode" class="col-xs-2 control-label">公司性质<span class="text-danger">*</span></label>
+                <div class="col-xs-2">
+                    <input type="text" required="true" name="smscode" value="" class="form-control" id="input_sms_vcode" placeholder="验证码">
+                </div>
+                <div class="col-xs-2">                       
+                    <div class="mobile-vcode">
+                        <button type="button" data-loading-text="正在发送..." class="btn btn-default">获取短信验证码</button>
                     </div>
                 </div>
+            </div>
 
-              <div class="form-group">
-                  <label for="input_vcode" class="col-xs-2 control-label">验证码<span class="text-danger">*</span></label>
-                  <div class="col-xs-2">
-                    <input type="text" required="true" name="vcode" class="form-control" id="input_vcode" placeholder="验证码">
-                  </div>
-                  <div class="col-xs-2">
-                      <div class="local-vcode">                         
-						<img id="codeimage" class="codechange" src="<{link app=site ctl=vcode act=index args0='sellerpassport'}>" alt="验证码" style="width:51px;height:20px;"/>
-						<button type="button" class="btn btn-link btn-sm codechange" >更换验证码</button>
-                      </div>                      
-                  </div>
+            <div class="form-group">
+              <label for="input_vcode" class="col-xs-2 control-label">验证码<span class="text-danger">*</span></label>
+              <div class="col-xs-2">
+                <input type="text" required="true" name="vcode" class="form-control" id="input_vcode" placeholder="验证码">
               </div>
+              <div class="col-xs-2">
+                  <div class="local-vcode">                         
+                    <img id="codeimage" class="codechange" src="<{link app=site ctl=vcode act=index args0='sellerpassport'}>" alt="验证码" style="width:51px;height:20px;"/>
+                    <button type="button" class="btn btn-link btn-sm codechange" >更换验证码</button>
+                  </div>                      
+              </div>
+            </div>
               
               <div class="form-group">
                   <div class="col-xs-offset-2 col-xs-5">

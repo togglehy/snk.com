@@ -25,7 +25,12 @@ class seller_frontpage extends site_controller {
         $this->passport_obj = vmc::singleton('seller_user_passport');		
     }
 
-    
+    final public function gen_url($params = array())
+    {
+        return app::get('seller')->router()->gen_url($params);
+    } 
+	//End Function
+
 	/*
      * 如果是登录状态则直接跳转到商家中心
      * 
@@ -95,11 +100,28 @@ class seller_frontpage extends site_controller {
         );
         $user_obj = vmc::singleton('seller_user_seller');
         $cookie_expires = $user_obj->cookie_expires ? time() + $user_obj->cookie_expires * 60 : 0;
+		/*
         $seller_data = $user_obj->get_sellers_data($columns,$seller_id);
         $login_name = $user_obj->get_seller_name($data['account']['login_name'],$seller_id);
+		*/
         $this->cookie_path = vmc::base_url() . '/';
         $this->set_cookie('UNAME', $login_name, $cookie_expires);
         $this->set_cookie('SELLER_IDENT', $seller_id, $cookie_expires);
+    }
+	public function unset_seller()
+    {
+        $auth = pam_auth::instance(pam_account::get_account_type($this->app->app_id));
+        foreach (vmc::servicelist('passport') as $k => $passport) {
+            $passport->loginout($auth);
+        }
+        $this->app->seller_id = 0;
+        vmc::singleton('base_session')->set_cookie_expires(0);
+        $this->cookie_path = vmc::base_url().'/';
+        $this->set_cookie('UNAME', '', time() - 3600); //用户名
+        $this->set_cookie('SELLER_IDENT', 0, time() - 3600);//会员ID
+        foreach (vmc::servicelist('seller.logout_after') as $service) {
+            $service->logout();
+        }
     }
     public function get_current_seller() {
         return vmc::singleton('seller_user_object')->get_current_seller();

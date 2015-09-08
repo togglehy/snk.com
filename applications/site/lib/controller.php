@@ -95,7 +95,7 @@ class site_controller extends base_controller
      * @access public
      * @return string
     */
-    final public function gen_url($params = array())
+    public function gen_url($params = array())
     {
         return app::get('site')->router()->gen_url($params);
     } //End Function

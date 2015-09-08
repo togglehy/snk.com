@@ -19,7 +19,7 @@ class b2c_messenger_stage
     public function __construct(&$app)
     {
         $this->app = $app;
-        $this->mdl_mem_systmpl = $this->app->model('member_systmpl');
+        $this->mdl_mem_systmpl = app::get('b2c')->model('member_systmpl');
     }
 
 

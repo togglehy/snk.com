@@ -126,7 +126,6 @@ class site_router implements base_interface_router
         if ($key === null) {
             return $this->_urlmap;
         }
-
         return $this->_urlmap[$key];
     } //End Function
     /*
