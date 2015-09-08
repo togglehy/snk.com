@@ -28,7 +28,7 @@ class seller_ctl_site_seller extends seller_frontpage
 	// 审核进度
 	public function process()
 	{
-		echo $this->title . "process";
+		// echo $this->title . "process";
 	}
 
 	
@@ -39,13 +39,13 @@ class seller_ctl_site_seller extends seller_frontpage
 		$seller = $this->app->model('sellers')->getRow('*', array(
 			'seller_id' => $this->seller['seller_id']
 		));
+		$this->pagedata['seller'] = $seller;
 		$company = $this->app->model('company')->getRow('*', array(
 			'company_id' => $$seller['seller_id']
 		));
 		$this->pagedata['company'] = $company;
 		$this->pagedata['_PAGE_'] = 'seller/company.html';
-		$this->output();
-		
+		$this->output();		
 	}
 	// 公司信息提交
 	private function _company_post($post)
@@ -65,8 +65,8 @@ class seller_ctl_site_seller extends seller_frontpage
 				throw new Exception('公司信息更新失败');
 			}
 			// 更新seller
-			$update_company_data = compact('area', 'addr', 'contact');
-			if($mdl_seller->update($update, array('seller_id' => $this->seller['seller_id'])))
+			$update_seller_data = compact('area', 'addr', 'contact');
+			if($mdl_seller->update($update_seller_data, array('seller_id' => $this->seller['seller_id'])))
 			{
 				throw new Exception('商家信息更新失败');
 			}
@@ -75,7 +75,7 @@ class seller_ctl_site_seller extends seller_frontpage
 			$this->db->rollback();
 			$this->end(false, $e->getMessage());
 		}
-		$this->end(true, $e->getMessage());
+		$this->end(true, '成功');
 	}
 
 	public function account()
@@ -93,8 +93,8 @@ class seller_ctl_site_seller extends seller_frontpage
 			'ctl' => 'site_seller',
 			'act' => 'account'
 		));		
-		$update_company_data = compact('area', 'addr', 'contact');
-		if($mdl_seller->update($update, array('seller_id' => $this->seller['seller_id'])))
+		$update_data = compact('area', 'addr', 'contact');
+		if($mdl_seller->update($update_data, array('seller_id' => $this->seller['seller_id'])))
 		{
 			$this->end(false, '账户信息更新失败');
 		}			
