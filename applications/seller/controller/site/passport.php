@@ -211,7 +211,7 @@ class seller_ctl_site_passport extends seller_frontpage
             if(!vmc::singleton('seller_user_vcode')->verify($params['vcode'], $params['account'], 'reset')){
                 $this->splash('error',$redirect_here,'验证码错误！');
             }
-            $p_m = app::get('pam')->model('sellers')->getRow('seller_id',array('login_account'=>$params['account']));
+            $p_m = app::get('pam')->model('sellers')->getRow('seller_id', array('login_account'=>$params['account']));
             if(empty($p_m['seller_id'])){
                 $this->splash('error',$redirect_here,'账号异常!');
             }
