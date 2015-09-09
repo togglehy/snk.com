@@ -22,6 +22,23 @@ class seller_ctl_site_brand extends seller_frontpage
 	// 商家品牌
 	public function index()
 	{		
+	
+		$this->finder('seller_mdl_brand', array(
+            'title' => ('商品品牌') ,
+            'use_buildin_recycle'=>true,
+            'actions' => array(
+                array(
+                    'label' => ('添加品牌') ,
+                    'icon' => 'fa-plus',
+                    'href' => $this->gen_url(array(
+                    	'app' => 'seller',
+                    	'ctl' => 'brand',
+                    	'act' => 'add'
+                    )),
+                ) ,
+            )
+        ));
+        exit;
 		$brands = $this->app->model('brand')->getRow('*', array(
 			'seller_id' => $this->seller['seller_id']
 		));		
@@ -31,9 +48,9 @@ class seller_ctl_site_brand extends seller_frontpage
 	}
 
 	// 品牌申请 添加
-	public function apply($id=0)
+	public function add($id=0)
 	{
-		if($_POST) $this->_apply_post($_POST);
+		if($_POST) $this->_post($_POST);
 		if($id)
 		{
 			$mdl_brand = app::get('b2c')->model('brand');
@@ -52,14 +69,14 @@ class seller_ctl_site_brand extends seller_frontpage
 	}
 
 	// 申请提交
-	private function _apply_post($post)
+	private function _post($post)
 	{
 		extract($post);		
-		$this->begin($this->gen_url(
+		$this->begin($this->gen_url(array(
 			'app' => 'seller',
 			'ctl' => 'site_brand',
 			'act' => 'index'
-		));
+		)));
 		try{
 			// 更新brand
 			$mdl_brand = app::get('b2c')->model('brand');
@@ -70,13 +87,13 @@ class seller_ctl_site_brand extends seller_frontpage
 			);
 			if($mdl_brand->save($update_brand_data, array('seller_id' => $seller_id)))
 			{
-				throw new Exception('公司信息更新失败');
+				throw new Exception('保存失败');
 			}
 			// 更新seller
 			$update_seller_data = compact('area', 'addr', 'contact');
 			if($mdl_seller->save($update_seller_data, array('seller_id' => $this->seller['seller_id'])))
 			{
-				throw new Exception('商家信息更新失败');
+				throw new Exception('申请失败');
 			}
 			$this->db->commit();
 		}catch(Exception $e){

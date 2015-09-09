@@ -61,15 +61,53 @@ $db['store'] = array(
             'default_in_list' => true,
         ) ,
 
-		'seller_id' => array (
-			'type' => 'number',
-			'label' => ('商家'),
-			'comment' => ('商家'),
-			'default' => 0,
-			'width' => 110,
-			'in_list' => true,
-			'orderby' => true,
-		),
+        'logo' => array(
+            'type' => 'char(32)',
+            'comment' => ('店铺logo') ,
+            'label' => ('logo') ,
+            'in_list' => true,
+            'default_in_list' => true,
+        ),
+        'template' => array(
+            'type' => 'varchar(100)',
+            'comment' => ('店铺模板') ,
+            'label' => ('店铺模板') ,
+            'in_list' => false,
+            'default_in_list' => false,
+        ),
+        'template_setting' => array(
+            'type' => 'serialize',
+            'comment' => ('模板设置') ,
+            'deny_export' => true,
+        ),
+
+        'status' => array(
+            'label' => ('用户状态') ,
+            'type' => array(
+                0 => ('待审'),
+                1 => ('已审核'),
+                -1 => ('未通过'),
+            ),
+            'default' => '0',
+            'in_list' => false,
+            'default_in_list' => false,
+        )，
+
+        'reason' => array(
+            'comment' => ('未通过原因') ,
+            'type' => 'varchar(200)',
+            'default' => '',
+        )，
+        
+        'seller_id' => array (
+    			'type' => 'number',
+    			'label' => ('商家'),
+    			'comment' => ('商家'),
+    			'default' => 0,
+    			'width' => 110,
+    			'in_list' => true,
+    			'orderby' => true,
+    		),
     ) ,
     'index' => array(
         'ind_bn' => array(

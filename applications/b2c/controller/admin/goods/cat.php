@@ -96,7 +96,7 @@ class b2c_ctl_admin_goods_cat extends desktop_controller{
                     $obj_operatorlogs->goodscat_log($cat_data,$olddata);
                 }
             }
-            
+
             #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑记录管理员操作日志@lujy↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
             $the_cat = $objCat->dump($cat_data['cat_id']);
             $this->end(true,('保存成功'),null,array('the_cat'=>$the_cat));
@@ -203,7 +203,7 @@ class b2c_ctl_admin_goods_cat extends desktop_controller{
             $nv['cat_path'] = $nv['cat_path'].$nv['cat_id'];
         }
 
-    //     error_log(var_export($list,true),3,'c:/dd.txt');
+        // error_log(var_export($list,true),3,'c:/dd.txt');
 
         $count = $objCat->get_subcat_count($cat_id);
         $list[]['cat_id'] = 0;

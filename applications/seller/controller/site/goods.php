@@ -19,12 +19,16 @@ class seller_ctl_site_goods extends seller_frontpage
     public function __construct(&$app)
     {
         parent::__construct($app);
+        if(in_array($this->action, array('index', 'apply'))	$this->verify_store(); // 店铺状态
     }	
 	
 	// 在售商品 审核|待审
 	public function index($status)
 	{
-		echo 'seller_goods_index';
+		// 入商品库
+		$mdl_b2c_goods = app::get('b2c')->model('goods');
+		$mdl_seller_goods = $this->app->model('goods');
+		$this->output();
 	}
 	// 商品添加
 	public function add()
