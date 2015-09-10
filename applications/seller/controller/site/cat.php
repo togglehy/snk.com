@@ -13,75 +13,100 @@
 class seller_ctl_site_cat extends seller_frontpage
 {
     public $title = '店铺分类';
-    
+
     public function __construct(&$app)
     {
         parent::__construct($app);
-        
 		//if(in_array($this->action, array('index', 'add'))) $this->verify_store(); // 店铺状态
-        
+        $this->mCat = app::get('store')->model('goods_cat');
+    }
+
+    private function redirect_url()
+    {
+        return $this->gen_url(array(
+			'app' => 'seller',
+			'ctl' => 'site_cat',
+			'act' => 'index'
+		));
     }
 	// 分类列表
 	public function index()
-	{	
-		$mdl_cat = app::get('store')->model('goods_cat');
-		$this->pagedata['cats'] = $mdl_cat->getlist('*', array('store_id' => $this->store['store_id']));
-		
+	{
+		$this->pagedata['cats'] = $this->mCat->getlist('*', array('store_id' => $this->store['store_id']));
 		$this->output();
 	}
 
 	// add
 	public function add($id=0)
 	{
-		if($_POST) $this->_setting_post($_POST);
-		$this->output();
+        $this->pagedata['parents'] = $this->mCat->getlist('cat_id,cat_name,p_order', array('parent_id' => 0));
+        array_unshift($this->pagedata['parents'], array(
+            'cate_id' => 0,
+            'p_order' => 0,
+            'cat_name' => '---无---'
+        ));
+        $this->page('site/cat/form.html', true, 'seller');
 	}
 	public function edit($id)
 	{
-		if($_POST) $this->_save($_POST);
-		$this->_info($id, 'edit');
+        $this->pagedata['parents'] = $this->mCat->getlist('cat_id,cat_name,p_order', array('parent_id' => 0));
+        array_unshift($this->pagedata['parents'], array(
+            'cate_id' => 0,
+            'p_order' => 0,
+            'cat_name' => '---无---'
+        ));
+        $this->pagedata['cat'] = $mdl_cat->dump($id);
+		$this->page('site/cat/form.html', true, 'seller');
 	}
-	// 表单
-	public function _form($id = 0, $type = 'add')
+	public function save($id)
 	{
-		// 父级分类
-		$this->display('site/cat/form.html');
-	}
-	private function _save()
-	{
-		extract($post);
-		$this->begin($this->gen_url(array(
-			'app' => 'seller',
-			'ctl' => 'site_store',
-			'act' => 'setting'
-		)));
-		isset($parent_id) || $parent_id = 0;
+        if(empty($_POST['cat']))  $this->end(false, '操作受限');
+		extract($_POST['cat']);
+		$this->begin($this->redirect_url());
+		empty($parent_id) && $parent_id = 0;
 		isset($cat_id) || $cat_id = 0;
+        $disable = $disable == 1 ? 'true' : 'false';
 		$last_modify = time();
-		$update_data = compact('cat_id', 'parent_id', 'cat_name', 'last_modify', 'disabled');
-		$mdl_goods_cat = $this->model('goods_cat');
-		if($mdl_goods_cat->save($update_data))
+        $store_id = $this->store['store_id'];
+		$update_data = compact('cat_id', 'parent_id', 'cat_name', 'last_modify', 'p_order', 'disabled', 'store_id');
+		if(!$this->mCat->save($update_data))
 		{
-			$this->end(false, '分类添加失败');
+		 	$this->end(false, ('分类添加失败'));
 		}
-		$this->end(true, '成功');
+		$this->end(true,('保存成功'),null);
 	}
-	
-	public function remove($id)
-	{
-		$this->_info($nCatId,'edit');
-	}
-		
-	// 排序
+
+	// 更新是否设为导航
 	public function update($id)
 	{
-		$this->begin($this->gen_url());
-        $mdl_goods_cat = $this->app->model('goods_cat');
+		$this->begin($this->redirect_url());
         foreach( $_POST['p_order'] as $k => $v ){
-            $mdl_goods_cat->update(array('p_order'=>($v===''?null:$v)),array('cat_id'=>$k) );
+            $this->mCat->update(array('p_order'=>($v===''?null:$v)),array('cat_id'=>$k) );
         }
         $mdl_goods_cat->cat2json();
         $this->end(true,('操作成功'));
 	}
-	
+    // 更新排序
+    public function order()
+    {
+        $this->begin($this->redirect_url());
+        print_r($_POST);
+        exit;
+        foreach( $_POST['p_order'] as $k => $v ){
+            $this->mCat->update(array('p_order'=>($v===''?null:$v)),array('cat_id'=>$k) );
+        }
+        $this->mCat->cat2json();
+        $this->end(true,('操作成功'));
+    }
+    // 删除
+    public function remove($id)
+    {
+        $this->begin($this->redirect_url());
+        $cat_sdf = $this->mCat->dump($id);
+        if($this->mCat->toRemove($id, $msg)){
+            $this->end(true, $cat_sdf['cat_name'].('已删除'));
+        }
+        $this->end(false, $msg);
+    }
+
 }

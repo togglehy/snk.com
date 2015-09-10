@@ -4,7 +4,7 @@
         <class>content_finder_indexs</class>
     </service>
 
-	
+
 
 	<service id="tpl_source.content">
 		<class>content_service_tplsource</class>

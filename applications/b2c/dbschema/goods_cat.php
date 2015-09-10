@@ -22,7 +22,7 @@ $db['goods_cat']=array (
       'extra' => 'auto_increment',
       'label' => ('分类ID'),
       'width' => 110,
-      
+
       'in_list' => true,
       'default_in_list' => true,
     ),
@@ -31,7 +31,7 @@ $db['goods_cat']=array (
       'type' => 'number',
       'label' => ('分类ID'),
       'width' => 110,
-      
+
       'in_list' => true,
       'parent_id'=>true,
     ),
@@ -41,7 +41,7 @@ $db['goods_cat']=array (
       'default' => ',',
       'label' => ('分类路径(从根至本结点的路径,逗号分隔,首部有逗号)'),
       'width' => 110,
-      
+
       'in_list' => true,
     ),
     'is_leaf' =>
@@ -51,7 +51,7 @@ $db['goods_cat']=array (
       'default' => 'false',
       'label' => ('是否叶子结点（true：是；false：否）'),
       'width' => 110,
-      
+
       'in_list' => true,
     ),
     'cat_name' =>
@@ -62,7 +62,7 @@ $db['goods_cat']=array (
       'default' => '',
       'label' => ('分类名称'),
       'width' => 110,
-      
+
       'in_list' => true,
       'default_in_list' => true,
     ),
@@ -77,7 +77,7 @@ $db['goods_cat']=array (
       'type' => 'number',
       'label' => ('排序'),
       'width' => 110,
-      
+
       'default' => 0,
       'in_list' => true,
     ),
@@ -86,13 +86,13 @@ $db['goods_cat']=array (
       'type' => 'number',
       'default' => 0,
       'required' => true,
-      
+
       'comment' => ('子类别数量'),
     ),
     'addon' =>
     array (
       'type' => 'longtext',
-      
+
       'comment' => ('附加项'),
     ),
     'last_modify' =>
@@ -110,7 +110,7 @@ $db['goods_cat']=array (
       'required' => true,
       'label' => ('是否屏蔽（true：是；false：否）'),
       'width' => 110,
-      
+
       'in_list' => true,
     ),
   ),

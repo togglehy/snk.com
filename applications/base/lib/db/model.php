@@ -338,6 +338,7 @@ class base_db_model implements base_interface_model
         foreach ((array) $this->idColumn as $idv) {
             if (!$dbData[$idv]) {
                 $doMethod = 'insert';
+                unset($dbData[$idv]);
                 break;
             }
             $filter[$idv] = $dbData[$idv];

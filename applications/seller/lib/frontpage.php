@@ -19,6 +19,16 @@ class seller_frontpage extends site_controller {
 		'store_id' => 1
 	);
 
+    protected function redirect_url($params = array())
+    {
+        extract($params);
+        empty($app) && $app = $this->app->app_id;
+        empty($ctl) && $ctl = $this->controller;
+        empty($app) && $act = 'index';
+        $args = empty($args) ? array() : (array) $args;
+        return $this->gen_url(compact('app', 'ctl', 'act'));
+    }
+
     function __construct(&$app) {
         parent::__construct($app);
         $this->_response->set_header('Cache-Control', 'no-store');
@@ -83,26 +93,26 @@ class seller_frontpage extends site_controller {
             'act' => 'login' //
         )) , '未登录');
     }
-    
+
     // 是否开店
     protected function verify_store()
     {
     	$redirect = $this->gen_url(array(
-			'app' => 'seller', 
-			'ctl' => 'site_seller', 
+			'app' => 'seller',
+			'ctl' => 'site_seller',
 			'act' => 'index',
 		));
-		
+
 	 	$this->store = app::get('store')->model('store')->getRow('*', array(
 			'seller_id' => $this->seller['seller_id']
 		));
-		
+
 		if(!$this->store) $this->splash('error', $redirect, '店铺尚未开启！');
 		if($this->store['disable'] == false) $this->splash('Error', $redirect, '店铺正在审核');
 		$this->pagedata['store'] = $this->store;
 		return true;
     }
-    
+
     /**
      * loginlimit-登录受限检测
      *
@@ -224,7 +234,7 @@ class seller_frontpage extends site_controller {
         $this->pagedata['menu'] = $this->get_menu();
         $this->pagedata['current_action'] = $this->action;
         $this->action_view = $this->action.'.html';
-        
+
         $controller = str_replace("site_", "", $this->controller);
         if ($this->pagedata['_PAGE_']) {
             $this->pagedata['_PAGE_'] = 'site/' . $controller . "/" . $this->pagedata['_PAGE_'];
@@ -236,5 +246,5 @@ class seller_frontpage extends site_controller {
         $this->pagedata['_MAIN_'] = 'site/main.html';
         $this->page('site/main.html');
     }
-    
+
 }

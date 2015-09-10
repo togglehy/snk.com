@@ -92,6 +92,15 @@ $db['goods_cat']=array (
 		  'in_list' => false,
 		  'orderby' => false,
 		),
+    'ismenu' => array (
+      'type' => 'intbool',
+      'label' => ('导航'),
+      'comment' => ('导航'),
+      'default' => 0,
+      'width' => 110,
+      'in_list' => false,
+      'orderby' => false,
+    ),
     'disabled' =>    array (
       'type' => 'bool',
       'default' => 'false',

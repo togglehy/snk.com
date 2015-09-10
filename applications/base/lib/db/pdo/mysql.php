@@ -18,12 +18,12 @@ class base_db_pdo_mysql extends base_db_abstract implements base_interface_db
     protected $_use_transaction = false;
     public $_enable_innodb = false;
 
-	// debug 2015/8/31
-	public $error_code = 0;
-	public $error = null;
-	public $last_query = null;
-	public $array_query = array();
-
+  	// debug 2015/8/31
+  	public $error_code = 0;
+  	public $error = null;
+  	public $last_query = null;
+  	public $array_query = array();
+    //
     public function __construct()
     {
         parent::__construct();
@@ -81,6 +81,10 @@ class base_db_pdo_mysql extends base_db_abstract implements base_interface_db
                 }
             }
             logger::debug('EXEC SQL:'.$sql);
+
+            // debug 2015/8/31
+            $this->last_query = $sql;
+            $this->array_query[] = $sql;
             $affected = $db_lnk->exec($sql);
             if($affected === false){
                 $this->error = $error_info = $db_lnk->errorInfo();
@@ -104,9 +108,9 @@ class base_db_pdo_mysql extends base_db_abstract implements base_interface_db
                 $db_res[] = $row;
             }
 
-			// debug 2015/8/31
-			$this->last_query = $sql;
-			$this->array_query[] = $sql;
+      			// debug 2015/8/31
+      			$this->last_query = $sql;
+      			$this->array_query[] = $sql;
 
             return array(
                 'rs' => $db_res,

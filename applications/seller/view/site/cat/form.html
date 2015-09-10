@@ -1,49 +1,43 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="fal">关闭</button>
-    <h3 class="modal-title"><{if $cat.cat_id }>分类编辑<{else}>分类添加<{/if}></h3>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <h3 class="modal-title"><{if $cat.cat_id }>分类编辑<{else}>添加新分类<{/if}></h3>
 </div>
-
-<form method="post" action="<{link app=seller ctl=site_cat act=add}>" id='cat_form' calss="form">
+<form method="post" action="<{link app=seller ctl=site_cat act=save args0=$cat['cat_id']}>" id='cat_form' calss="form">
 <div class="modal-body  form-horizontal">
 <div class="form-body">
     <{if $cat.cat_id }><input type="hidden" value="<{$cat.cat_id}>" name="cat[cat_id]" /><{/if}>
     <div class="form-group">
-        <label class="col-md-3 control-label">品牌名称
+        <label class="col-md-3 control-label">父级分类</label>
+        <div class="col-md-5">
+            <{input class="form-control" type="select"  name="cat[parent_id]" style="font-size:12px;"  value=$cat.parent_id rows=$parents valueColumn="cat_id" labelColumn="cat_name"}>
+            <span class="help-block">若要添加顶级分类，此项可不选择</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">分类名称
             <span class="required" aria-required="true">*</span>
        </label>
         <div class="col-md-5">
             <input type="text" required=true value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]" vtype='required' class='form-control'/>
         </div>
     </div>
-
     <div class="form-group">
-        <label class="col-md-3 control-label">品牌地址
-            <span class="required" aria-required="true">*</span>
-       </label>
+        <label class="col-md-3 control-label">同级分类排名</label>
         <div class="col-md-5">
-            <input type="text" required=true value="<{$cat.addr|escape:'html'}>" name="cat[cat_url]" vtype='required' class='form-control'/>
+        <input  value="<{if $cat.p_order}> <{$cat.p_order}> <{else}>0<{/if}>" name="cat[p_order]" class="form-control" type="number"/>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="col-md-3 control-label">品牌logo
-            <span class="required" aria-required="true">*</span>
-       </label>
-        <div class="col-md-5">
-            <input type="text" required=true value="<{$cat.cat_logo|escape:'html'}>" name="cat[cat_logo]" vtype='required' class='form-control'/>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-md-3 control-label">简介
-            <span class="required" aria-required="true">*</span>
-       </label>
-        <div class="col-md-5">
-            <input type="text" required=true value="<{$cat.cat_logo|escape:'html'}>" name="cat[cat_logo]" vtype='required' class='form-control'/>
+        <label class="col-md-3 control-label">设为导航</label>
+        <div class="col-md-5 checker">
+		<input type="checkbox" value="1" <{if $cat.disabled == 'true'}>checked="checked"<{/if}>" name="cat[disabled]" type="checkbox">
         </div>
     </div>
 
 </div>
+</div>
+
 
 <div class="modal-footer">
         <button type="button" class="btn default" data-dismiss="modal">关闭</button>

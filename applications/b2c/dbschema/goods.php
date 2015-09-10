@@ -200,10 +200,10 @@ $db['goods'] = array(
             'label' => ('周购买次数') ,
         ) ,
 		// 商家
-		'seller_id' => array (
+		'store_id' => array (
 		  'type' => 'number',
-		  'label' => ('商家'),
-		  'comment' => ('商家'),
+		  'label' => ('店铺'),
+		  'comment' => ('店铺'),
 		  'default' => 0,
 		  'width' => 110,
 		  'in_list' => true,
