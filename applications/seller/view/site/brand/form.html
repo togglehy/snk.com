@@ -1,18 +1,18 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="fal">关闭</button>
-    <h3 class="modal-title"><{if $cat.cat_id }>分类编辑<{else}>分类添加<{/if}></h3>
+    <h3 class="modal-title"><{if $cat.cat_id }>品牌编辑<{else}>品牌申请<{/if}></h3>
 </div>
 
-<form method="post" action="<{link app=seller ctl=site_cat act=add}>" id='cat_form' calss="form">
+<form method="post" action="<{link app=seller ctl=site_brand act=add}>" id='brand_form' calss="form">
 <div class="modal-body  form-horizontal">
 <div class="form-body">
-    <{if $cat.cat_id }><input type="hidden" value="<{$cat.cat_id}>" name="cat[cat_id]" /><{/if}>
+    <{if $cat.cat_id }><input type="hidden" value="<{$brand.brand_id}>" name="cat[brand_id]" /><{/if}>
     <div class="form-group">
         <label class="col-md-3 control-label">品牌名称
             <span class="required" aria-required="true">*</span>
        </label>
         <div class="col-md-5">
-            <input type="text" required=true value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]" vtype='required' class='form-control'/>
+            <input type="text" required=true value="<{$brand.brand_name|escape:'html'}>" name="brand[brand_name]" vtype='required' class='form-control'/>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
             <span class="required" aria-required="true">*</span>
        </label>
         <div class="col-md-5">
-            <input type="text" required=true value="<{$cat.addr|escape:'html'}>" name="cat[cat_url]" vtype='required' class='form-control'/>
+            <input type="text" required=true value="<{$brand.addr|escape:'html'}>" name="brand[brand_url]" vtype='required' class='form-control'/>
         </div>
     </div>
 
@@ -30,7 +30,7 @@
             <span class="required" aria-required="true">*</span>
        </label>
         <div class="col-md-5">
-            <input type="text" required=true value="<{$cat.cat_logo|escape:'html'}>" name="cat[cat_logo]" vtype='required' class='form-control'/>
+            <input type="text" required=true value="<{$brand.brand_logo|escape:'html'}>" name="brand[brand_logo]" vtype='required' class='form-control'/>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
             <span class="required" aria-required="true">*</span>
        </label>
         <div class="col-md-5">
-            <input type="text" required=true value="<{$cat.cat_logo|escape:'html'}>" name="cat[cat_logo]" vtype='required' class='form-control'/>
+            <input type="text" required=true value="<{$brand.brand_logo|escape:'html'}>" name="brand[brand_logo]" vtype='required' class='form-control'/>
         </div>
     </div>
 
@@ -59,8 +59,8 @@
 <{if $env.get.callback_func}>
 <script charset="utf-8">
     //临时添加分类
-    $('#cat_form').data('ajax:success',function(re){
-        $('#cat_form').closest('.modal').modal('hide');
+    $('#brand_form').data('ajax:success',function(re){
+        $('#brand_form').closest('.modal').modal('hide');
         re = jsonDecode(re);
         if(re.the_cat){
             if('<{$env.get.callback_func}>' in window){

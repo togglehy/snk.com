@@ -6,7 +6,7 @@
 		
 		<menugroup name="店铺">
             <menu controller='site_store' action='index' display='true' order="60">店铺设置</menu>
-			<menu controller='site_store' action='cat' display='true' order="60">店铺分类</menu>
+			<menu controller='site_cat' action='index' display='true' order="60">店铺分类</menu>
 			<menu controller='site_store' action='setting' display='true' order="60">模板设置</menu>
 			<menu controller='site_store' action='view' display='true' order="60">查看店铺</menu>
         </menugroup>		

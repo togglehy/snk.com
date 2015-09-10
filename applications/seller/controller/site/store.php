@@ -14,12 +14,11 @@ class seller_ctl_site_store extends seller_frontpage
 {
     public $title = '店铺管理';
     
-    private $store = Array();
-
     public function __construct(&$app)
     {
         parent::__construct($app);
-        if(in_array($this->action, array('index', 'apply'))	$this->verify_store(); // 店铺状态
+        
+        if(in_array($this->action, array('index', 'apply'))) $this->verify_store(); // 店铺状态
         
     }	
     
@@ -113,6 +112,6 @@ class seller_ctl_site_store extends seller_frontpage
 			'args' => array(
 				$this->store['store_id']
 			)
-		));
+		)));
 	}
 }

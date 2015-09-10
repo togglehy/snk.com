@@ -23,27 +23,11 @@ class seller_ctl_site_brand extends seller_frontpage
 	public function index()
 	{		
 	
-		$this->finder('seller_mdl_brand', array(
-            'title' => ('商品品牌') ,
-            'use_buildin_recycle'=>true,
-            'actions' => array(
-                array(
-                    'label' => ('添加品牌') ,
-                    'icon' => 'fa-plus',
-                    'href' => $this->gen_url(array(
-                    	'app' => 'seller',
-                    	'ctl' => 'brand',
-                    	'act' => 'add'
-                    )),
-                ) ,
-            )
-        ));
-        exit;
 		$brands = $this->app->model('brand')->getRow('*', array(
 			'seller_id' => $this->seller['seller_id']
 		));		
 		$this->pagedata['brands'] = $seller;
-		$this->pagedata['_PAGE_'] = 'seller/brand.html';
+		
 		$this->output();
 	}
 
@@ -64,8 +48,8 @@ class seller_ctl_site_brand extends seller_frontpage
 			));
 			$this->pagedata['brands'] = $brand;
 		}
-		$this->pagedata['_PAGE_'] = 'seller/brand.html';
-		$this->output();
+		$this->page('site/brand/form.html', true, 'seller');
+		
 	}
 
 	// 申请提交

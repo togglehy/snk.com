@@ -14,19 +14,19 @@ class seller_ctl_site_cat extends seller_frontpage
 {
     public $title = '店铺分类';
     
-    private $store = Array();
-
     public function __construct(&$app)
     {
         parent::__construct($app);
-        if(in_array($this->action, array('index', 'apply'))	$this->verify_store(); // 店铺状态
+        
+		//if(in_array($this->action, array('index', 'add'))) $this->verify_store(); // 店铺状态
         
     }
 	// 分类列表
 	public function index()
 	{	
-		$mdl_cat = $this->app->model('cat');
-		$this->pagedata['cats'] = $mdl_cat->getlist('*', array('store_id' => $this->store['store_id']);
+		$mdl_cat = app::get('store')->model('goods_cat');
+		$this->pagedata['cats'] = $mdl_cat->getlist('*', array('store_id' => $this->store['store_id']));
+		
 		$this->output();
 	}
 
@@ -60,7 +60,7 @@ class seller_ctl_site_cat extends seller_frontpage
 		$last_modify = time();
 		$update_data = compact('cat_id', 'parent_id', 'cat_name', 'last_modify', 'disabled');
 		$mdl_goods_cat = $this->model('goods_cat');
-		if($mdl_goods_cat->save($update_data)
+		if($mdl_goods_cat->save($update_data))
 		{
 			$this->end(false, '分类添加失败');
 		}
@@ -75,7 +75,7 @@ class seller_ctl_site_cat extends seller_frontpage
 	// 排序
 	public function update($id)
 	{
-		$this->begin($this->);
+		$this->begin($this->gen_url());
         $mdl_goods_cat = $this->app->model('goods_cat');
         foreach( $_POST['p_order'] as $k => $v ){
             $mdl_goods_cat->update(array('p_order'=>($v===''?null:$v)),array('cat_id'=>$k) );

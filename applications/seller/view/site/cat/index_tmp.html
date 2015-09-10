@@ -2,7 +2,7 @@
   <h1>店铺分类 <small>Store catagroy</small></h1>
 </div>
 <div class="bnt-group">
-    <a class="btn btn-success" data-target="#cat_form" data-toggle="modal" label="添加分类" icon="fa-plus" href="<{link app=seller ctl=site_cat act=add}>">
+    <a class="btn green" data-target="#cat_form" data-toggle="modal" label="添加分类" icon="fa-plus" href="<{link app=seller ctl=site_cat act=add}>">
         添加分类&nbsp;<i class="glyphicon glyphicon-plus-sign"></i>
     </a>
 </div>
@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody id="cat_list">
-        <{foreach from=$cats item=item name="item"}>
+        <{eeeforeach from=$cats item=item name="item"}>
             <tr data-catid="<{$item.cat_id}>">
                 <td><{$item.cat_name}></td>
                 <td>
@@ -29,6 +29,7 @@
     </table>
 </div>
 </form>
+
 <script charset="utf-8">
     $.each($('#cat_list tr'),function(index,item){
             item = $(item);

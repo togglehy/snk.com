@@ -67,10 +67,8 @@ class seller_ctl_site_seller extends seller_frontpage
 			if($mdl_seller->update($update_seller_data, array('seller_id' => $this->seller['seller_id'])))
 			{
 				throw new Exception('商家信息更新失败');
-			}
-			$this->db->commit();
+			}			
 		}catch(Exception $e){
-			$this->db->rollback();
 			$this->end(false, $e->getMessage());
 		}
 		$this->end(true, '成功');

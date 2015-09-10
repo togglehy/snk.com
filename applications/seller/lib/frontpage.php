@@ -15,10 +15,14 @@ class seller_frontpage extends site_controller {
 		'seller_id' => 1,
 		'avartar' => ''
 	);
+	protected $store = array(
+		'store_id' => 1
+	);
 
     function __construct(&$app) {
         parent::__construct($app);
         $this->_response->set_header('Cache-Control', 'no-store');
+        $this->_response->set_header('Cache-Control', 'no-cache');
         vmc::singleton('base_session')->start();
 		//$this->verify();
 		$this->action = $this->_request->get_act_name();
@@ -28,8 +32,7 @@ class seller_frontpage extends site_controller {
 		$this->set_tmpl('seller');
         $this->user_obj = vmc::singleton('seller_user_object');
         $this->passport_obj = vmc::singleton('seller_user_passport');
-		$this->db = vmc::database();
-    }
+	}
 
     final public function gen_url($params = array())
     {
@@ -82,16 +85,18 @@ class seller_frontpage extends site_controller {
     }
     
     // 是否开店
-    private function verify_store()
+    protected function verify_store()
     {
     	$redirect = $this->gen_url(array(
 			'app' => 'seller', 
-			'ctl' => 'store', 
-			'act' => 'index'
+			'ctl' => 'site_seller', 
+			'act' => 'index',
 		));
+		
 	 	$this->store = app::get('store')->model('store')->getRow('*', array(
 			'seller_id' => $this->seller['seller_id']
 		));
+		
 		if(!$this->store) $this->splash('error', $redirect, '店铺尚未开启！');
 		if($this->store['disable'] == false) $this->splash('Error', $redirect, '店铺正在审核');
 		$this->pagedata['store'] = $this->store;
@@ -219,35 +224,17 @@ class seller_frontpage extends site_controller {
         $this->pagedata['menu'] = $this->get_menu();
         $this->pagedata['current_action'] = $this->action;
         $this->action_view = $this->action.'.html';
+        
         $controller = str_replace("site_", "", $this->controller);
         if ($this->pagedata['_PAGE_']) {
             $this->pagedata['_PAGE_'] = 'site/' . $controller . "/" . $this->pagedata['_PAGE_'];
         } else {
             $this->pagedata['_PAGE_'] = 'site/' . $controller . "/" .$this->action_view;
         }
-        echo $this->pagedata['_PAGE_'];
+		$this->pagedata['_PAGE_'];
         $this->pagedata['app_id'] = $app_id;
         $this->pagedata['_MAIN_'] = 'site/main.html';
         $this->page('site/main.html');
     }
     
-    // finder
-    public function finder($object_name, $params = array())
-    {
-        header('cache-control: no-store, no-cache, must-revalidate');
-        $_GET['action'] = $_GET['action'] ? $_GET['action'] : 'view';
-        $finder = vmc::singleton('desktop_finder_builder_'.$_GET['action'], $this);
-        foreach ($params as $k => $v) {
-            $finder->$k = $v;
-        }
-        $app_id = substr($object_name, 0, strpos($object_name, '_'));
-        $app = app::get($app_id);
-        $finder->app = $app;
-        $finder->work($object_name);
-    }
-    
-    public function sidebar_active()
-    {
-    	return $output;
-    }
 }

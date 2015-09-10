@@ -284,6 +284,7 @@ class site_controller extends base_controller
             $this->pagedata['_THEME_'] = vmc::get_themes_host_url().'/'.$this->get_theme(); //模版地址
             $tmpl_type = $this->get_tmpl(); //模板文件类型
             $tmpl_file = $this->get_tmpl_file(); //指定模板文件
+            
             //没有指定模板文件
             if (!$tmpl_file || $tmpl_file == '') {
                 if ($views[$tmpl_type] && $views[$tmpl_type][0]) {
@@ -297,9 +298,10 @@ class site_controller extends base_controller
                 }
             } //如果有模版，检测当前theme下是否有此模板
             $this->set_tmpl_main_app_id($app_id);
+            
             $html = $this->fetch_tmpl($tmpl_file, $is_preview);
         } else {
-            $html = $this->fetch($view, $app_id, $is_preview);
+        	$html = $this->fetch($view, $app_id, $is_preview);
         }
 
         if (!$this->_response->get_header('Content-type', $header)) {

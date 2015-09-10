@@ -91,14 +91,14 @@ $db['store'] = array(
             'default' => '0',
             'in_list' => false,
             'default_in_list' => false,
-        )，
+        ),
 
         'reason' => array(
             'comment' => ('未通过原因') ,
             'type' => 'varchar(200)',
             'default' => '',
-        )，
-        
+        ),
+
         'seller_id' => array (
     			'type' => 'number',
     			'label' => ('商家'),

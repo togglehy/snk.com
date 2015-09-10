@@ -1,0 +1,55 @@
+<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="fal">关闭</button>
+        <h3 class="modal-title"><{if $cat.cat_id }>分类编辑<{else}>添加新分类<{/if}></h3>
+
+</div>
+<form method="post" action="<{link app=seller ctl=site_cat act=save}>" id='cat_form' calss="form">
+<div class="modal-body  form-horizontal">
+<div class="form-body">
+    <{if $cat.cat_id }><input type="hidden" value="<{$cat.cat_id}>" name="cat[cat_id]" /><{/if}>
+    <div class="form-group">
+        <label class="col-md-3 control-label">分类名称
+            <span class="required" aria-required="true">*</span>
+       </label>
+        <div class="col-md-5">
+            <input type="text" required=true value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]" vtype='required' class='form-control'/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label">同级分类排名</label>
+        <div class="col-md-5">
+        <input  value="<{if $cat.p_order}> <{$cat.p_order}> <{else}>0<{/if}>" name="cat[p_order]" class="form-control" type="number"/>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+<div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn blue">保存</button>
+</div>
+
+<{if $env.get.callback_func}>
+<!-- 保存后，不跳转 -->
+<input type="hidden" name="no_redirect" value="1">
+<{/if}>
+</form>
+
+<{if $env.get.callback_func}>
+<script charset="utf-8">
+    //临时添加分类
+    $('#cat_form').data('ajax:success',function(re){
+        $('#cat_form').closest('.modal').modal('hide');
+        re = jsonDecode(re);
+        if(re.the_cat){
+            if('<{$env.get.callback_func}>' in window){
+                window['<{$env.get.callback_func}>'](re.the_cat);
+            }
+        }
+    });
+</script>
+<{/if}>

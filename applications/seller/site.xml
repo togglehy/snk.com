@@ -19,7 +19,11 @@
 		<title>商家订单</title>
 		<disable>true</disable>
 	</module>	
-	
+	<module controller='site_cat' id="seller">
+		<name>sellercat</name>
+		<title>店铺分类</title>
+		<disable>true</disable>
+	</module>
 	<module controller='site_passport' id="seller">
 		<name>sellerpassport</name>
 		<title>商家用户</title>

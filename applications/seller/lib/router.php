@@ -26,7 +26,6 @@ class seller_router extends site_router
     {
 		$result = parent::gen_url($params);
 		strpos($result, 'seller') === 0 && $result = str_replace('seller', 'seller/', $result);
-		echo $result;
 		return $result;
 	}
 	// 商家2015/9/6
