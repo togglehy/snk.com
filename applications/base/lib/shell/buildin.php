@@ -130,8 +130,8 @@ class base_shell_buildin extends base_shell_prototype
         $options = $this->get_options();
         if(count($args)<1){
             $args[0] = 'vmcshop';
-        }		
-        $install_queue = vmc::singleton('base_application_manage')->install_queue($args, $options['reset']);		
+        }
+        $install_queue = vmc::singleton('base_application_manage')->install_queue($args, $options['reset']);
         $this->install_app_by_install_queue($install_queue, $options);
     }
 
@@ -299,7 +299,12 @@ class base_shell_buildin extends base_shell_prototype
             logger::info('系统未安装!请先运行install');
             return;
         }
-
+        $force = array_search('force', $args);
+        if($force !== false)
+        {
+            unset($args[$force]);
+            $force = true;
+        }
         if (!$args) {
             $rows = app::get('base')->model('apps')->getList('app_id', array('installed' => 1));
             foreach ($rows as $r) {
@@ -313,14 +318,13 @@ class base_shell_buildin extends base_shell_prototype
         $args = array_unique($args);
         foreach ($args as $app_id) {
             $appinfo = app::get('base')->model('apps')->getList('*', array('app_id' => $app_id));
-
             if (version_compare($appinfo[0]['local_ver'], $appinfo[0]['dbver'], '>') || $options['force-update-app']) {
                 app::get($app_id)->runtask('pre_update', array('dbver' => $appinfo[0]['dbver']));
-                vmc::singleton('base_application_manage')->update_app_content($app_id);
+                vmc::singleton('base_application_manage')->update_app_content($app_id, true, $force);
                 app::get($app_id)->runtask('post_update', array('dbver' => $appinfo[0]['dbver']));
                 app::get('base')->model('apps')->update(array('dbver' => $appinfo[0]['local_ver']), array('app_id' => $app_id));
             } else {
-                vmc::singleton('base_application_manage')->update_app_content($app_id);
+                vmc::singleton('base_application_manage')->update_app_content($app_id, true, $force);
             }
         }
         logger::info('Applications update, complete!');
@@ -411,8 +415,8 @@ class base_shell_buildin extends base_shell_prototype
 	*/
 	public $command_db_export = '数据结构';
 	public function command_db_export()
-    {		
-		$rows = app::get('base')->model('apps')->getlist('*');		
+    {
+		$rows = app::get('base')->model('apps')->getlist('*');
         foreach ($rows as $k => $v) {
 			$result = "VMC dbSchema";
 			$result.= "\r\n=====================================================================\r\n";
@@ -428,25 +432,25 @@ class base_shell_buildin extends base_shell_prototype
 				$label = isset($db[$key]['comment']) ? $db[$key]['comment'] : $db[$key]['label'];
 				$result.= "----{$key}{$label}";
 				$result.= isset($db[$key]['engine']) ? $db[$key]['engine'] : "MyIsam";
-				$result.= "\r\n";			
+				$result.= "\r\n";
 				foreach($db[$key]['columns'] as $k => $col)
 				{
 					$result.= "\t{$k}\t{$col['label']}\t";
 					$type = '';
 					if(is_array($col['type']))
-					{						
+					{
 						foreach($col['type'] as $t => $p)
 						{
 							$type = "{$k}：{$p}|";
 						}
 					}else{
-						$type = $col['type'];	
+						$type = $col['type'];
 					}
 					$result.= $type . "\r\n";
-				}				
-			}	
+				}
+			}
 			file_put_contents(APP_DIR . "{$v['app_id']}.txt", $result);
         }
-		//echo $result;	
+		//echo $result;
     }
 }

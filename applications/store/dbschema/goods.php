@@ -8,9 +8,9 @@
 // +----------------------------------------------------------------------
 // | Author: Shanghai ChenShang Software Technology Co., Ltd.
 // +----------------------------------------------------------------------
-// | 商家品牌申请、授权
+// | 店铺商品
 // +----------------------------------------------------------------------
-$db['brand'] = array(
+$db['goods'] = array(
     'columns' => array(
         'id' => array(
             'type' => 'number',
@@ -28,7 +28,18 @@ $db['brand'] = array(
             'in_list' => false,
 			'comment' => '品牌ID',
         ),
-		'seller_id' => array(
+		'store_id' => array(
+            'type' => 'number',
+            'required' => false,
+			'default' => 0,
+            'label' => '店铺',
+			'searchtype' => 'has',
+            'in_list' => true,
+            'default_in_list' => true,
+            'order' => '1',
+			'comment' => '店铺',
+        ),
+        'seller_id' => array(
             'type' => 'number',
             'required' => false,
 			'default' => 0,
@@ -55,7 +66,7 @@ $db['brand'] = array(
         ),
 		'create_time' => array (
             'type' => 'time',
-            'label' => ('创建时间'),
+            'label' => ('注册时间'),
             'in_list' => true,
             'default_in_list' => false,
 			'filtertype' => 'time',
@@ -69,14 +80,14 @@ $db['brand'] = array(
         ),
     ),
 	'index' => array(
-		'ind_status' => array(
+        'ind_status' => array(
 			'columns' => array(
-				0 => 'status',
+				0 => 'id',
 			),
 		),
-        'ind_seller_id' => array(
+        'ind_store_id' => array(
 			'columns' => array(
-				0 => 'seller_id',
+				0 => 'store_id',
 			),
 		),
 	),

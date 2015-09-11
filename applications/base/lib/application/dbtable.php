@@ -267,17 +267,17 @@ class base_application_dbtable extends base_application_prototype_filepath{
     function install(){
         $db = vmc::database();
         $sql = $this->get_sql();
-        $real_table_name = $this->real_table_name();        
+        $real_table_name = $this->real_table_name();
         $db->exec('drop table if exists `'.$real_table_name.'`');
         $db->exec($sql);
-		
+
 		$log = 'Creating table '.$real_table_name;
 		if(intVal($db->errorCode()) > 0)
 		{
-			$error_info = $db->errorInfo();			
+			$error_info = $db->errorInfo();
 			logger::info($err = $log . " fail \n" . 'ERROR_INFO:'. $error_info[2]);
-			logger::error($err . "\n" . $db->last_query);			
-		}else{			
+			logger::error($err . "\n" . $db->last_query);
+		}else{
 			logger::info($log . " success");
 		}
     }
