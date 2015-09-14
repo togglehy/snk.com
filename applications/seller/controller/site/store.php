@@ -13,35 +13,19 @@
 class seller_ctl_site_store extends seller_frontpage
 {
     public $title = '店铺管理';
-    
+
     public function __construct(&$app)
     {
         parent::__construct($app);
-        
+
         if(in_array($this->action, array('index', 'apply'))) $this->verify_store(); // 店铺状态
-        
-    }	
-    
-    // 是否开店
-    private function verify_store()
-    {
-    	$redirect = $this->gen_url(array(
-			'app' => 'seller', 
-			'ctl' => 'store', 
-			'act' => 'index'
-		));
-	 	$this->store = app::get('store')->model('store')->getRow('*', array(
-			'seller_id' => $this->seller['seller_id']
-		));
-		if(!$this->store) $this->splash('error', $redirect, '店铺尚未开启！');
-		if($this->store['disable'] == false) $this->splash('Error', $redirect, '店铺正在审核');
-		$this->pagedata['store'] = $this->store;
-		return true;
+
     }
-	
+
+
 	// 已开店 店铺状态
 	public function index()
-	{	
+	{
 		$this->output();
 	}
 
@@ -50,7 +34,7 @@ class seller_ctl_site_store extends seller_frontpage
 	{
 		$this->output();
 	}
-	
+
 	// 店铺设置
 	public function setting()
 	{
@@ -75,11 +59,11 @@ class seller_ctl_site_store extends seller_frontpage
 		$this->end(true, '更新成功');
 
 	}
-	
+
 	public function template()
 	{
 		$this->pagedata['template'] = $this->store['template_setting'];
-		$this->output();	
+		$this->output();
 	}
 	//模板设置
 	private function _template_post()
@@ -102,13 +86,13 @@ class seller_ctl_site_store extends seller_frontpage
 		}
 		$this->end(true, '更新成功');
 	}
-	
+
 	// 查看
 	public function view()
 	{
 		$this->redirect(app::get('site')->router()->gen_url(array(
-			'app' => 'site', 
-			'ctl' => 'store', 
+			'app' => 'site',
+			'ctl' => 'store',
 			'args' => array(
 				$this->store['store_id']
 			)

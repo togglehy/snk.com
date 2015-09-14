@@ -172,8 +172,8 @@ class base_component_compiler
                     }
                     $_args[$key] = "'$key' => $value";
                 }
-
-                return '<?php echo vmc::router()->gen_url(array('.implode(',', (array) $_args).')); ?>';
+                /*return '<?php echo vmc::router()->gen_url(array('.implode(',', (array) $_args).')); ?>';*/
+                return '<?php echo app::get("' . $this->controller->app->app_id . '")->router()->gen_url(array('.implode(',', (array) $_args).')); ?>';
             case 'foreachelse':
                 return '<?php }else{ ?>';
             case 'break':

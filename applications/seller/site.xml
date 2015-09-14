@@ -4,6 +4,7 @@
 		<title>商家中心</title>
 		<disable>true</disable>
 	</module>
+	
 	<module controller='site_order' id="seller">
 		<name>sellerorder</name>
 		<title>商家订单</title>

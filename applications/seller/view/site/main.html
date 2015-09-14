@@ -9,7 +9,7 @@
                             <{foreach from=$i.items item=m key=j}>
 								<{if $m.display == 'true'}>
                                <li data-myaction="<{$m.action}>" class="mm-<{$m.controller}>-<{$m.items.action}> <{if $current_action!='index' && $m.items.action == $current_action}> active<{/if}>">
-                                   <a <{if $m.controller != 'site_seller'}>target="_blank"<{/if}> href="<{link app=seller ctl=$m.controller act=$m.action}>">
+                                   <a <{if $m.app != 'seller'}>target="_blank"<{/if}> href="<{link app=seller ctl=$m.controller act=$m.action}>">
                                        <span><{$m.label}></span>
                                    </a>
                                </li>

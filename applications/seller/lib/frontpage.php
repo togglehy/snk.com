@@ -19,16 +19,6 @@ class seller_frontpage extends site_controller {
 		'store_id' => 1
 	);
 
-    protected function redirect_url($params = array())
-    {
-        extract($params);
-        empty($app) && $app = $this->app->app_id;
-        empty($ctl) && $ctl = $this->controller;
-        empty($app) && $act = 'index';
-        $args = empty($args) ? array() : (array) $args;
-        return $this->gen_url(compact('app', 'ctl', 'act'));
-    }
-
     function __construct(&$app) {
         parent::__construct($app);
         $this->_response->set_header('Cache-Control', 'no-store');
@@ -38,11 +28,22 @@ class seller_frontpage extends site_controller {
 		$this->action = $this->_request->get_act_name();
         $this->controller = $this->_request->get_ctl_name();
         $this->seller = $this->get_current_seller();
+
 		$this->_menus = $this->get_menu();
 		$this->set_tmpl('seller');
         $this->user_obj = vmc::singleton('seller_user_object');
-        $this->passport_obj = vmc::singleton('seller_user_passport');
+        $this->passport_obj = vmc::singleton('seller_user_passport');    
 	}
+
+    protected function redirect_url($params = array())
+    {
+        extract($params);
+        empty($app) && $app = $this->app->app_id;
+        empty($ctl) && $ctl = $this->controller;
+        empty($app) && $act = 'index';
+        $args = empty($args) ? array() : (array) $args;
+        return $this->gen_url(compact('app', 'ctl', 'act'));
+    }
 
     final public function gen_url($params = array())
     {
@@ -97,18 +98,12 @@ class seller_frontpage extends site_controller {
     // 是否开店
     protected function verify_store()
     {
-    	$redirect = $this->gen_url(array(
-			'app' => 'seller',
-			'ctl' => 'site_seller',
-			'act' => 'index',
-		));
-
+        return true;
 	 	$this->store = app::get('store')->model('store')->getRow('*', array(
 			'seller_id' => $this->seller['seller_id']
 		));
-
-		if(!$this->store) $this->splash('error', $redirect, '店铺尚未开启！');
-		if($this->store['disable'] == false) $this->splash('Error', $redirect, '店铺正在审核');
+		if(!$this->store) $this->splash('error', $this->redirect_url(), '店铺尚未开启！');
+		if($this->store['disable'] == false) $this->splash('Error', $this->redirect_url(), '店铺正在审核');
 		$this->pagedata['store'] = $this->store;
 		return true;
     }

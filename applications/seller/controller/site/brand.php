@@ -18,16 +18,15 @@ class seller_ctl_site_brand extends seller_frontpage
     {
         parent::__construct($app);
     }
-	
+
 	// 商家品牌
 	public function index()
-	{		
-	
+	{
 		$brands = $this->app->model('brand')->getRow('*', array(
 			'seller_id' => $this->seller['seller_id']
-		));		
+		));
 		$this->pagedata['brands'] = $seller;
-		
+
 		$this->output();
 	}
 
@@ -49,13 +48,13 @@ class seller_ctl_site_brand extends seller_frontpage
 			$this->pagedata['brands'] = $brand;
 		}
 		$this->page('site/brand/form.html', true, 'seller');
-		
+
 	}
 
 	// 申请提交
 	private function _post($post)
 	{
-		extract($post);		
+		extract($post);
 		$this->begin($this->gen_url(array(
 			'app' => 'seller',
 			'ctl' => 'site_brand',
@@ -66,7 +65,7 @@ class seller_ctl_site_brand extends seller_frontpage
 			$mdl_brand = app::get('b2c')->model('brand');
 			$last_modify = time();
 			$update_brand_data = compact(
-				'brand_name', 'brand_initial', 'brand_url', 'brand_desc', 
+				'brand_name', 'brand_initial', 'brand_url', 'brand_desc',
 				'brand_logo', 'ordernum', 'last_modify'
 			);
 			if($mdl_brand->save($update_brand_data, array('seller_id' => $seller_id)))

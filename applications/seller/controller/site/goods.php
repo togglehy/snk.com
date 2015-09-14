@@ -19,9 +19,10 @@ class seller_ctl_site_goods extends seller_frontpage
     public function __construct(&$app)
     {
         parent::__construct($app);
-        if(in_array($this->action, array('index', 'apply'))	$this->verify_store(); // 店铺状态
-    }	
-	
+        if(in_array($this->action, array('index', 'apply')))
+            $this->verify_store(); // 店铺状态
+    }
+
 	// 在售商品 审核|待审
 	public function index($status)
 	{
@@ -33,32 +34,32 @@ class seller_ctl_site_goods extends seller_frontpage
 	// 商品添加
 	public function add()
 	{
-		
-	}	
+
+	}
 	// 商品编辑
 	public function edit($id)
 	{
-	
+
 	}
-	
+
 	// 商品保存
 	public function save()
 	{
-	
+
 	}
 	// 库存
 	public function stock()
 	{
-		
+
 	}
 	// 仓库
 	public function storage()
 	{
-	
+
 	}
 	// 价格修改
 	public function price()
 	{
-	
-	}	
+
+	}
 }

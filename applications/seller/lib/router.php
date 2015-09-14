@@ -18,19 +18,21 @@ class seller_router extends site_router
             return $this->_urlmap;
         }
 		$result = $this->_urlmap[$key];
-		strpos($result, 'seller') === 0 && $result = str_replace('seller', 'seller/', $result);
-        return $result;
+		//strpos($result, 'seller') === 0 && $result = str_replace('seller', 'seller/', $result);
+		//(strpos($result, 'seller') === 0 && strpos($result, 'seller-') === false) && $result = str_replace('seller', 'seller/', $result);
+
+		return $result;
     }
-	
+
 	public function gen_url($params = array())
     {
-		$result = parent::gen_url($params);
-		strpos($result, 'seller') === 0 && $result = str_replace('seller', 'seller/', $result);
+		$result = parent::gen_url($params);		
+		(strpos($result, 'seller') > 0 && strpos($result, 'seller-') === false) && $result = str_replace('seller', 'seller/', $result);
 		return $result;
 	}
 	// 商家2015/9/6
 	protected function check_expanded_name()
-    {		
+    {
         if (!array_key_exists($this->app->app_id . $this->get_query_info('module'), $this->get_sitemap())) {
             $this->http_status(404); //404页面
         }
@@ -39,15 +41,15 @@ class seller_router extends site_router
         }
     }
 	protected function get_current_sitemap($key = null)
-    {		
+    {
 		// 2015/9/6
 		$module = $this->get_query_info('module');
 		$curModule = $this->app->app_id;
-		$module == 'index' || $curModule .= $module;		
-		// 		
-        if ($key === null) {			
+		$module == 'index' || $curModule .= $module;
+		//
+        if ($key === null) {
             $result = $this->_sitemap[$curModule];
-        }		
+        }
 		$result = $this->_sitemap[$curModule][$key];
 		return $result;
     }
