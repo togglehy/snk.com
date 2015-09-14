@@ -25,12 +25,12 @@ class seller_mdl_sellers extends dbeav_model
          ),
     );
 
-    private static $member_info;
+    private static $seller_info;
 
     public function __construct($app)
     {
         parent::__construct($app);
-        $this->use_meta();  //member中的扩展属性将通过meta系统进行存储
+        $this->use_meta();  //seller中的扩展属性将通过meta系统进行存储
     }
 
     public function save(&$sdf, $mustUpdate = null, $mustInsert = false)
@@ -52,12 +52,12 @@ class seller_mdl_sellers extends dbeav_model
             unset($sdf['profile']['birthday']);
         }
         $sdf['contact']['addr'] = htmlspecialchars($sdf['contact']['addr']);
-        if(empty($sdf['member_lv']) || empty($sdf['member_lv']['member_group_id'])){
-            $sdf['member_lv']['member_group_id'] = $this->app->model('member_lv')->get_default_lv();
+        if(empty($sdf['seller_lv']) || empty($sdf['seller_lv']['seller_group_id'])){
+            $sdf['seller_lv']['seller_group_id'] = $this->app->model('seller_lv')->get_default_lv();
         }
         $info_object = vmc::service('sensitive_information');
         if (is_object($info_object)) {
-            $info_object->opinfo($sdf, 'b2c_mdl_members', __FUNCTION__);
+            $info_object->opinfo($sdf, 'b2c_mdl_sellers', __FUNCTION__);
         }
         $flag = parent::save($sdf, $mustUpdate = null, $mustInsert = false);
 
@@ -76,7 +76,7 @@ class seller_mdl_sellers extends dbeav_model
                 $ret['profile']['gender'] = 'no';
             }
         }
-        if (intval($filter) == 0 || (is_array($filter) && intval($filter['member_id']) == 0)) {
+        if (intval($filter) == 0 || (is_array($filter) && intval($filter['seller_id']) == 0)) {
             $ret['contact']['name'] = '匿名购买';
         }
 
@@ -84,15 +84,15 @@ class seller_mdl_sellers extends dbeav_model
     }
 
      //密码修改
-    public function save_security($nMemberId, $aData, &$msg)
+    public function save_security($nsellerId, $aData, &$msg)
     {
-        $aMem = $this->dump($nMemberId, '*', array(':account@pam' => array('*')));
+        $aMem = $this->dump($nsellerId, '*', array(':account@pam' => array('*')));
         if (!$aMem) {
             $msg = ('无效的用户Id');
 
             return false;
         }
-        $member_sdf['member_id'] = $nMemberId;
+        $serller_sdf['seller_id'] = $nsellerId;
         //如果密码是空的则进入安全问题修改过程
         if (empty($aData['passwd'])) {
             if (!$aData['pw_answer'] || !$aData['pw_question']) {
@@ -100,12 +100,12 @@ class seller_mdl_sellers extends dbeav_model
 
                 return false;
             }
-            $member_sdf = $this->dump($nMemberId, '*');
-            $member_sdf['account']['pw_question'] = $aData['pw_question'];
-            $member_sdf['account']['pw_answer'] = $aData['pw_answer'];
+            $seller_sdf = $this->dump($nsellerId, '*');
+            $seller_sdf['account']['pw_question'] = $aData['pw_question'];
+            $seller_sdf['account']['pw_answer'] = $aData['pw_answer'];
             $msg = ('安全问题修改成功');
 
-            return $this->save($member_sdf);
+            return $this->save($seller_sdf);
         } else {
             $use_pass_data['login_name'] = $aMem['pam_account']['login_name'];
             $use_pass_data['createtime'] = $aMem['pam_account']['createtime'];
@@ -133,13 +133,13 @@ class seller_mdl_sellers extends dbeav_model
                 return false;
             }
             $aMem['pam_account']['login_password'] = pam_encrypt::get_encrypted_password(trim($aData['passwd']), pam_account::get_account_type($this->app->app_id), $use_pass_data);
-            $aMem['pam_account']['account_id'] = $nMemberId;
+            $aMem['pam_account']['account_id'] = $nsellerId;
             if ($this->save($aMem)) {
                 $aData = array_merge($aMem, $aData);
                 $data['email'] = $aMem['contact']['email'];
                 $data['uname'] = $aMem['pam_account']['login_name'];
                 $data['passwd'] = $aData['passwd_re'];
-                $obj_account = $this->app->model('member_account');
+                $obj_account = $this->app->model('seller_account');
                 $msg = ('密码修改成功');
 
                 return true;
@@ -165,37 +165,37 @@ class seller_mdl_sellers extends dbeav_model
         $data['pam_account']['login_password'] = pam_encrypt::get_encrypted_password(trim($data['pam_account']['login_password']), pam_account::get_account_type($this->app->app_id), $use_pass_data);
         $this->save($data);
 
-        return $data['member_id'];
+        return $data['seller_id'];
     }
 
     /**
      * 会员等级更新
      */
-    public function touch_lv($member_id){
-        $mdl_member_lv = $this->app->model('member_lv');
-        $member = $this->dump($member_id);
-        $mdl_member_lv->defaultOrder = array('experience',' desc');
-        $member['experience'] = $member['experience']?$member['experience']:0;
-        $m_lv = $mdl_member_lv->getList('member_lv_id',array('experience|sthan'=>$member['experience']));
+    public function touch_lv($seller_id){
+        $mdl_seller_lv = $this->app->model('seller_lv');
+        $seller = $this->dump($seller_id);
+        $mdl_seller_lv->defaultOrder = array('experience',' desc');
+        $seller['experience'] = $seller['experience']?$seller['experience']:0;
+        $m_lv = $mdl_seller_lv->getList('seller_lv_id',array('experience|sthan'=>$seller['experience']));
         if( $m_lv[0]){
-            $member['member_lv']['member_group_id'] = $m_lv[0]['member_lv_id'];
+            $seller['seller_lv']['seller_group_id'] = $m_lv[0]['seller_lv_id'];
         }else{
-            $member['member_lv']['member_group_id'] = $mdl_member_lv->get_default_lv();
+            $seller['seller_lv']['seller_group_id'] = $mdl_seller_lv->get_default_lv();
         }
-        return $this->save($member);
+        return $this->save($seller);
     }
 
     /**
      * 经验值更新
      */
-     public function exp_renew($member_id)
+     public function exp_renew($seller_id)
      {
-        if(!$member_id)return true;
+        if(!$seller_id)return true;
         $db = $this->db;
         $tb = $this->table_name(1);
         $order_tb = $this->app->model('orders')->table_name(1);
         $order_where = " status IN('active','finish') AND  pay_status='1'";
-        $sql = "UPDATE $tb SET experience=(SELECT SUM(order_total) FROM $order_tb WHERE member_id = $member_id AND $order_where) WHERE member_id = $member_id";
+        $sql = "UPDATE $tb SET experience=(SELECT SUM(order_total) FROM $order_tb WHERE seller_id = $seller_id AND $order_where) WHERE seller_id = $seller_id";
         return $db->exec($sql,true);
      }
 
@@ -212,7 +212,7 @@ class seller_mdl_sellers extends dbeav_model
     public function pre_restore(&$data, $restore_type = 'add')
     {
         foreach ((array) $data['pam_account'] as $key => $row) {
-            $data[$this->schema['idColumn']] = $row['member_id'];
+            $data[$this->schema['idColumn']] = $row['seller_id'];
             if (!$this->is_exists($row['login_account'])) {
                 $data['need_delete'] = true;
             } else {
@@ -248,21 +248,21 @@ class seller_mdl_sellers extends dbeav_model
     }
     public function _filter($filter, $tableAlias = null, $baseWhere = null)
     {
-        foreach (vmc::servicelist('b2c_mdl_members.filter') as $k => $obj_filter) {
+        foreach (vmc::servicelist('b2c_mdl_sellers.filter') as $k => $obj_filter) {
             if (method_exists($obj_filter, 'extend_filter')) {
                 $obj_filter->extend_filter($filter);
             }
         }
 
         if ($filter['login_account']) {
-            $aData = app::get('pam')->model('members')->getList('member_id', array('login_account|head' => $filter['login_account']));
+            $aData = app::get('pam')->model('sellers')->getList('seller_id', array('login_account|head' => $filter['login_account']));
             unset($filter['login_account']);
 
             if ($aData) {
                 foreach ($aData as $key => $val) {
-                    $member[$key] = $val['member_id'];
+                    $seller[$key] = $val['seller_id'];
                 }
-                $filter['member_id'] = $member;
+                $filter['seller_id'] = $seller;
             } else {
                 return 0;
             }
@@ -270,7 +270,7 @@ class seller_mdl_sellers extends dbeav_model
 
         $info_object = vmc::service('sensitive_information');
         if (is_object($info_object)) {
-            $info_object->opinfo($filter, 'b2c_mdl_members', __FUNCTION__);
+            $info_object->opinfo($filter, 'b2c_mdl_sellers', __FUNCTION__);
         }
         $filter = parent::_filter($filter);
 
@@ -287,8 +287,8 @@ class seller_mdl_sellers extends dbeav_model
         $columns = array();
         foreach ($this->_columns() as $k => $v) {
             if (isset($v['searchtype']) && $v['searchtype']) {
-                if ($k == 'member_id') {
-                    $columns['member_key'] = $v['label'];
+                if ($k == 'seller_id') {
+                    $columns['seller_key'] = $v['label'];
                 } else {
                     $columns[$k] = $v['label'];
                 }
@@ -301,23 +301,7 @@ class seller_mdl_sellers extends dbeav_model
         return $columns;
     }
 
-    /**
-     * @根据会员ID获取会员等级信息
-     *
-     * @param $cols 查询字段
-     * @param $sLv 会员等级id
-     */
-    public function get_lv_info($member_id)
-    {
-        if (empty($member_id) || $member_id < 0) {
-            return;
-        }
-        $row = $this->db->selectrow('SELECT mlv.* FROM vmc_b2c_members AS m
-                                                        LEFT JOIN vmc_b2c_member_lv  AS mlv ON m.member_lv_id=mlv.member_lv_id
-                                                        WHERE mlv.disabled = \'false\' AND m.member_id = '.intval($member_id));
 
-        return $row;
-    }
 
 
 
@@ -342,6 +326,6 @@ class seller_mdl_sellers extends dbeav_model
 
     public function is_exists($uname)
     {
-        return vmc::singleton('b2c_user_passport')->is_exists_login_name($uname);
+        return vmc::singleton('seller_user_passport')->is_exists_login_name($uname);
     }
 }

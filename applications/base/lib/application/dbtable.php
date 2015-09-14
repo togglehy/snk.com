@@ -303,12 +303,12 @@ class base_application_dbtable extends base_application_prototype_filepath{
             if($rows){
                 foreach($rows as $row){
                     $index[$row['Key_name']] = array(
-                                    'Column_name'=>$row['Column_name'],
-                                    'Non_unique'=>$row['Non_unique'],
-                                    'Collation'=>$row['Collation'],
-                                    'Sub_part'=>$row['Sub_part'],
-                                    'Index_type'=>$row['Index_type'],
-                                );
+                        'Column_name'=>$row['Column_name'],
+                        'Non_unique'=>$row['Non_unique'],
+                        'Collation'=>$row['Collation'],
+                        'Sub_part'=>$row['Sub_part'],
+                        'Index_type'=>$row['Index_type'],
+                    );
                 }
             }
             return array('columns'=>$columns, 'index'=>$index);
@@ -388,9 +388,6 @@ class base_application_dbtable extends base_application_prototype_filepath{
                 foreach($new_define['index'] as $key=>$define){
                     if(isset($old_define['index'][$key])){
                         if($old_define['index'][$key] != $new_define['index'][$key]){
-                            print_r($old_define['index'][$key]);
-                            print_r($new_define['index'][$key]);
-                            echo "=====================\n";
                             $diff[] = 'ALTER IGNORE TABLE `'.$real_table_name.'` DROP PRIMARY KEY, ADD '.$this->get_index_sql($key);
                         }
                         unset($old_define_index[$key]);
