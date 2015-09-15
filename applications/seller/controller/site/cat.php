@@ -75,16 +75,21 @@ class seller_ctl_site_cat extends seller_frontpage
 		$this->begin($this->redirect_url());
         extract($_POST);
         $dbschema = $this->mCat->get_schema();
-        print_r($dbschema);
-        exit;
-        
+        if(empty($id) || !isset($dbschema['columns'][$column])) $this->end(false, ('操作失败'));
+        $res = $this->mCat->update(
+            array(
+                $column => $value
+            ), array(
+                'cat_id'=> $id,
+                'store_id' => $this->store['store_id']
+        ));
+        if(!$res) $this->end(false, ('操作失败'));
         $this->end(true,('操作成功'));
 	}
     // 更新排序
     public function order()
     {
         $this->begin($this->redirect_url());
-
         foreach( $_POST['p_order'] as $k => $v ){
             $this->mCat->update(array('p_order'=>($v===''?null:$v)),array('cat_id'=>$k) );
         }

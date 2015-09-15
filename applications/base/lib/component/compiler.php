@@ -172,8 +172,15 @@ class base_component_compiler
                     }
                     $_args[$key] = "'$key' => $value";
                 }
-                /*return '<?php echo vmc::router()->gen_url(array('.implode(',', (array) $_args).')); ?>';*/
-                return '<?php echo app::get("' . $this->controller->app->app_id . '")->router()->gen_url(array('.implode(',', (array) $_args).')); ?>';
+
+				// 商家link
+				if($this->controller->app->app_id == 'seller')
+				{
+					return '<?php echo app::get("seller")->router()->gen_url(array('.implode(',', (array) $_args).')); ?>';
+				}
+
+                return '<?php echo vmc::router()->gen_url(array('.implode(',', (array) $_args).')); ?>';
+               
             case 'foreachelse':
                 return '<?php }else{ ?>';
             case 'break':
@@ -275,7 +282,7 @@ class base_component_compiler
                         $this->_env_vars[\'foreach\']['.$_args['name'].'][\'first\'] = ($this->_env_vars[\'foreach\']['.$_args['name'].'][\'iteration\']==0);
                         $this->_env_vars[\'foreach\']['.$_args['name'].'][\'iteration\']++;
                         $this->_env_vars[\'foreach\']['.$_args['name'].'][\'last\'] = ($this->_env_vars[\'foreach\']['.$_args['name'].'][\'iteration\']==$this->_env_vars[\'foreach\']['.$_args['name'].'][\'total\']);
-?>';
+					?>';
                 } else {
                     array_push($this->_foreachelse_stack, false);
                     $_result = '<?php if('.$_args['from'].')foreach ((array)'.$_args['from'].' as '.$_args['key'].'$this->_vars[\''.$_args['value'].'\']){ ?>';
